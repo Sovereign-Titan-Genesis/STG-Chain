@@ -42,3 +42,29 @@ STG-Chain/
 ├── SECURITY.md          # Security policy
 └── README.md            # Project overview
 
+
+
+## Ecosystem Projects
+STG-Chain is part of the **STG Ecosystem**, managed under [Sovereign-Titan-Genesis Projects](https://github.com/orgs/Sovereign-Titan-Genesis/projects/1):
+
+- **STG-1AI:** AI orchestration and dashboard.
+- **Carbon Shards Unit 009:** ESG tokenization.
+- **SovereignToken Unit 008:** Financial liquidity.
+- **Governance Sentinel:** Compliance and audit.
+- **Aurora-Nirkabel:** Global node connectivity.
+
+## Mainnet Roadmap
+- **Phase 1:** Devnet launch (Genesis Ritual).
+- **Phase 2:** Token modules (STG, CSHARD).
+- **Phase 3:** Governance Sentinel activation.
+- **Phase 4:** Bridge to Layer-2 (Polygon/Arbitrum).
+- **Phase 5:** Mainnet deployment + DEX listing.
+- **Phase 6:** CEX listing with SeedLegals £5M raise.
+
+## Security
+See [SECURITY.md](./SECURITY.md) for vulnerability reporting and compliance rules.
+
+## License
+This project is licensed under the **STG-PURE-MANDIRI LICENSE**.  
+See [LICENSE](./LICENSE) for details.
+
