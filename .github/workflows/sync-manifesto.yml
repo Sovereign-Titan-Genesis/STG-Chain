@@ -1,0 +1,165 @@
+name: Sync Tagline and Manifesto
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'true = simulate only, false = apply changes'
+        required: false
+        default: 'true'
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  sync-manifesto:
+    runs-on: ubuntu-latest
+    env:
+      REPOS: |
+        Sovereign-Titan-Genesis
+        METAPORTATION
+        Quorum-State
+        qs-guardian-search
+        TITAN-PSYCHE-MONO
+        STG-METAPORTATION-EVENT
+        Qubicoin
+        Makronesia-Act-Ark
+        Garage
+        STG-1AI
+        quantum-swap-engine
+        Jasawan
+      HEADER_START: "<!-- STG-HEADER-START -->"
+      HEADER_END: "<!-- STG-HEADER-END -->"
+      MANIFEST_START: "<!-- STG-MANIFEST-START -->"
+      MANIFEST_END: "<!-- STG-MANIFEST-END -->"
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Prepare content files
+        run: |
+          cat > stg_header.md <<'EOF'
+          <!-- STG-HEADER-START -->
+          --- 🏛️ STG‑CHAIN OFFICIAL PILLAR ---
+          *Part of the Sovereign Titan Genesis Ecosystem*
+
+          **Status:** Native Asset — Self‑Sovereign Infrastructure  
+          **Authority:** [Repo 1: Sovereign‑Titan‑Genesis](https://github.com/bswcorp/Sovereign-Titan-Genesis)  
+
+          Tagline: *"Sovereign fintech turning crises into opportunity."*
+          <!-- STG-HEADER-END -->
+          EOF
+
+          cat > stg_manifest.md <<'EOF'
+          <!-- STG-MANIFEST-START -->
+          ## Sovereign Manifesto (Canonical)
+          1. Native Asset Supremacy: STG Native Coin is native to STG‑Chain.
+          2. Gas Fee Independence: Minimize external gas dependency.
+          3. AI&Me Powered: Decisions guided by STG‑1AI (5‑Stage).
+          <!-- STG-MANIFEST-END -->
+          EOF
+
+      - name: Validate token availability
+        run: |
+          if [ -z "${{ secrets.SYNC_TOKEN }}" ]; then
+            echo "ERROR: SYNC_TOKEN secret is not set. Aborting."
+            exit 1
+          fi
+
+      - name: Clone and apply to each repo
+        env:
+          GIT_TOKEN: ${{ secrets.SYNC_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'true' }}
+        run: |
+          set -euo pipefail
+
+          for repo in $REPOS; do
+            echo "---- Processing $repo ----"
+            REPO_URL="https://x-access-token:${GIT_TOKEN}@github.com/bswcorp/${repo}.git"
+            git clone --depth 1 "$REPO_URL" "$repo" || { echo "Clone failed for $repo"; continue; }
+
+            README="$repo/README.md"
+            # Ensure README exists
+            if [ ! -f "$README" ]; then
+              echo "README not found in $repo, creating one."
+              touch "$README"
+            fi
+
+            # Replace or insert header block (idempotent)
+            awk -v start="$HEADER_START" -v end="$HEADER_END" -v file="stg_header.md" '
+              BEGIN { inblock=0; printed=0 }
+              {
+                if ($0 ~ start) { inblock=1; printed=1; while((getline line < file) > 0) print line; # print new header
+                  # skip lines until end marker
+                  while(getline) { if ($0 ~ end) break }
+                  next
+                }
+                print
+              }
+              END {
+                if (!printed) {
+                  # prepend header if not found
+                  system("cat stg_header.md tmp_readme > tmp && mv tmp \"" ARGV[1] "\"")
+                }
+              }' "$README" > tmp_readme || true
+
+            # If awk created tmp_readme, move it back; otherwise ensure header inserted
+            if [ -f tmp_readme ]; then
+              mv tmp_readme "$README"
+            fi
+
+            # Replace or append manifesto block in README (idempotent)
+            awk -v start="$MANIFEST_START" -v end="$MANIFEST_END" -v file="stg_manifest.md" '
+              BEGIN { inblock=0; printed=0 }
+              {
+                if ($0 ~ start) { inblock=1; printed=1; while((getline line < file) > 0) print line; while(getline) { if ($0 ~ end) break } next }
+                print
+              }
+              END {
+                if (!printed) {
+                  print ""
+                  system("cat stg_manifest.md >> " ARGV[1])
+                }
+              }' "$README" > tmp_readme2 || true
+
+            if [ -f tmp_readme2 ]; then
+              mv tmp_readme2 "$README"
+            fi
+
+            # Commit & push if not dry run
+            if [ "$DRY_RUN" = "false" ]; then
+              cd "$repo"
+              git config user.name "stg-sync-bot"
+              git config user.email "stg-sync-bot@users.noreply.github.com"
+              git add README.md
+              if git diff --cached --quiet; then
+                echo "No changes to commit for $repo"
+              else
+                git commit -m "chore(sync): update STG header & manifesto (automated)"
+                git push origin HEAD:main
+                echo "Pushed changes to $repo"
+              fi
+              cd ..
+            else
+              echo "[DRY RUN] Changes prepared for $repo (not pushed)"
+            fi
+
+            # cleanup
+            rm -rf "$repo"
+          done
+
+      - name: Cleanup temp files
+        run: |
+          rm -f stg_header.md stg_manifest.md tmp_readme tmp_readme2 || true
+
+      - name: Summary
+        run: |
+          if [ "${{ github.event.inputs.dry_run || 'true' }}" = "true" ]; then
+            echo "Dry run complete. To apply changes set dry_run=false when dispatching the workflow."
+          else
+            echo "Sync complete and pushed to target repos."
+          fi
