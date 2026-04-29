@@ -1,4 +1,6 @@
-# STG-Chain
+Structure
+
+ructure# STG-Chain
 STG-Chain Devnet (Development Network) adalah "Janin Digital" cikal bakalnya rantai kotak yang dibangun secara Mandiri demi Kedaulatan 
 # STG-Chain: Sovereign Titan Genesis Blockchain
 
@@ -27,5 +29,16 @@ STG-Chain is built as a **Cosmos SDK App-Chain** with Proof of Authority (PoA) c
 - **AURORA-Nirkabel:** High-speed global pulse.
 - **SANGNAGA:** Final executor.
 
-## Repository Structure
+## Repository Struct
+Message overviewure
+
+STG-Chain/
+├── blockchain/          # Core chain configs, genesis, scripts
+├── contracts/           # Smart contracts (STG, CSHARD, Governance)
+├── docs/                # Whitepapers, Proposal Hijau, legal docs
+├── .gitignore           # Node & chain runtime exclusions
+├── LICENSE              # STG-PURE-MANDIRI License
+├── CONTRIBUTING.md      # Contribution rules
+├── SECURITY.md          # Security policy
+└── README.md            # Project overview
 
