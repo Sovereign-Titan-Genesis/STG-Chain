@@ -1,0 +1,30 @@
+STG-PURE-MANDIRI LICENSE
+Version 1.0 — 2026-04-29
+Copyright (c) 2026
+Sovereign Titan Genesis (STG)
+UBO: Andi Muhammad Harpianto
+
+Preamble
+STG-Chain is declared a sovereign, self-governing software project created to operate as a private app-chain under the stewardship of Sovereign Titan Genesis. This license grants rights to use, inspect, and contribute to the codebase while preserving the project's sovereign governance and provenance.
+
+Permissions
+1. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to use, copy, modify, and distribute the Software, subject to the Conditions below.
+
+Conditions
+2. Attribution. Redistributions of source code must retain this License file and the above copyright notice.
+3. Sovereign Notice. Any redistribution, modification, or derivative work must include a clear statement that the work is derived from STG-Chain and must reference the original repository: https://github.com/Sovereign-Titan-Genesis/STG-Chain.
+4. Non-Subordination. No party may assert control, seizure, or unilateral governance over the STG-Chain network that contradicts on‑chain governance decisions ratified by the STG multisig and validator set as defined in the repository governance documents.
+5. Compliance. Use of the Software must comply with applicable laws and export controls. Contributors must not introduce code that intentionally circumvents legal compliance mechanisms (KYC/AML) embedded in Governance modules.
+
+Limitations
+6. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY.
+
+Dispute Resolution and Jurisdiction
+7. To the extent permitted by applicable law, disputes arising under this License shall be governed by the laws of the Republic of Indonesia and resolved in Indonesian courts, unless parties agree otherwise in writing.
+
+Acceptance
+8. Use, modification, or distribution of the Software constitutes acceptance of the terms of this License.
+
+Signed,
+Sovereign Titan Genesis
+Andi Muhammad Harpianto
