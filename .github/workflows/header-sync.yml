@@ -1,0 +1,61 @@
+name: Sync STG Header
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  distribute-header:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Sovereign-Titan-Genesis
+        uses: actions/checkout@v4
+
+      - name: Set Header Content
+        run: |
+          cat << 'EOF' > header.txt
+          --- 🏛️ STG‑CHAIN OFFICIAL PILLAR ---
+          *Part of the Sovereign Titan Genesis Ecosystem*
+
+          **Status:** Native Asset — Self‑Sovereign Infrastructure  
+          **Authority:** [Repo 1: Sovereign‑Titan‑Genesis](https://github.com/bswcorp/Sovereign-Titan-Genesis)  
+
+          Tagline: *"Sovereign fintech turning crises into opportunity."*
+          EOF
+
+      - name: Clone All 12 Repos
+        run: |
+          git clone https://github.com/bswcorp/Sovereign-Titan-Genesis
+          git clone https://github.com/bswcorp/METAPORTATION
+          git clone https://github.com/bswcorp/Quorum-State
+          git clone https://github.com/bswcorp/qs-guardian-search
+          git clone https://github.com/bswcorp/TITAN-PSYCHE-MONO
+          git clone https://github.com/bswcorp/STG-METAPORTATION-EVENT
+          git clone https://github.com/bswcorp/Qubicoin
+          git clone https://github.com/bswcorp/Makronesia-Act-Ark
+          git clone https://github.com/bswcorp/Garage
+          git clone https://github.com/bswcorp/STG-1AI
+          git clone https://github.com/bswcorp/quantum-swap-engine
+          git clone https://github.com/bswcorp/Jasawan
+
+      - name: Apply Header to README.md
+        run: |
+          for repo in Sovereign-Titan-Genesis METAPORTATION Quorum-State qs-guardian-search TITAN-PSYCHE-MONO STG-METAPORTATION-EVENT Qubicoin Makronesia-Act-Ark Garage STG-1AI quantum-swap-engine Jasawan; do
+            FILE="$repo/README.md"
+            if [ -f "$FILE" ]; then
+              cat header.txt "$FILE" > "$repo/README.new"
+              mv "$repo/README.new" "$FILE"
+            else
+              cp header.txt "$FILE"
+            fi
+            cd $repo
+            git config user.name "stg-bot"
+            git config user.email "stg-bot@users.noreply.github.com"
+            git add README.md
+            git commit -m "Sync STG Header: Napas Kedaulatan"
+            git push origin main
+            cd ..
+          done
