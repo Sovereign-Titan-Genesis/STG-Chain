@@ -1,1 +1,185 @@
+name: Sync STG Header & Manifesto (Create PRs)
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'true = simulate only, false = create PRs'
+        required: false
+        default: 'true'
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-prs:
+    runs-on: ubuntu-latest
+    env:
+      REPOS: |
+        Sovereign-Titan-Genesis
+        METAPORTATION
+        Quorum-State
+        qs-guardian-search
+        TITAN-PSYCHE-MONO
+        STG-METAPORTATION-EVENT
+        Qubicoin
+        Makronesia-Act-Ark
+        Garage
+        STG-1AI
+        quantum-swap-engine
+        Jasawan
+      HEADER_START: "<!-- STG-HEADER-START -->"
+      HEADER_END: "<!-- STG-HEADER-END -->"
+      MANIFEST_START: "<!-- STG-MANIFEST-START -->"
+      MANIFEST_END: "<!-- STG-MANIFEST-END -->"
+      BRANCH_PREFIX: "stg-sync/"
+      PR_TITLE: "chore(sync): update STG header & manifesto (automated)"
+      PR_BODY: |
+        This PR updates the README with the canonical STG header and Sovereign Manifesto.
+        Changes are automated by the Sovereign-Titan-Genesis sync workflow.
+        Please review and merge if acceptable.
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Prepare header and manifesto files
+        run: |
+          cat > stg_header.md <<'EOF'
+          <!-- STG-HEADER-START -->
+          --- 🏛️ STG‑CHAIN OFFICIAL PILLAR ---
+          *Part of the Sovereign Titan Genesis Ecosystem*
+
+          **Status:** Native Asset — Self‑Sovereign Infrastructure  
+          **Authority:** [Repo 1: Sovereign‑Titan‑Genesis](https://github.com/bswcorp/Sovereign-Titan-Genesis)  
+
+          Tagline: *"Sovereign fintech turning crises into opportunity."*
+          <!-- STG-HEADER-END -->
+          EOF
+
+          cat > stg_manifest.md <<'EOF'
+          <!-- STG-MANIFEST-START -->
+          ## Sovereign Manifesto (Canonical)
+          1. Native Asset Supremacy: STG Native Coin is native to STG‑Chain.
+          2. Gas Fee Independence: Minimize external gas dependency.
+          3. AI&Me Powered: Decisions guided by STG‑1AI (5‑Stage).
+          <!-- STG-MANIFEST-END -->
+          EOF
+
+      - name: Validate token secret
+        run: |
+          if [ -z "${{ secrets.SYNC_TOKEN }}" ]; then
+            echo "ERROR: SYNC_TOKEN secret is not set. Aborting."
+            exit 1
+          fi
+
+      - name: Process repositories and create PRs
+        env:
+          GIT_TOKEN: ${{ secrets.SYNC_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'true' }}
+        run: |
+          set -euo pipefail
+          IFS=$'\n'
+          for repo in $REPOS; do
+            echo "---- Processing $repo ----"
+            REPO_URL="https://x-access-token:${GIT_TOKEN}@github.com/bswcorp/${repo}.git"
+            WORKDIR="$(mktemp -d)"
+            git clone --depth 1 "$REPO_URL" "$WORKDIR" || { echo "Clone failed for $repo"; rm -rf "$WORKDIR"; continue; }
+
+            README="$WORKDIR/README.md"
+            if [ ! -f "$README" ]; then
+              echo "README not found in $repo, creating one."
+              touch "$README"
+            fi
+
+            # Insert or replace header block
+            awk -v start="$HEADER_START" -v end="$HEADER_END" -v file="stg_header.md" '
+              BEGIN { inblock=0; printed=0 }
+              {
+                if ($0 ~ start) {
+                  inblock=1; printed=1;
+                  while((getline line < file) > 0) print line;
+                  # skip until end marker
+                  while(getline) { if ($0 ~ end) break }
+                  next
+                }
+                print
+              }
+              END {
+                if (!printed) {
+                  # prepend header if not found
+                  system("cat stg_header.md tmp_readme > tmp && mv tmp tmp2 && cat tmp2 > tmp_readme")
+                }
+              }' "$README" > "$WORKDIR/README.tmp" || true
+
+            # If awk produced tmp, move it back; otherwise ensure header inserted
+            if [ -f "$WORKDIR/README.tmp" ]; then
+              mv "$WORKDIR/README.tmp" "$README"
+            fi
+
+            # Insert or replace manifesto block (append if missing)
+            awk -v start="$MANIFEST_START" -v end="$MANIFEST_END" -v file="stg_manifest.md" '
+              BEGIN { inblock=0; printed=0 }
+              {
+                if ($0 ~ start) {
+                  inblock=1; printed=1;
+                  while((getline line < file) > 0) print line;
+                  while(getline) { if ($0 ~ end) break }
+                  next
+                }
+                print
+              }
+              END {
+                if (!printed) {
+                  print ""
+                  system("cat stg_manifest.md >> " ARGV[1])
+                }
+              }' "$README" > "$WORKDIR/README.tmp2" || true
+
+            if [ -f "$WORKDIR/README.tmp2" ]; then
+              mv "$WORKDIR/README.tmp2" "$README"
+            fi
+
+            # Prepare branch and PR
+            if [ "$DRY_RUN" = "false" ]; then
+              cd "$WORKDIR"
+              git config user.name "stg-sync-bot"
+              git config user.email "stg-sync-bot@users.noreply.github.com"
+              BRANCH="${BRANCH_PREFIX}update-readme-$(date -u +%Y%m%d%H%M%S)"
+              git checkout -b "$BRANCH"
+              git add README.md
+              if git diff --cached --quiet; then
+                echo "No changes to commit for $repo"
+              else
+                git commit -m "$PR_TITLE"
+                git push --set-upstream origin "$BRANCH"
+                # Create PR via GitHub API
+                API_PAYLOAD=$(jq -n --arg title "$PR_TITLE" --arg head "$BRANCH" --arg base "main" --arg body "$PR_BODY" '{title:$title, head:$head, base:$base, body:$body}')
+                curl -s -X POST -H "Authorization: token ${GIT_TOKEN}" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/bswcorp/${repo}/pulls" -d "$API_PAYLOAD" \
+                  | jq -r '.html_url // "PR creation response missing URL"'
+                echo "PR created for $repo"
+              fi
+              cd -
+            else
+              echo "[DRY RUN] Prepared changes for $repo (no PR created)."
+            fi
+
+            rm -rf "$WORKDIR"
+          done
+
+      - name: Cleanup temp files
+        run: |
+          rm -f stg_header.md stg_manifest.md || true
+
+      - name: Summary
+        run: |
+          if [ "${{ github.event.inputs.dry_run || 'true' }}" = "true" ]; then
+            echo "Dry run complete. To create PRs set dry_run=false when dispatching the workflow."
+          else
+            echo "PR creation attempted for target repos."
+          fi
 
