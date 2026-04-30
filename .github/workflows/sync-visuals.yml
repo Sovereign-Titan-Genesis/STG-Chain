@@ -1,0 +1,55 @@
+name: Sync Visual Branding
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 4 * * *"   # sinkronisasi otomatis setiap jam 04:00 UTC
+
+permissions:
+  contents: write
+
+jobs:
+  update-visuals:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Sovereign-Titan-Genesis
+        uses: actions/checkout@v4
+
+      - name: Prepare Visual Showcase Section
+        run: |
+          cat > visuals.md <<'EOF'
+          ## 📸 Visual Showcase
+
+          | Pilar | Logo |
+          |-------|------|
+          | Sovereign‑Titan‑Genesis | ![Genesis Logo](assets/genesis.png) |
+          | Metaportation | ![Metaportation Logo](assets/metaportation.png) |
+          | Quorum‑State | ![Quorum Logo](assets/quorum.png) |
+          | QS Guardian Search | ![Guardian Logo](assets/guardian.png) |
+          | Titan Psyche Mono | ![Psyche Logo](assets/psyche.png) |
+          | STG‑Metaportation‑Event | ![Event Logo](assets/event.png) |
+          | Qubicoin | ![Qubicoin Logo](assets/qubicoin.png) |
+          | Makronesia Act‑Ark | ![Makronesia Logo](assets/makronesia.png) |
+          | Garage | ![Garage Logo](assets/garage.png) |
+          | STG‑1AI | ![1AI Logo](assets/1ai.png) |
+          | Quantum Swap Engine | ![Swap Logo](assets/swap.png) |
+          | Jasawan | ![Jasawan Logo](assets/jasawan.png) |
+          EOF
+
+      - name: Update Showcase README
+        run: |
+          # Sisipkan Visual Showcase ke README induk
+          awk '/## 📸 Visual Showcase/{exit} {print}' README.md > tmp_readme
+          cat visuals.md >> tmp_readme
+          mv tmp_readme README.md
+
+          git config user.name "stg-visual-bot"
+          git config user.email "stg-visual-bot@users.noreply.github.com"
+          git add README.md assets/
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore(showcase): sync visual branding for 12 Pillars"
+            git push origin main
+          fi
