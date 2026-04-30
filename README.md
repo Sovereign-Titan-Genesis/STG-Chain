@@ -209,6 +209,16 @@ Unit 008 (Financial Sovereignty) now supports:
 
 View transaction log: [Bio-Currency Mesh](fin/index.html)
 
+## 🗺️ Asset Map
+The STG Dashboard includes a weekly asset map showing:
+- Unit 008 (Financial Sovereignty)
+- Unit 009 (Carbon Sovereignty)
+- Asteroid Mining Data (16 Psyche)
+- Deep Sea Nodes (LOG)
+- Status of all 12 Pillars
+
+View interactive asset map: [Asset Map](assets/asset-map.pdf)
+
 View interactive snapshot: [Monthly Snapshot](snapshot/index.html)
 
 
