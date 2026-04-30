@@ -217,6 +217,14 @@ The STG Dashboard includes a weekly asset map showing:
 - Deep Sea Nodes (LOG)
 - Status of all 12 Pillars
 
+## 🗺️ Secure Asset Map
+The STG Dashboard now integrates Bio-Sensor Node data:
+- Asset positions across 12 Pillars
+- Real-time security alerts (Safe, Warning, Detected)
+- Weekly automated update
+
+View secure asset map: [Secure Asset Map](assets/asset-map-security.pdf)
+
 View interactive asset map: [Asset Map](assets/asset-map.pdf)
 
 View interactive snapshot: [Monthly Snapshot](snapshot/index.html)
