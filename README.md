@@ -1,6 +1,5 @@
-certificatesertificatesduduserserertifiedertifiedertificateertificateuilding
-
-ructure# STG-Chain
+update
+STGcertified-ructure# STG-Chain
 STG-Chain Devnet (Development Network) adalah "Janin Digital" cikal bakalnya rantai kotak yang dibangun secara Mandiri demi Kedaulatan 
 # STG-Chain: Sovereign Titan Genesis Blockchain
 
@@ -191,7 +190,7 @@ View passport: [Bio-Passport](passport/bio-passport.pdf)
 
 View certificate: [Certified AKSA User](edu/certificates/certified-aksa-user.pdf) 
 
-## 🌊 Carbon Offset Report
+##DetectedtsctedingingingractivewaterCarbon Offset Report
 Unit 009 (Carbon Sovereignty) generates weekly reports:
 - Carbon Shards Reserve
 - Emission Offset
@@ -222,6 +221,16 @@ The STG Dashboard now integrates Bio-Sensor Node data:
 - Asset positions across 12 Pillars
 - Real-time security alerts (Safe, Warning, Detected)
 - Weekly automated update
+
+  ## 📜 Manifesto Q-Day
+STG issues a confidential manifesto for members:
+- Definition of Q-Day
+- Guarantee of AKSA currency
+- Emergency communication via UMN
+- Member actions and survival protocol
+
+View manifesto: [Manifesto Q-Day](edu/manifesto_qday.pdf)
+
 
 View secure asset map: [Secure Asset Map](assets/asset-map-security.pdf)
 
