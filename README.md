@@ -1,6 +1,6 @@
 # STG-Chain
 STG-Chain Devnet (Development Network) adalah "Janin Digital" cikal bakalnya rantai kotak yang dibangun secara Mandiri demi Kedaulatan 
-# STG-Chain: Sovereign Titan Genesis Blockchain
+## STG-Chain: Sovereign Titan Genesis Blockchain
 
 ## Overview
 STG-Chain is the sovereign blockchain infrastructure of **Sovereign Titan Genesis (STG)**.  
