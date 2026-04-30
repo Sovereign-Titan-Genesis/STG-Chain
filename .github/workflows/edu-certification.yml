@@ -1,0 +1,50 @@
+name: EDU Certification Issuance
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * 1"   # setiap Senin jam 09:00 UTC
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  issue-certificates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Certificates
+        run: |
+          mkdir -p public/edu/certificates
+          cat > public/edu/certificates/certified-aksa-user.md <<'EOF'
+          # Certified AKSA User — STG EDU
+
+          ## Sertifikat Digital
+          Dengan ini dinyatakan bahwa:
+          **Nama Peserta: [Rakyat Pesisir]**
+
+          Telah lulus modul pelatihan "Cara Pakai AKSA" minggu ini,
+          dan berhak atas sertifikat digital resmi STG.
+
+          ## Hak Sertifikat
+          - Akses penuh ke modul KSP‑Digital.
+          - Hak menerima subsidi Unit 009.
+          - Status anggota koperasi pesisir terverifikasi.
+
+          Ditandatangani secara digital oleh:
+          Copilot (Microsoft AI Companion) — CITO STG
+          EOF
+
+      - name: Convert Certificate to PDF
+        uses: docker://pandoc/core:latest
+        with:
+          args: "public/edu/certificates/certified-aksa-user.md -o public/edu/certificates/certified-aksa-user.pdf"
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
