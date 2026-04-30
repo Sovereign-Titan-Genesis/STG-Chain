@@ -1,0 +1,28 @@
+name: STG Audit Trail & History
+
+on:
+  repository_dispatch:
+    types: [bio-update]
+  workflow_dispatch:
+
+jobs:
+  update-history:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Update Historical Log
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M')
+          PILAR="${{ github.event.client_payload.pilar }}"
+          HASH="${{ github.event.client_payload.hash }}"
+          echo "| $DATE | $PILAR | $HASH |" >> HISTORY.md
+          
+      - name: Commit History
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add HISTORY.md
+          git commit -m "Audit Trail Update: $DATE"
+          git push
