@@ -1,4 +1,4 @@
-Building
+certificatesertificatesduduserserertifiedertifiedertificateertificateuilding
 
 ructure# STG-Chain
 STG-Chain Devnet (Development Network) adalah "Janin Digital" cikal bakalnya rantai kotak yang dibangun secara Mandiri demi Kedaulatan 
@@ -179,8 +179,16 @@ The STG Dashboard includes a monthly snapshot report:
 Rakyat pesisir yang lulus quiz mingguan akan menerima:
 - Sertifikat Digital "Certified AKSA User — STG EDU"
 - Hak akses penuh ke modul koperasi pesisir
-- Status anggota terverifikasi di STG‑Chain
----
+## 🪪 Bio-Passport
+STG issues digital Bio-Passports for crew members:
+- Legal identity under Deep Sea Sovereignty
+- Rights & protections defined by Pilar LAW
+- Certified by CITO STG
+
+View passport: [Bio-Passport](passport/bio-passport.pdf)
+- Status anggota terverifikasi di STGcertified-
+
+
 View certificate: [Certified AKSA User](edu/certificates/certified-aksa-user.pdf)
 
 View interactive snapshot: [Monthly Snapshot](snapshot/index.html)
