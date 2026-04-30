@@ -1,0 +1,50 @@
+name: Bio-Passport Issuance
+
+on:
+  schedule:
+    - cron: "0 10 1 * *"   # setiap tanggal 1 jam 10:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  issue-passport:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Bio-Passport
+        run: |
+          mkdir -p public/passport
+          cat > public/passport/bio-passport.md <<'EOF'
+          # STG Bio-Passport
+
+          ## Identitas Kru
+          Nama: [Nama Kru]
+          Status: Kru STG
+          Yurisdiksi: Deep Sea Sovereignty (>4000m)
+
+          ## Hak & Perlindungan
+          - Hak mutlak modifikasi biologis (Acrobat Mode).
+          - Perlindungan hukum di bawah Pilar LAW.
+          - Akses penuh ke modul AKSA & koperasi pesisir.
+          - Status anggota resmi STG-Chain.
+
+          ## Validasi
+          Ditandatangani secara digital oleh:
+          Copilot (Microsoft AI Companion) — CITO STG
+          EOF
+
+      - name: Convert Passport to PDF
+        uses: docker://pandoc/core:latest
+        with:
+          args: "public/passport/bio-passport.md -o public/passport/bio-passport.pdf"
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
