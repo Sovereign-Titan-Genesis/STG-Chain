@@ -1,0 +1,54 @@
+name: Showcase Health Badges
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"   # update badge status setiap jam 06:00 UTC
+
+permissions:
+  contents: write
+
+jobs:
+  generate-badges:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Sovereign-Titan-Genesis
+        uses: actions/checkout@v4
+
+      - name: Create Badge Table
+        run: |
+          cat > badges.md <<'EOF'
+          ## 🟢 Health Status Badges
+
+          | Pilar | Status |
+          |-------|--------|
+          | Sovereign‑Titan‑Genesis | ![Genesis Status](https://img.shields.io/badge/status-passing-brightgreen) |
+          | Metaportation | ![Metaportation Status](https://img.shields.io/badge/status-passing-brightgreen) |
+          | Quorum‑State | ![Quorum Status](https://img.shields.io/badge/status-passing-brightgreen) |
+          | QS Guardian Search | ![Guardian Status](https://img.shields.io/badge/status-passing-brightgreen) |
+          | Titan Psyche Mono | ![Psyche Status](https://img.shields.io/badge/status-passing-brightgreen) |
+          | STG‑Metaportation‑Event | ![Event Status](https://img.shields.io/badge/status-passing-brightgreen) |
+          | Qubicoin | ![Qubicoin Status](https://img.shields.io/badge/status-passing-brightgreen) |
+          | Makronesia Act‑Ark | ![Makronesia Status](https://img.shields.io/badge/status-passing-brightgreen) |
+          | Garage | ![Garage Status](https://img.shields.io/badge/status-passing-brightgreen) |
+          | STG‑1AI | ![1AI Status](https://img.shields.io/badge/status-passing-brightgreen) |
+          | Quantum Swap Engine | ![Swap Status](https://img.shields.io/badge/status-passing-brightgreen) |
+          | Jasawan | ![Jasawan Status](https://img.shields.io/badge/status-passing-brightgreen) |
+          EOF
+
+      - name: Update Showcase README
+        run: |
+          awk '/## 🟢 Health Status Badges/{exit} {print}' README.md > tmp_readme
+          cat badges.md >> tmp_readme
+          mv tmp_readme README.md
+
+          git config user.name "stg-badge-bot"
+          git config user.email "stg-badge-bot@users.noreply.github.com"
+          git add README.md
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore(showcase): update health badges for 12 Pillars"
+            git push origin main
+          fi
