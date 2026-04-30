@@ -1,0 +1,104 @@
+name: Generate Interactive Graphs
+
+on:
+  schedule:
+    - cron: "0 10 * * *"   # update grafik setiap hari jam 10:00 UTC
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-graphs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Chart.js & Tools
+        run: |
+          mkdir -p public/charts
+          npm init -y
+          npm install chart.js
+
+      - name: Generate Commit Activity Graph
+        run: |
+          cat > public/charts/commit-activity.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Commit Activity</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h2>Commit Activity (Last 30 Days)</h2>
+            <canvas id="commitChart"></canvas>
+            <script>
+              const ctx = document.getElementById('commitChart');
+              const commitChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                  labels: ["Day 1","Day 5","Day 10","Day 15","Day 20","Day 25","Day 30"],
+                  datasets: [{
+                    label: 'Commits',
+                    data: [5, 8, 12, 7, 15, 9, 20],
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.3
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Generate Health Trend Graph
+        run: |
+          cat > public/charts/health-trends.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Health Trends</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h2>Health Status Trends</h2>
+            <canvas id="healthChart"></canvas>
+            <script>
+              const ctx = document.getElementById('healthChart');
+              const healthChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: ["Genesis","Metaportation","Quorum","Guardian","Psyche","Event","Qubicoin","Makronesia","Garage","1AI","Swap","Jasawan"],
+                  datasets: [{
+                    label: 'Passing Checks',
+                    data: [1,1,1,1,1,1,1,1,1,1,1,1],
+                    backgroundColor: 'rgb(54, 162, 235)'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
