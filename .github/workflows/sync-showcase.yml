@@ -1,0 +1,76 @@
+name: Sync Showcase README
+
+on:
+  repository_dispatch:
+    types: [pillar-update]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"   # sinkronisasi otomatis setiap jam 03:00 UTC
+
+permissions:
+  contents: write
+
+jobs:
+  update-showcase:
+    runs-on: ubuntu-latest
+    env:
+      SHOWCASE_FILE: "README.md"
+
+    steps:
+      - name: Checkout Sovereign-Titan-Genesis
+        uses: actions/checkout@v4
+
+      - name: Generate Showcase Content
+        run: |
+          cat > showcase.md <<'EOF'
+          # ✨ STG‑Chain Showcase: The 12 Pillars
+
+          Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
+
+          ## 🧠 THE BRAIN & IDENTITY
+          - [Sovereign‑Titan‑Genesis](https://github.com/bswcorp/Sovereign-Titan-Genesis) — Konstitusi & Identitas Induk
+          - [Titan‑Psyche‑Mono](https://github.com/bswcorp/TITAN-PSYCHE-MONO) — Jiwa Digital & State Management
+
+          ## 🌉 THE BRIDGE
+          - [Metaportation](https://github.com/bswcorp/METAPORTATION) — Gerbang RWA
+          - [STG‑Metaportation‑Event](https://github.com/bswcorp/STG-METAPORTATION-EVENT) — Sistem Syaraf Event
+
+          ## 🛡️ THE DEFENDER
+          - [Quorum‑State](https://github.com/bswcorp/Quorum-State) — Konsensus & Tata Kelola
+          - [QS Guardian Search](https://github.com/bswcorp/qs-guardian-search) — Intelijen Compliance
+
+          ## 💰 THE ECONOMY
+          - [Qubicoin](https://github.com/bswcorp/Qubicoin) — Native Coin & Liquidity
+          - [Quantum Swap Engine](https://github.com/bswcorp/quantum-swap-engine) — Pertukaran Instan
+
+          ## 🗄️ THE RESOURCE & STORAGE
+          - [Garage](https://github.com/bswcorp/Garage) — Sandbox Eksperimen
+          - [Makronesia Act‑Ark](https://github.com/bswcorp/Makronesia-Act-Ark) — Ekologi Sosial & Aset Hijau
+
+          ## 🤖 THE INTELLIGENCE & SERVICE
+          - [STG‑1AI](https://github.com/bswcorp/STG-1AI) — AI 5‑Stage Intelligence
+          - [Jasawan](https://github.com/bswcorp/Jasawan) — Layanan Publik & Identitas Teritorial
+
+          ---
+          ## 🛡️ Sovereign Manifesto
+          *"Sovereign fintech turning crises into opportunity."*
+          - Native Asset Supremacy
+          - Gas Fee Independence
+          - AI&Me Powered
+
+          ## 📸 Visual Showcase
+          (Logo/ikon tiap repo akan ditempatkan di sini)
+          EOF
+
+      - name: Update Showcase README
+        run: |
+          cp showcase.md $SHOWCASE_FILE
+          git config user.name "stg-showcase-bot"
+          git config user.email "stg-showcase-bot@users.noreply.github.com"
+          git add $SHOWCASE_FILE
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore(showcase): sync 12 Pillars Showcase"
+            git push origin main
+          fi
