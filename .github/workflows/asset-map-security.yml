@@ -1,0 +1,87 @@
+name: Asset Map with Security Status
+
+on:
+  schedule:
+    - cron: "0 15 * * 1"   # setiap Senin jam 15:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-secure-map:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Secure Asset Map
+        run: |
+          mkdir -p reports/assets
+          cat > reports/assets/asset-map-security.md <<'EOF'
+          # STG Asset Map + Security Status
+
+          ## Unit 008 (Dana)
+          - Pilar FIN
+          - Status: Verified & Secured
+          - Security: ✅ Safe
+
+          ## Unit 009 (Karbon)
+          - Pilar ENV
+          - Status: Carbon Credit Verified
+          - Security: ✅ Safe
+
+          ## Unit TECH (Asteroid 16 Psyche)
+          - Status: Mining Simulation Active
+          - Security: ⚠️ Monitoring Required
+
+          ## Pilar LOG (Deep Sea Node)
+          - Node Alpha: Safe
+          - Node Beta: Safe
+          - Node Gamma: 🚨 Submarine Detected
+          - Node Delta: Safe
+
+          ## Pilar COM (UMN)
+          - Status: Mesh Active
+          - Security: ✅ Encrypted
+
+          ## Pilar LAW
+          - Status: Deep Sea Sovereignty Active
+          - Security: ✅ Protected
+
+          ## Pilar EDU
+          - Status: Training Active
+          - Security: ✅ Safe
+
+          ## Pilar SOC
+          - Status: Pasar AKSA Active
+          - Security: ✅ Safe
+
+          ## Pilar ECO
+          - Status: Circular Economy Active
+          - Security: ✅ Safe
+
+          ## Pilar MED
+          - Status: Bio-Sensor Active
+          - Security: ✅ Safe
+
+          ## Pilar ENG
+          - Status: Energy Infrastructure Active
+          - Security: ✅ Safe
+
+          ## Pilar SEC
+          - Status: Anti-Trace Active
+          - Security: ✅ Safe
+          EOF
+
+      - name: Convert Secure Map to PDF
+        uses: docker://pandoc/core:latest
+        with:
+          args: "reports/assets/asset-map-security.md -o reports/assets/asset-map-security.pdf"
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: reports/assets
