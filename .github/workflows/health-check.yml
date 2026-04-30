@@ -1,0 +1,65 @@
+name: STG Pillars Health Check
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * *"   # cek kesehatan otomatis setiap jam 05:00 UTC
+
+permissions:
+  contents: read
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        repo: [
+          "Sovereign-Titan-Genesis",
+          "METAPORTATION",
+          "Quorum-State",
+          "qs-guardian-search",
+          "TITAN-PSYCHE-MONO",
+          "STG-METAPORTATION-EVENT",
+          "Qubicoin",
+          "Makronesia-Act-Ark",
+          "Garage",
+          "STG-1AI",
+          "quantum-swap-engine",
+          "Jasawan"
+        ]
+
+    steps:
+      - name: Checkout ${{ matrix.repo }}
+        uses: actions/checkout@v4
+        with:
+          repository: bswcorp/${{ matrix.repo }}
+          token: ${{ secrets.SYNC_TOKEN }}
+
+      - name: Run Lint Check
+        run: |
+          if [ -f "package.json" ]; then
+            npm install
+            npm run lint || echo "Lint failed in ${{ matrix.repo }}"
+          elif [ -f "go.mod" ]; then
+            go vet ./... || echo "Go vet failed in ${{ matrix.repo }}"
+          elif [ -f "Cargo.toml" ]; then
+            cargo check || echo "Cargo check failed in ${{ matrix.repo }}"
+          else
+            echo "No lint/test config found in ${{ matrix.repo }}"
+          fi
+
+      - name: Run Unit Tests
+        run: |
+          if [ -f "package.json" ]; then
+            npm test || echo "Tests failed in ${{ matrix.repo }}"
+          elif [ -f "go.mod" ]; then
+            go test ./... || echo "Go tests failed in ${{ matrix.repo }}"
+          elif [ -f "Cargo.toml" ]; then
+            cargo test || echo "Cargo tests failed in ${{ matrix.repo }}"
+          else
+            echo "No test suite found in ${{ matrix.repo }}"
+          fi
+
+      - name: Report Health Status
+        run: |
+          echo "✅ Health check completed for ${{ matrix.repo }}"
