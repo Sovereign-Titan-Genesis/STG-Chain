@@ -1,0 +1,89 @@
+name: Asset Map Report
+
+on:
+  schedule:
+    - cron: "0 14 * * 1"   # setiap Senin jam 14:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-asset-map:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Asset Map
+        run: |
+          mkdir -p reports/assets
+          cat > reports/assets/asset-map.md <<'EOF'
+          # STG Asset Map — Peta Harta Karun
+
+          ## Unit 008 (Dana)
+          - Pilar FIN
+          - Nilai: 1,498,000,000,000 IDR
+          - Status: Verified & Secured by Bio-Server
+
+          ## Unit 009 (Karbon)
+          - Pilar ENV
+          - Status: Carbon Credit Audit Trail Verified
+          - Fungsi: Diplomasi global & subsidi rakyat
+
+          ## Unit TECH (Asteroid 16 Psyche)
+          - Data NASA Direct Feed
+          - Nilai: 10 Quintillion (simulasi)
+          - Status: Mining Simulation Active
+
+          ## Pilar LOG (Deep Sea Node)
+          - Node Alpha: Sunda Trench
+          - Node Beta: Banda Sea
+          - Node Gamma: North Papua
+          - Node Delta: Challenger Edge
+
+          ## Pilar COM (UMN)
+          - Acoustic Quantum-Key Distribution
+          - Status: Mesh aktif, anti-sadap
+
+          ## Pilar LAW
+          - Deep Sea Sovereignty Active
+          - Natural Law & Maritime Jurisdiction
+
+          ## Pilar EDU
+          - Modul Pelatihan AKSA Mingguan
+          - Sertifikasi Digital Rakyat Pesisir
+
+          ## Pilar SOC
+          - Digital Storefront "Pasar AKSA"
+          - KSP-Digital, Trade-Hub, Subsidy-Gate
+
+          ## Pilar ECO
+          - Ekonomi sirkular internal
+          - Anti-Tax system
+
+          ## Pilar MED
+          - Bio-Sensor integrasi
+          - Proteksi kesehatan kru
+
+          ## Pilar ENG
+          - Infrastruktur energi laut dalam
+          - Bio-Reactor Node
+
+          ## Pilar SEC
+          - Protokol keamanan anti-trace
+          - Audit trail STG-Chain
+
+          EOF
+
+      - name: Convert Asset Map to PDF
+        uses: docker://pandoc/core:latest
+        with:
+          args: "reports/assets/asset-map.md -o reports/assets/asset-map.pdf"
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: reports/assets
