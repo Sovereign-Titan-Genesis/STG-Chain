@@ -1,0 +1,47 @@
+name: Publish STG Dashboard
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 9 * * *"   # update dashboard setiap hari jam 09:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build Dashboard
+        run: |
+          mkdir -p public
+          cp README.md public/index.md
+          cp reports/audit.pdf public/audit.pdf
+          cp -r assets public/assets
+          echo "<!DOCTYPE html><html><head><meta charset='utf-8'><title>STG Dashboard</title></head><body>" > public/index.html
+          echo "<h1>STG‑Chain Dashboard</h1>" >> public/index.html
+          echo "<p>Welcome to the Sovereign Titan Genesis Showcase.</p>" >> public/index.html
+          echo "<h2>Showcase</h2>" >> public/index.html
+          markdown-to-html public/index.md >> public/index.html
+          echo "<h2>Weekly Audit Report</h2><a href='audit.pdf'>Download PDF</a>" >> public/index.html
+          echo "</body></html>" >> public/index.html
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
