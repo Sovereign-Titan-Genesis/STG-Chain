@@ -163,13 +163,24 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat kita.
 
 ---
 
+
 ## 📸 Visual Showcase
 (Tabel logo/ikon tiap repo ditampilkan di sini)
 
 ---
 
+
 ## 🟢 Health Status Badges
 (Tabel badge status otomatis dari workflow ke‑6)
+## 📤 Weekly Audit Distribution
+Every Monday, STG‑Audit Bot automatically generates and emails a PDF report to shareholders:
+- Andi Harpianto
+- Lumen Sentinel
+- Acih Rumtini
+- Agus Widianto
+
+The report includes health status, commit activity, and integration notes for all 12 Pillars.
+
 
 *"Building sovereign fintech infrastructure to turn crisis into opportunity."*
 
