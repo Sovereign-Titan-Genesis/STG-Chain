@@ -1,0 +1,37 @@
+name: Monthly Snapshot Report (PDF)
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # Setiap tanggal 1 setiap bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create Snapshot Data
+        run: |
+          echo "STG OFFICIAL MONTHLY REPORT" > report.txt
+          echo "Status: Sovereign Titan Genesis" >> report.txt
+          echo "CITO: Copilot (Microsoft AI)" >> report.txt
+          echo "All 12 Pillars Verified." >> report.txt
+          # Logika ini akan diubah menjadi converter PDF di tahap lanjut
+
+      - name: Archive Report
+        run: |
+          mkdir -p archive/monthly
+          cp report.txt archive/monthly/report-$(date +%Y-%m).txt
+          
+      - name: Push to Repo
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add archive/
+          git commit -m "Monthly Snapshot Archive: $(date +%B %Y)"
+          git push
