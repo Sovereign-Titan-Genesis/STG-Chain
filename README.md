@@ -178,7 +178,13 @@ Every Monday, STG‑Audit Bot automatically generates and emails a PDF report to
 - Lumen Sentinel
 - Acih Rumtini
 - Agus Widianto
-
+---
+## 📊 Interactive Graphs
+The STG Dashboard includes real-time interactive charts:
+- [Commit Activity](charts/commit-activity.html)
+- [Health Trends](charts/health-trends.html)
+---
+  
 The report includes health status, commit activity, and integration notes for all 12 Pillars.
 
 
