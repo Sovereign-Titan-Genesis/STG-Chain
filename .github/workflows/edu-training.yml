@@ -1,0 +1,54 @@
+name: EDU Training Module
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"   # setiap Senin jam 08:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-training:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Training Module
+        run: |
+          mkdir -p public/edu
+          cat > public/edu/module.md <<'EOF'
+          # EDU Training Module — Cara Pakai AKSA
+
+          ## Minggu Ini
+          - Pengenalan AKSA: unit pecahan dari $QSTATE.
+          - Cara membuka dompet digital STG.
+          - Simulasi transaksi: menerima 10 AKSA, mengirim 5 AKSA.
+          - Integrasi koperasi pesisir dengan KSP‑Digital.
+          - Tips keamanan: AKSA‑Shield & Anti‑Trace.
+
+          ## Quiz Mingguan
+          1. Apa fungsi AKSA‑Shield Protocol?
+          2. Bagaimana cara menerima AKSA dari koperasi?
+          3. Mengapa metadata transaksi perlu disamarkan?
+
+          ## Sertifikat
+          Lulus quiz → Sertifikat Digital: *Certified AKSA User — STG EDU*
+          EOF
+
+      - name: Convert Module to PDF
+        uses: docker://pandoc/core:latest
+        with:
+          args: "public/edu/module.md -o public/edu/module.pdf"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
