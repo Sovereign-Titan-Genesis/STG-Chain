@@ -184,6 +184,15 @@ The STG Dashboard includes real-time interactive charts:
 - [Commit Activity](charts/commit-activity.html)
 - [Health Trends](charts/health-trends.html)
 ---
+## 🔗 Dependency Graph
+The STG Dashboard includes a real-time dependency graph showing:
+- Devnet Engine (Bio-Server / DNA-Masking & Engine)
+- 12 Operational Pillars (bswcorp)
+- Synchronization flows with STG‑Chain
+---
+
+View interactive graph: [Dependency Graph](graphs/dependency-graph.html)
+
   graph TD
     subgraph "CORE (Kanonikal)"
         STG_CHAIN[STG-Chain / Blockchain Backbone]
@@ -207,6 +216,7 @@ The STG Dashboard includes real-time interactive charts:
     
     style STG_CHAIN fill:#f96,stroke:#333,stroke-width:4px
     style BIO_SERVER fill:#6cf,stroke:#333,stroke-width:4px
+
 
  ---
 The report includes health status, commit activity, and integration notes for all 12 Pillars.
