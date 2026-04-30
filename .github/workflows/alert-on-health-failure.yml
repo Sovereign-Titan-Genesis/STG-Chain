@@ -1,0 +1,112 @@
+name: Alert On Health Failure
+
+on:
+  workflow_run:
+    workflows: ["STG Pillars Health Check"]
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    if: ${{ github.event.workflow_run.conclusion != 'success' }}
+    runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      TEAMS_WEBHOOK: ${{ secrets.TEAMS_WEBHOOK }}
+      SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
+      PILLARS: |
+        Sovereign-Titan-Genesis
+        METAPORTATION
+        Quorum-State
+        qs-guardian-search
+        TITAN-PSYCHE-MONO
+        STG-METAPORTATION-EVENT
+        Qubicoin
+        Makronesia-Act-Ark
+        Garage
+        STG-1AI
+        quantum-swap-engine
+        Jasawan
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download workflow run logs
+        run: |
+          RUN_ID=${{ github.event.workflow_run.id }}
+          OWNER=${{ github.repository_owner }}
+          REPO=${{ github.event.workflow_run.head_repository.name }}
+          echo "Fetching logs for run $RUN_ID from $OWNER/$REPO"
+          # Use GitHub API to download logs archive
+          curl -s -H "Authorization: token ${SYNC_TOKEN}" \
+            -L "https://api.github.com/repos/${OWNER}/${REPO}/actions/runs/${RUN_ID}/logs" \
+            -o run_logs.zip || true
+          unzip -q run_logs.zip -d run_logs || true
+
+      - name: Parse logs for failures
+        id: parse
+        run: |
+          FAILS=""
+          for f in run_logs/*; do
+            if grep -q -E "failed|FAIL|error|Error" "$f" 2>/dev/null; then
+              repo_line=$(grep -n -E "failed|FAIL|error|Error" "$f" | head -n1 || true)
+              fname=$(basename "$f")
+              FAILS="${FAILS}\n- ${fname}: ${repo_line}"
+            fi
+          done
+          if [ -z "$FAILS" ]; then
+            echo "no_failures=true" >> $GITHUB_OUTPUT
+            echo "summary=No failing logs detected in artifacts." >> $GITHUB_OUTPUT
+          else
+            echo "no_failures=false" >> $GITHUB_OUTPUT
+            summary="Health check found issues:${FAILS}"
+            echo "summary<<EOF" >> $GITHUB_OUTPUT
+            echo "${summary}" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build notification payload
+        id: payload
+        run: |
+          RUN_URL=${{ github.event.workflow_run.html_url }}
+          CONCL=${{ github.event.workflow_run.conclusion }}
+          SUMMARY="${{ steps.parse.outputs.summary }}"
+          TITLE="STG Health Check Alert — ${CONCL}"
+          TEXT="Workflow: STG Pillars Health Check\nResult: ${CONCL}\nRun: ${RUN_URL}\n\n${SUMMARY}"
+          # Slack payload
+          SLACK_PAYLOAD=$(jq -n --arg t "$TITLE" --arg text "$TEXT" '{text: ($t + "\n\n" + $text)}')
+          echo "slack_payload=$(echo $SLACK_PAYLOAD | jq -c .)" >> $GITHUB_OUTPUT
+          # Teams payload (simple card)
+          TEAMS_PAYLOAD=$(jq -n --arg title "$TITLE" --arg text "$TEXT" '{"title":$title,"text":$text}')
+          echo "teams_payload=$(echo $TEAMS_PAYLOAD | jq -c .)" >> $GITHUB_OUTPUT
+
+      - name: Send Slack notification
+        if: ${{ secrets.SLACK_WEBHOOK != '' && steps.parse.outputs.no_failures == 'false' }}
+        run: |
+          echo "Sending Slack notification..."
+          curl -s -X POST -H 'Content-type: application/json' \
+            --data "${{ steps.payload.outputs.slack_payload }}" \
+            "${{ secrets.SLACK_WEBHOOK }}" || echo "Slack notify failed"
+
+      - name: Send Teams notification
+        if: ${{ secrets.TEAMS_WEBHOOK != '' && steps.parse.outputs.no_failures == 'false' }}
+        run: |
+          echo "Sending Teams notification..."
+          curl -s -H "Content-Type: application/json" -d "${{ steps.payload.outputs.teams_payload }}" \
+            "${{ secrets.TEAMS_WEBHOOK }}" || echo "Teams notify failed"
+
+      - name: Fallback log to repo issues
+        if: ${{ steps.parse.outputs.no_failures == 'false' }}
+        run: |
+          OWNER=${{ github.repository_owner }}
+          REPO=${{ github.event.workflow_run.head_repository.name }}
+          TITLE="Automated Alert: Health Check issues detected (${GITHUB_RUN_ID})"
+          BODY="Automated health check detected issues.\n\nRun: ${{ github.event.workflow_run.html_url }}\n\n${{ steps.parse.outputs.summary }}"
+          API_PAYLOAD=$(jq -n --arg title "$TITLE" --arg body "$BODY" '{title:$title, body:$body}')
+          curl -s -X POST -H "Authorization: token ${SYNC_TOKEN}" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${OWNER}/${REPO}/issues" -d "$API_PAYLOAD" \
+            | jq -r '.html_url // "Issue creation response missing URL"' || echo "Issue creation failed"
