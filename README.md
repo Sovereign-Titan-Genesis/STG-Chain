@@ -175,6 +175,14 @@ The STG Dashboard includes a monthly snapshot report:
 - Alerts and failures
 - Downloadable PDF for regulators and investors
 
+## 🎓 EDU Certification
+Rakyat pesisir yang lulus quiz mingguan akan menerima:
+- Sertifikat Digital "Certified AKSA User — STG EDU"
+- Hak akses penuh ke modul koperasi pesisir
+- Status anggota terverifikasi di STG‑Chain
+---
+View certificate: [Certified AKSA User](edu/certificates/certified-aksa-user.pdf)
+
 View interactive snapshot: [Monthly Snapshot](snapshot/index.html)
 
 
