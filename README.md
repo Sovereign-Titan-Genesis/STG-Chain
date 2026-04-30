@@ -184,9 +184,33 @@ The STG Dashboard includes real-time interactive charts:
 - [Commit Activity](charts/commit-activity.html)
 - [Health Trends](charts/health-trends.html)
 ---
-  
+  graph TD
+    subgraph "CORE (Kanonikal)"
+        STG_CHAIN[STG-Chain / Blockchain Backbone]
+    end
+
+    subgraph "DEVNET ENGINE"
+        BIO_SERVER[Bio-Server / DNA-Masking & Engine]
+    end
+
+    subgraph "OPERATIONAL (12 PILAR - bswcorp)"
+        EDU[EDU] --- ECO[ECO] --- TECH[TECH]
+        SOC[SOC] --- LAW[LAW] --- SEC[SEC]
+        ENV[ENV] --- ENG[ENG] --- MED[MED]
+        COM[COM] --- LOG[LOG] --- FIN[FIN]
+    end
+
+    %% Jalur Sinkronisasi
+    BIO_SERVER -->|Integritas Data| STG_CHAIN
+    STG_CHAIN -->|Validasi Blok| OPERATIONAL
+    OPERATIONAL -->|Laporan Health-Check| STG_CHAIN
+    
+    style STG_CHAIN fill:#f96,stroke:#333,stroke-width:4px
+    style BIO_SERVER fill:#6cf,stroke:#333,stroke-width:4px
+
+ ---
 The report includes health status, commit activity, and integration notes for all 12 Pillars.
 
-
+---
 *"Building sovereign fintech infrastructure to turn crisis into opportunity."*
 
