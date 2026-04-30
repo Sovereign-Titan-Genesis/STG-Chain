@@ -1,0 +1,122 @@
+name: Alert On Health Failure Canonical
+
+on:
+  repository_dispatch:
+    types: [health-check-completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    env:
+      SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      TEAMS_WEBHOOK: ${{ secrets.TEAMS_WEBHOOK }}
+
+    steps:
+      - name: Parse incoming payload
+        id: parse_payload
+        run: |
+          echo "Received repository_dispatch event"
+          # payload available at github.event.client_payload
+          RUN_ID="${{ github.event.client_payload.run_id || '' }}"
+          ORG="${{ github.event.client_payload.owner || '' }}"
+          REPO="${{ github.event.client_payload.repo || '' }}"
+          CONCL="${{ github.event.client_payload.conclusion || 'unknown' }}"
+          echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
+          echo "owner=$ORG" >> $GITHUB_OUTPUT
+          echo "repo=$REPO" >> $GITHUB_OUTPUT
+          echo "conclusion=$CONCL" >> $GITHUB_OUTPUT
+
+      - name: Abort if conclusion is success
+        if: ${{ steps.parse_payload.outputs.conclusion == 'success' }}
+        run: |
+          echo "Health check concluded success; no alert needed."
+          exit 0
+
+      - name: Download workflow run logs
+        if: ${{ steps.parse_payload.outputs.run_id != '' }}
+        run: |
+          RUN_ID=${{ steps.parse_payload.outputs.run_id }}
+          OWNER=${{ steps.parse_payload.outputs.owner }}
+          REPO=${{ steps.parse_payload.outputs.repo }}
+          TOKEN="${{ env.SYNC_TOKEN }}"
+          echo "Fetching logs for run $RUN_ID from $OWNER/$REPO"
+          LOGS_URL="https://api.github.com/repos/${OWNER}/${REPO}/actions/runs/${RUN_ID}/logs"
+          curl -s -H "Authorization: token ${TOKEN}" -L "${LOGS_URL}" -o run_logs.zip || true
+          if [ -f run_logs.zip ]; then
+            unzip -q run_logs.zip -d run_logs || true
+            echo "logs_extracted=true" >> $GITHUB_OUTPUT
+          else
+            echo "logs_extracted=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Parse logs for failures
+        id: parse
+        run: |
+          FAIL_SUMMARY=""
+          if [ -d run_logs ]; then
+            for f in $(find run_logs -type f); do
+              if grep -q -E "failed|FAIL|error|Error" "$f" 2>/dev/null; then
+                FIRST=$(grep -n -E "failed|FAIL|error|Error" "$f" | head -n1 || true)
+                LINE_NUM=$(echo "$FIRST" | cut -d: -f1 || echo "")
+                LINE_TXT=$(sed -n "${LINE_NUM}p" "$f" 2>/dev/null || echo "")
+                FAIL_SUMMARY="${FAIL_SUMMARY}\n- $(basename "$f"): ${LINE_TXT}"
+              fi
+            done
+          fi
+          if [ -z "$FAIL_SUMMARY" ]; then
+            echo "no_failures=true" >> $GITHUB_OUTPUT
+            echo "summary=No explicit failure lines found in logs." >> $GITHUB_OUTPUT
+          else
+            echo "no_failures=false" >> $GITHUB_OUTPUT
+            echo "summary<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$FAIL_SUMMARY" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build notification payloads
+        id: payload
+        run: |
+          OWNER=${{ steps.parse_payload.outputs.owner }}
+          REPO=${{ steps.parse_payload.outputs.repo }}
+          RUN_ID=${{ steps.parse_payload.outputs.run_id }}
+          CONCL=${{ steps.parse_payload.outputs.conclusion }}
+          RUN_URL="https://github.com/${OWNER}/${REPO}/actions/runs/${RUN_ID}"
+          SUMMARY="${{ steps.parse.outputs.summary }}"
+          TITLE="STG Health Alert — ${CONCL}"
+          TEXT="Repository: ${OWNER}/${REPO}\nResult: ${CONCL}\nRun: ${RUN_URL}\n\n${SUMMARY}"
+          SLACK_PAYLOAD=$(jq -n --arg t "$TITLE" --arg text "$TEXT" '{text: ($t + "\n\n" + $text)}')
+          TEAMS_PAYLOAD=$(jq -n --arg title "$TITLE" --arg text "$TEXT" '{"title":$title,"text":$text}')
+          echo "slack_payload=$(echo $SLACK_PAYLOAD | jq -c .)" >> $GITHUB_OUTPUT
+          echo "teams_payload=$(echo $TEAMS_PAYLOAD | jq -c .)" >> $GITHUB_OUTPUT
+
+      - name: Send Slack notification
+        if: ${{ secrets.SLACK_WEBHOOK != '' && steps.parse.outputs.no_failures == 'false' }}
+        run: |
+          echo "Sending Slack notification..."
+          curl -s -X POST -H 'Content-type: application/json' \
+            --data "${{ steps.payload.outputs.slack_payload }}" \
+            "${{ secrets.SLACK_WEBHOOK }}" || echo "Slack notify failed"
+
+      - name: Send Teams notification
+        if: ${{ secrets.TEAMS_WEBHOOK != '' && steps.parse.outputs.no_failures == 'false' }}
+        run: |
+          echo "Sending Teams notification..."
+          curl -s -H "Content-Type: application/json" -d "${{ steps.payload.outputs.teams_payload }}" \
+            "${{ secrets.TEAMS_WEBHOOK }}" || echo "Teams notify failed"
+
+      - name: Create fallback Issue in source repo
+        if: ${{ steps.parse.outputs.no_failures == 'false' }}
+        run: |
+          OWNER=${{ steps.parse_payload.outputs.owner }}
+          REPO=${{ steps.parse_payload.outputs.repo }}
+          TITLE="Automated Alert: Health Check issues detected (run ${{ steps.parse_payload.outputs.run_id }})"
+          BODY="Automated health check detected issues.\n\nRun: https://github.com/${OWNER}/${REPO}/actions/runs/${{ steps.parse_payload.outputs.run_id }}\n\n${{ steps.parse.outputs.summary }}"
+          API_PAYLOAD=$(jq -n --arg title "$TITLE" --arg body "$BODY" '{title:$title, body:$body}')
+          curl -s -X POST -H "Authorization: token ${SYNC_TOKEN}" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${OWNER}/${REPO}/issues" -d "$API_PAYLOAD" \
+            | jq -r '.html_url // "Issue creation response missing URL"' || echo "Issue creation failed"
