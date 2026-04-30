@@ -200,6 +200,14 @@ Unit 009 (Carbon Sovereignty) generates weekly reports:
 
 View interactive report: [Carbon Offset](env/index.html)
 
+## 💱 Bio-Currency Mesh Transaction
+Unit 008 (Financial Sovereignty) now supports:
+- Transactions via Underwater Mesh Network (UMN)
+- Steganographic encryption for anti-surveillance
+- Audit trail verified by Bio-Server
+- Weekly automated transaction simulation
+
+View transaction log: [Bio-Currency Mesh](fin/index.html)
 
 View interactive snapshot: [Monthly Snapshot](snapshot/index.html)
 
