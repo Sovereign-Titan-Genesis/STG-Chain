@@ -189,7 +189,17 @@ View passport: [Bio-Passport](passport/bio-passport.pdf)
 - Status anggota terverifikasi di STGcertified-
 
 
-View certificate: [Certified AKSA User](edu/certificates/certified-aksa-user.pdf)
+View certificate: [Certified AKSA User](edu/certificates/certified-aksa-user.pdf) 
+
+## 🌊 Carbon Offset Report
+Unit 009 (Carbon Sovereignty) generates weekly reports:
+- Carbon Shards Reserve
+- Emission Offset
+- ESG Compliance
+- Subsidy Distribution
+
+View interactive report: [Carbon Offset](env/index.html)
+
 
 View interactive snapshot: [Monthly Snapshot](snapshot/index.html)
 
