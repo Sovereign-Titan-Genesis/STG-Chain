@@ -1,0 +1,77 @@
+name: Generate Timeline Audit Trail
+
+on:
+  schedule:
+    - cron: "0 14 * * 0"   # setiap Minggu jam 14:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-timeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Collect Weekly Data
+        run: |
+          mkdir -p public/timeline
+          echo "## STG Timeline Audit Trail" > public/timeline/timeline.md
+          echo "Generated on $(date -u)" >> public/timeline/timeline.md
+          echo "" >> public/timeline/timeline.md
+
+          # Contoh data commit & health status
+          echo "- Week 1: All pillars healthy, 120 commits" >> public/timeline/timeline.md
+          echo "- Week 2: SEC pillar warning, 95 commits" >> public/timeline/timeline.md
+          echo "- Week 3: Qubicoin pillar failure, 110 commits" >> public/timeline/timeline.md
+          echo "- Week 4: All pillars healthy, 140 commits" >> public/timeline/timeline.md
+
+      - name: Convert Timeline to HTML
+        run: |
+          cat > public/timeline/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>STG Timeline Audit Trail</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h2>STG Timeline Audit Trail</h2>
+            <canvas id="timelineChart"></canvas>
+            <script>
+              const ctx = document.getElementById('timelineChart');
+              const timelineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                  labels: ["Week 1","Week 2","Week 3","Week 4"],
+                  datasets: [{
+                    label: 'Commits',
+                    data: [120,95,110,140],
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.3
+                  },{
+                    label: 'Health Score',
+                    data: [12,11,10,12],
+                    borderColor: 'rgb(255, 99, 132)',
+                    tension: 0.3
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
