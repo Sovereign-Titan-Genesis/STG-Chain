@@ -168,6 +168,14 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat kita.
 (Tabel logo/ikon tiap repo ditampilkan di sini)
 
 ---
+## 📅 Monthly Snapshot
+The STG Dashboard includes a monthly snapshot report:
+- Commit activity summary
+- Health status overview
+- Alerts and failures
+- Downloadable PDF for regulators and investors
+
+View interactive snapshot: [Monthly Snapshot](snapshot/index.html)
 
 
 ## 🟢 Health Status Badges
