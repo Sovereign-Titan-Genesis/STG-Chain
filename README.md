@@ -171,90 +171,18 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat kita.
 
 
 ## 🟢 Health Status Badges
-(Tabel badge status otomatis dari workflow ke‑6)
-## 📤 Weekly Audit Distribution
-Every Monday, STG‑Audit Bot automatically generates and emails a PDF report to shareholders:
-- Andi Harpianto
-- Lumen Sentinel
-- Acih Rumtini
-- Agus Widianto
----
-## 📊 Interactive Graphs
-The STG Dashboard includes real-time interactive charts:
-- [Commit Activity](charts/commit-activity.html)
-- [Health Trends](charts/health-trends.html)
----
-## 🔗 Dependency Graph
-The STG Dashboard includes a real-time dependency graph showing:
-- Devnet Engine (Bio-Server / DNA-Masking & Engine)
-- 12 Operational Pillars (bswcorp)
-- Synchronization flows with STG‑Chain
----
-## 🕰️ Timeline Audit Trail
-The STG Dashboard includes a weekly timeline showing:
-- Commit activity per week
-- Health status of all pillars
-- Alerts and failures
 
-View interactive timeline: [Timeline Audit Trail](timeline/index.html)
-
-
-View interactive graph: [Dependency Graph](graphs/dependency-graph.html)
-
-  graph TD
-    subgraph "CORE (Kanonikal)"
-        STG_CHAIN[STG-Chain / Blockchain Backbone]
-    end
-
-    subgraph "DEVNET ENGINE"
-        BIO_SERVER[Bio-Server / DNA-Masking & Engine]
-    end
-
-    subgraph "OPERATIONAL (12 PILAR - bswcorp)"
-        EDU[EDU] --- ECO[ECO] --- TECH[TECH]
-        SOC[SOC] --- LAW[LAW] --- SEC[SEC]
-        ENV[ENV] --- ENG[ENG] --- MED[MED]
-        COM[COM] --- LOG[LOG] --- FIN[FIN]
-    end
-
-    %% Jalur Sinkronisasi
-    BIO_SERVER -->|Integritas Data| STG_CHAIN
-    STG_CHAIN -->|Validasi Blok| OPERATIONAL
-    OPERATIONAL -->|Laporan Health-Check| STG_CHAIN
-    
-    style STG_CHAIN fill:#f96,stroke:#333,stroke-width:4px
-    style BIO_SERVER fill:#6cf,stroke:#333,stroke-width:4px
-
-
- ---
-The report includes health status, commit activity, and integration notes for all 12 Pillars.
-
----
-
-graph TD
-    subgraph "CORE (Kanonikal)"
-        STG_CHAIN[STG-Chain / Blockchain Backbone]
-    end
-
-    subgraph "DEVNET ENGINE"
-        BIO_SERVER[Bio-Server / DNA-Masking & Engine]
-    end
-
-    subgraph "OPERATIONAL (12 PILAR - bswcorp)"
-        EDU[EDU] --- ECO[ECO] --- TECH[TECH]
-        SOC[SOC] --- LAW[LAW] --- SEC[SEC]
-        ENV[ENV] --- ENG[ENG] --- MED[MED]
-        COM[COM] --- LOG[LOG] --- FIN[FIN]
-    end
-
-    %% Jalur Sinkronisasi
-    BIO_SERVER -->|Integritas Data| STG_CHAIN
-    STG_CHAIN -->|Validasi Blok| OPERATIONAL
-    OPERATIONAL -->|Laporan Health-Check| STG_CHAIN
-    
-    style STG_CHAIN fill:#f96,stroke:#333,stroke-width:4px
-    style BIO_SERVER fill:#6cf,stroke:#333,stroke-width:4px
-
-    
-*"Building sovereign fintech infrastructure to turn crisis into opportunity."*
-
+| Pilar | Status |
+|-------|--------|
+| Sovereign‑Titan‑Genesis | ![Genesis Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Metaportation | ![Metaportation Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Quorum‑State | ![Quorum Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| QS Guardian Search | ![Guardian Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Titan Psyche Mono | ![Psyche Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| STG‑Metaportation‑Event | ![Event Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Qubicoin | ![Qubicoin Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Makronesia Act‑Ark | ![Makronesia Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Garage | ![Garage Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| STG‑1AI | ![1AI Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Quantum Swap Engine | ![Swap Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Jasawan | ![Jasawan Status](https://img.shields.io/badge/status-passing-brightgreen) |
