@@ -1,0 +1,71 @@
+name: Dependency Graph Alerts
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 13 * * *"   # update alert setiap hari jam 13:00 UTC
+  repository_dispatch:
+    types: [health-check-completed]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  update-graph-alerts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Graph with Alerts
+        run: |
+          mkdir -p public/graphs
+          cat > public/graphs/dependency-alert.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>STG Dependency Graph with Alerts</title>
+            <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+            <script>mermaid.initialize({startOnLoad:true});</script>
+          </head>
+          <body>
+            <h2>STG Dependency Graph (with Health Alerts)</h2>
+            <div class="mermaid">
+          subgraph "DEVNET ENGINE"
+            BIO_SERVER[Bio-Server / DNA-Masking & Engine]
+          end
+
+          subgraph "OPERATIONAL (12 PILAR - bswcorp)"
+            EDU[EDU]:::healthy --- ECO[ECO]:::healthy --- TECH[TECH]:::healthy
+            SOC[SOC]:::healthy --- LAW[LAW]:::healthy --- SEC[SEC]:::healthy
+            ENV[ENV]:::healthy --- ENG[ENG]:::healthy --- MED[MED]:::healthy
+            COM[COM]:::healthy --- LOG[LOG]:::healthy --- FIN[FIN]:::healthy
+          end
+
+          BIO_SERVER -->|Integritas Data| STG_CHAIN:::healthy
+          STG_CHAIN:::healthy -->|Validasi Blok| OPERATIONAL
+          OPERATIONAL -->|Laporan Health-Check| STG_CHAIN:::healthy
+
+          classDef healthy fill:#6f6,stroke:#333,stroke-width:2px;
+          classDef warning fill:#ff0,stroke:#333,stroke-width:2px;
+          classDef danger fill:#f66,stroke:#333,stroke-width:2px;
+
+          %% Example: jika pilar gagal, ubah class menjadi warning/danger
+          %% class EDU warning
+          %% class SEC danger
+            </div>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
