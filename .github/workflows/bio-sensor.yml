@@ -1,0 +1,20 @@
+name: Bio-Sensor Detection
+
+on:
+  schedule:
+    - cron: "0 12 * * 1"   # setiap Senin jam 12:00 UTC
+  workflow_dispatch:
+
+jobs:
+  detect-submarine:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Bio-Sensor Simulation
+        run: |
+          echo "🔬 [STG-COM] Bio-Sensor Node aktif..."
+          echo "Mendeteksi pola akustik..."
+          echo "Anomali terdeteksi: Kapal Selam Asing di Node-Gamma"
+          echo "🚨 Alert dikirim ke STG-Chain"
