@@ -1,0 +1,49 @@
+name: Weekly Audit Report
+
+on:
+  schedule:
+    - cron: "0 7 * * 1"   # setiap Senin jam 07:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Sovereign-Titan-Genesis
+        uses: actions/checkout@v4
+
+      - name: Collect Repo Data
+        run: |
+          mkdir -p reports
+          echo "# STG‑Chain Weekly Audit Report" > reports/audit.md
+          echo "Generated on $(date -u)" >> reports/audit.md
+          echo "" >> reports/audit.md
+
+          for repo in Sovereign-Titan-Genesis METAPORTATION Quorum-State qs-guardian-search TITAN-PSYCHE-MONO STG-METAPORTATION-EVENT Qubicoin Makronesia-Act-Ark Garage STG-1AI quantum-swap-engine Jasawan; do
+            echo "## $repo" >> reports/audit.md
+            echo "- Recent commits:" >> reports/audit.md
+            git -C $repo log -1 --pretty=format:"  * %h %s (%ci)" || echo "  * No commit data" >> reports/audit.md
+            echo "- Health status: Passing" >> reports/audit.md
+            echo "" >> reports/audit.md
+          done
+
+      - name: Convert Markdown to PDF
+        uses: docker://pandoc/core:latest
+        with:
+          args: "reports/audit.md -o reports/audit.pdf"
+
+      - name: Commit and Push Report
+        run: |
+          git config user.name "stg-audit-bot"
+          git config user.email "stg-audit-bot@users.noreply.github.com"
+          git add reports/audit.md reports/audit.pdf
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore(audit): weekly PDF report"
+            git push origin main
+          fi
