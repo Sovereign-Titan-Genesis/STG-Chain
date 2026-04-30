@@ -190,6 +190,14 @@ The STG Dashboard includes a real-time dependency graph showing:
 - 12 Operational Pillars (bswcorp)
 - Synchronization flows with STG‑Chain
 ---
+## 🕰️ Timeline Audit Trail
+The STG Dashboard includes a weekly timeline showing:
+- Commit activity per week
+- Health status of all pillars
+- Alerts and failures
+
+View interactive timeline: [Timeline Audit Trail](timeline/index.html)
+
 
 View interactive graph: [Dependency Graph](graphs/dependency-graph.html)
 
