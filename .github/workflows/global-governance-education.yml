@@ -1,0 +1,36 @@
+name: Global Governance Education Dashboard
+
+on:
+  schedule:
+    - cron: "0 9 * * *"   # Update harian jam 09 UTC
+  workflow_dispatch:
+
+jobs:
+  global-governance-education:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Governance Education Report
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "## Global Governance Education Report" > GLOBAL_GOVERNANCE_EDUCATION.md
+          echo "Last Update: $DATE" >> GLOBAL_GOVERNANCE_EDUCATION.md
+          echo "" >> GLOBAL_GOVERNANCE_EDUCATION.md
+          echo "| Region | Governance Module | Participants | Completion Rate | Status |" >> GLOBAL_GOVERNANCE_EDUCATION.md
+          echo "| --- | --- | --- | --- | --- |" >> GLOBAL_GOVERNANCE_EDUCATION.md
+          echo "| ASEAN | Voting & Proposal Literacy | 4,000 | 65% | Active |" >> GLOBAL_GOVERNANCE_EDUCATION.md
+          echo "| India | Public Budget Transparency | 6,000 | 70% | Ongoing |" >> GLOBAL_GOVERNANCE_EDUCATION.md
+          echo "| Africa | Community Governance & Rights | 5,000 | 75% | Active |" >> GLOBAL_GOVERNANCE_EDUCATION.md
+          echo "| China | Digital Sovereignty & Compliance | 7,000 | 60% | Ongoing |" >> GLOBAL_GOVERNANCE_EDUCATION.md
+          echo "| Global | Governance Simulation & Training | 10,000 | 80% | Active |" >> GLOBAL_GOVERNANCE_EDUCATION.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_GOVERNANCE_EDUCATION.md
+          git commit -m "Global Governance Education Update: $DATE"
+          git push
+          
