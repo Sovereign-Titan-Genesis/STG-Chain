@@ -239,6 +239,14 @@ STG issues a confidential manifesto for members:
 
 View manifesto: [Manifesto Q-Day](edu/manifesto_qday.pdf)
 
+## 📊 Welfare Dashboard
+The STG Dashboard includes a real-time welfare tracker:
+- Unit 008 balance (Rp1.498T)
+- Subsidy distribution in AKSA
+- Weekly audit trail
+
+View dashboard: [Welfare Dashboard](welfare/index.html)
+
 View secure asset map: [Secure Asset Map](assets/asset-map-security.pdf)
 
 View interactive asset map: [Asset Map](assets/asset-map.pdf)
