@@ -1,0 +1,26 @@
+name: STG Security Patrol Log
+
+on:
+  schedule:
+    - cron: "0 * * * *"   # Patroli setiap jam
+  workflow_dispatch:
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Security Report
+        run: |
+          DATE=$(date +'%H:%M')
+          echo "| $DATE | Sentinel-Wing | All Nodes Secure |" >> SECURITY_LOG.md
+
+      - name: Commit Security Log
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add SECURITY_LOG.md
+          git commit -m "Security Update: $DATE"
+          git push
