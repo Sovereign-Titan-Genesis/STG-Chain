@@ -230,6 +230,15 @@ STG positions itself in global forums:
 
 View governance report: [Global Governance Report](GLOBAL_GOVERNANCE.md)
 
+## 📑 Global Compliance & Audit Dashboard
+STG ensures international compliance:
+- AML/KYC, FATF, Basel III, ISO 20022
+- Cross-border transaction audits
+- Updated every 6 hours
+- Verified by Bio-Server & Sentinel
+
+View compliance audit: [Global Compliance Report](GLOBAL_COMPLIANCE_AUDIT.md)
+
 ---
 
 ### Workflows dan Dashboard
