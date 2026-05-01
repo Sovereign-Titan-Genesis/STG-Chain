@@ -301,6 +301,16 @@ STG integrates homeschooling curriculum worldwide:
 
 View education report: [Global Education & Curriculum](GLOBAL_EDUCATION_CURRICULUM.md)
 
+## 🏫🌍 Global Governance Education Dashboard
+STG educates citizens on governance:
+- Voting literacy, budget transparency, community rights
+- Digital sovereignty & compliance
+- Governance simulation & training
+- Updated daily
+- Verified by Bio-Server & Education Hub
+
+View governance education report: [Global Governance Education](GLOBAL_GOVERNANCE_EDUCATION.md)
+
 ---
 
 ### Workflows dan Dashboard
