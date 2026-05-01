@@ -1,0 +1,44 @@
+name: Auto Update Audit Trail
+
+on:
+  push:
+    paths:
+      - ".github/workflows/*.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Audit Table
+        run: |
+          echo "# STG‑Chain — Canonical Workflow Audit" > AUDIT.md
+          echo "" >> AUDIT.md
+          echo "## 📌 Overview" >> AUDIT.md
+          echo "This document is automatically updated whenever workflows change." >> AUDIT.md
+          echo "" >> AUDIT.md
+          echo "## 📑 Workflow Audit Table" >> AUDIT.md
+          echo "" >> AUDIT.md
+          echo "| Workflow | Theme | Canonical File | Status |" >> AUDIT.md
+          echo "|----------|-------|----------------|--------|" >> AUDIT.md
+
+          for file in .github/workflows/workflow-*.yml; do
+            wf=$(basename "$file")
+            num=$(echo "$wf" | cut -d'-' -f2)
+            theme=$(echo "$wf" | cut -d'-' -f3- | sed 's/.yml//')
+            echo "| $num | $theme | \`$wf\` | ✅ Canonical |" >> AUDIT.md
+          done
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add AUDIT.md
+          git commit -m "Auto-update AUDIT.md from workflows"
+          git push
