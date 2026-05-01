@@ -129,6 +129,16 @@ STG governance changes are secured with delays:
 
 View timelock log: [Timelock Controller Report](TIMELOCK_LOG.md)
 
+## 💧 Liquidity Injection Dashboard
+STG simulates collateral flow:
+- Unit 008 → Unit 012 (JASAWAN)
+- Unit 008 → Unit 001 (Bio-Store)
+- Unit 008 → Unit 009 (Carbon Sovereignty)
+- Updated every 6 hours
+- Verified by Bio-Server
+
+View liquidity log: [Liquidity Injection Report](LIQUIDITY_LOG.md)
+
 ---
 
 ### Workflows dan Dashboard
