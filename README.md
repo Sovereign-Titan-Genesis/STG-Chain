@@ -120,6 +120,15 @@ STG ensures secure allocation of funds:
 
 View vesting log: [Vesting Wallet Report](VESTING_LOG.md)
 
+## ⏳ Timelock Controller Dashboard
+STG governance changes are secured with delays:
+- 12h, 24h, 48h, 72h timelocks
+- Prevents sudden manipulation
+- Verified by Bio-Server
+- Updated every 6 hours
+
+View timelock log: [Timelock Controller Report](TIMELOCK_LOG.md)
+
 ---
 
 ### Workflows dan Dashboard
