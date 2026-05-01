@@ -1,0 +1,34 @@
+name: Timelock Controller Dashboard
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # Update setiap 6 jam
+  workflow_dispatch:
+
+jobs:
+  timelock-controller:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Timelock Report
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          echo "## Timelock Controller Report" > TIMELOCK_LOG.md
+          echo "Timestamp: $DATE" >> TIMELOCK_LOG.md
+          echo "" >> TIMELOCK_LOG.md
+          echo "| Proposal | Delay | Status | Execution Time |" >> TIMELOCK_LOG.md
+          echo "| --- | --- | --- | --- |" >> TIMELOCK_LOG.md
+          echo "| Governance Update | 24h | Pending | $DATE + 24h |" >> TIMELOCK_LOG.md
+          echo "| Vesting Wallet Release | 48h | Locked | $DATE + 48h |" >> TIMELOCK_LOG.md
+          echo "| Drone Logistics Scaling | 12h | Pending | $DATE + 12h |" >> TIMELOCK_LOG.md
+          echo "| Bio-Reactor Expansion | 72h | Locked | $DATE + 72h |" >> TIMELOCK_LOG.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add TIMELOCK_LOG.md
+          git commit -m "Timelock Controller Update: $DATE"
+          git push
