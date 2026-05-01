@@ -290,6 +290,15 @@ STG deploys Sentinel-Wing bio-hybrid drones:
 
 View security log: [Security Log](SECURITY_LOG.md)
 
+STG LAW: AIRSPACE SOVEREIGNTY & DRONE REGULATION
+------------------------------------------------
+1. Zona Larangan Terbang: Radius 10km di atas Bio-Store & Node adalah wilayah terlarang bagi drone asing.
+2. Status Sentinel-Wing: Merupakan instrumen penegak hukum sah STG.
+3. Sanksi Pelanggaran:
+   - Penyusupan: Penyitaan alat & Blacklist Bio-Passport.
+   - Perusakan Drone: Denda 10.000 AKSA & Kerja Wajib di Unit Produksi ENG.
+4. Hak Tindak: Sentinel-Wing diizinkan melakukan "Acoustic Disruption" untuk menjatuhkan drone ilegal.
+5. 
 View secure asset map: [Secure Asset Map](assets/asset-map-security.pdf)
 
 View interactive asset map: [Asset Map](assets/asset-map.pdf)
