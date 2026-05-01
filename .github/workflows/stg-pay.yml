@@ -1,0 +1,29 @@
+name: STG-Pay Transactions
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [stg-pay-transaction]
+
+jobs:
+  process-payment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log Transaction
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          WALLET="AKSA-PESISIR-001"
+          ITEM="Rice 10kg"
+          AMOUNT="100 AKSA"
+          echo "| $DATE | $WALLET | $ITEM | $AMOUNT | SUCCESS |" >> STG_PAY_LOG.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add STG_PAY_LOG.md
+          git commit -m "STG-Pay Transaction: $DATE"
+          git push
