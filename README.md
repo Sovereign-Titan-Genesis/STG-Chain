@@ -488,6 +488,17 @@ STG sets hybrid supremacy standard:
 
 View benchmark report: [Global AI-Quantum Benchmark](GLOBAL_AI_QUANTUM_BENCHMARK.md)
 
+## 🏗️🚂🌍 Global Infrastructure & Reconstruction Dashboard
+STG builds the physical foundation of the future:
+- 5,000 km Quantum Rail network in progress
+- 88/120 Quantum Hubs (campuses) completed
+- Smart Dams for long-term water sovereignty
+- 8 Sovereign Green Cities under development
+- $45M disaster recovery fund fully verified
+- Updated every 12 hours
+- Verified by Infrastructure & Audit Sentinels
+
+View progress report: [Global Infrastructure](GLOBAL_INFRASTRUCTURE.md)
 ---
 
 ### Workflows dan Dashboard
