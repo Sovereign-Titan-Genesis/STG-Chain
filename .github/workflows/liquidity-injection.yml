@@ -1,0 +1,33 @@
+name: Liquidity Injection Dashboard
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # Update setiap 6 jam
+  workflow_dispatch:
+
+jobs:
+  liquidity-injection:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Liquidity Report
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          echo "## Liquidity Injection Report" > LIQUIDITY_LOG.md
+          echo "Timestamp: $DATE" >> LIQUIDITY_LOG.md
+          echo "" >> LIQUIDITY_LOG.md
+          echo "| Source Unit | Destination Unit | Amount | Status |" >> LIQUIDITY_LOG.md
+          echo "| --- | --- | --- | --- |" >> LIQUIDITY_LOG.md
+          echo "| Unit 008 (FIN Collateral) | Unit 012 (JASAWAN) | 1,000,000,000 AKSA | Injected |" >> LIQUIDITY_LOG.md
+          echo "| Unit 008 (FIN Collateral) | Unit 001 (Bio-Store) | 500,000,000 AKSA | Injected |" >> LIQUIDITY_LOG.md
+          echo "| Unit 008 (FIN Collateral) | Unit 009 (Carbon Sovereignty) | 250,000,000 AKSA | Injected |" >> LIQUIDITY_LOG.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add LIQUIDITY_LOG.md
+          git commit -m "Liquidity Injection Update: $DATE"
+          git push
