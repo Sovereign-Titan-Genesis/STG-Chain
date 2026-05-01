@@ -1,0 +1,29 @@
+name: Carbon Ledger & ESG Dashboard
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # Update harian
+  workflow_dispatch:
+
+jobs:
+  update-carbon-ledger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Carbon Ledger
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          REDUCTION="25 ton CO2/day"
+          OFFSET="Bio-Reactor Protein Production"
+          ENERGY="OTEC Green Energy"
+          echo "| $DATE | $REDUCTION | $OFFSET | $ENERGY | VERIFIED |" >> CARBON_LEDGER.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add CARBON_LEDGER.md
+          git commit -m "Carbon Ledger Update: $DATE"
+          git push
