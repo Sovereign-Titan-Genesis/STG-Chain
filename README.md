@@ -139,3 +139,19 @@ View benchmark: [Global Benchmark Report](GLOBAL_BENCHMARK.md)
 - **CITO STG** — cito@stg.internal  
 - **Repo Owner** — Sovereign Titan Genesis
 
+## 🟢 Health Status Badges
+
+| Pilar | Status |
+|-------|--------|
+| Sovereign‑Titan‑Genesis | ![Genesis Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Metaportation | ![Metaportation Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Quorum‑State | ![Quorum Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| QS Guardian Search | ![Guardian Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Titan Psyche Mono | ![Psyche Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| STG‑Metaportation‑Event | ![Event Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Qubicoin | ![Qubicoin Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Makronesia Act‑Ark | ![Makronesia Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Garage | ![Garage Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| STG‑1AI | ![1AI Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Quantum Swap Engine | ![Swap Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Jasawan | ![Jasawan Status](https://img.shields.io/badge/status-passing-brightgreen) |
