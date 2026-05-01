@@ -286,6 +286,15 @@ STG supports resilience after crises:
 
 View resilience report: [Global Resilience Report](GLOBAL_RESILIENCE.md)
 
+## 💰🌍 Global Economic Empowerment Dashboard
+STG empowers communities worldwide:
+- Micro-credit loans, rural grants, food subsidies
+- Green tech investments, education & skills training
+- Updated every 12 hours
+- Verified by Bio-Server & Sentinel
+
+View empowerment report: [Global Economic Empowerment](GLOBAL_ECONOMIC_EMPOWERMENT.md)
+
 ---
 
 ### Workflows dan Dashboard
