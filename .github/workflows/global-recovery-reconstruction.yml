@@ -1,0 +1,35 @@
+name: Global Recovery & Reconstruction Dashboard
+
+on:
+  schedule:
+    - cron: "0 3 * * *"   # Update harian jam 03 UTC
+  workflow_dispatch:
+
+jobs:
+  global-recovery-reconstruction:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Recovery & Reconstruction Report
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "## Global Recovery & Reconstruction Report" > GLOBAL_RECOVERY_RECONSTRUCTION.md
+          echo "Last Update: $DATE" >> GLOBAL_RECOVERY_RECONSTRUCTION.md
+          echo "" >> GLOBAL_RECOVERY_RECONSTRUCTION.md
+          echo "| Region | Reconstruction Focus | Progress | Beneficiaries | Status |" >> GLOBAL_RECOVERY_RECONSTRUCTION.md
+          echo "| --- | --- | --- | --- | --- |" >> GLOBAL_RECOVERY_RECONSTRUCTION.md
+          echo "| ASEAN | Bridge & Road Repair | 60% | 12,000 commuters | Ongoing |" >> GLOBAL_RECOVERY_RECONSTRUCTION.md
+          echo "| India | School Rebuilding | 75% | 5,000 students | Active |" >> GLOBAL_RECOVERY_RECONSTRUCTION.md
+          echo "| Africa | Irrigation Systems | 70% | 20,000 farmers | Active |" >> GLOBAL_RECOVERY_RECONSTRUCTION.md
+          echo "| China | Hospital Reconstruction | 65% | 15,000 patients | Ongoing |" >> GLOBAL_RECOVERY_RECONSTRUCTION.md
+          echo "| Global | Renewable Energy Installations | 55% | 8,000 households | Active |" >> GLOBAL_RECOVERY_RECONSTRUCTION.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_RECOVERY_RECONSTRUCTION.md
+          git commit -m "Global Recovery & Reconstruction Update: $DATE"
+          git push
