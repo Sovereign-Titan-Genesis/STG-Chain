@@ -298,7 +298,18 @@ STG LAW: AIRSPACE SOVEREIGNTY & DRONE REGULATION
    - Penyusupan: Penyitaan alat & Blacklist Bio-Passport.
    - Perusakan Drone: Denda 10.000 AKSA & Kerja Wajib di Unit Produksi ENG.
 4. Hak Tindak: Sentinel-Wing diizinkan melakukan "Acoustic Disruption" untuk menjatuhkan drone ilegal.
-5. 
+
+## 🛒 Bio-Marketplace & Drone Law
+STG launches Bio-Marketplace live status:
+- Real-time inventory synced every 30 minutes
+- Accessible via Mesh Network & Bio-Passport
+- Transactions in AKSA currency
+
+Drone Law established:
+- 10km no-fly zone above Bio-Store
+- Sentinel-Wing recognized as legal enforcer
+- Penalties for intrusion or sabotage
+   
 View secure asset map: [Secure Asset Map](assets/asset-map-security.pdf)
 
 View interactive asset map: [Asset Map](assets/asset-map.pdf)
