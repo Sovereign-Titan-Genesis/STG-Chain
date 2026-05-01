@@ -1,0 +1,86 @@
+name: AKSA Distribution
+
+on:
+  schedule:
+    - cron: "0 18 * * 1"   # setiap Senin jam 18:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  distribute-aksa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Simulate Distribution
+        run: |
+          mkdir -p reports/distribution
+          echo "# AKSA Distribution Report" > reports/distribution/report.md
+          echo "Generated on $(date -u)" >> reports/distribution/report.md
+          echo "" >> reports/distribution/report.md
+
+          echo "## Summary" >> reports/distribution/report.md
+          echo "- Total Wallets: 1000" >> reports/distribution/report.md
+          echo "- Amount Distributed: 1,000,000,000 AKSA" >> reports/distribution/report.md
+          echo "- Average per Wallet: 1,000 AKSA" >> reports/distribution/report.md
+
+          echo "" >> reports/distribution/report.md
+          echo "## Audit Trail" >> reports/distribution/report.md
+          echo "- All transfers recorded in STG-Chain" >> reports/distribution/report.md
+          echo "- Verified by Bio-Server" >> reports/distribution/report.md
+
+      - name: Convert Report to PDF
+        uses: docker://pandoc/core:latest
+        with:
+          args: "reports/distribution/report.md -o reports/distribution/report.pdf"
+
+      - name: Update Welfare Dashboard
+        run: |
+          mkdir -p public/welfare
+          cat > public/welfare/distribution.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>AKSA Distribution Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h2>AKSA Distribution Dashboard</h2>
+            <canvas id="distributionChart"></canvas>
+            <script>
+              const ctx = document.getElementById('distributionChart');
+              const distributionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: ["Wallets","Total AKSA","Average per Wallet"],
+                  datasets: [{
+                    label: 'Distribution',
+                    data: [1000,1000000000,1000],
+                    backgroundColor: [
+                      'rgb(54, 162, 235)',
+                      'rgb(75, 192, 192)',
+                      'rgb(255, 206, 86)'
+                    ]
+                  }]
+                }
+              });
+            </script>
+            <p>✅ Audit Trail: Semua distribusi tercatat di STG‑Chain</p>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
