@@ -74,7 +74,16 @@ Interactive dashboard showing real-time distribution:
 - Audit trail logged in STG-Chain
 
 View dashboard: [Drone Logistics Dashboard](public/dashboard/index.html)
- 
+
+ ## 🌱 Carbon Ledger & ESG Dashboard
+STG tracks environmental contributions:
+- Daily CO2 reduction logged
+- Bio-Reactor protein offsets
+- OTEC green energy integration
+- Verified by Bio-Server
+
+View carbon ledger: [Carbon Ledger](CARBON_LEDGER.md)
+
 ---
 
 ### Workflows dan Dashboard
