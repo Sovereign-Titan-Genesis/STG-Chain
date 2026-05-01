@@ -93,6 +93,15 @@ STG compares its progress with global leaders:
 
 View benchmark: [Global Benchmark Report](GLOBAL_BENCHMARK.md)
 
+## 🛡️ Governance Sentinel Dashboard
+STG governance system with fail-safe:
+- Voting and consensus logs
+- Automatic pause on anomalies
+- Verified by Bio-Server
+- Updated every 12 hours
+
+View governance log: [Governance Sentinel Report](GOVERNANCE_LOG.md)
+
 ---
 
 ### Workflows dan Dashboard
