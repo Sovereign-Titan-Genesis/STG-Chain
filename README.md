@@ -45,6 +45,15 @@ Sustainable food production at the Deep Sea Node:
 - Direct integration with STG-Pay for local distribution
 - Real-time production monitoring
 
+## 🧬 Bio-Reactor (Node-Alpha)
+Sustainable food production at the Deep Sea Node:
+- Powered by OTEC (Green Energy)
+- Produces high-quality organic protein
+- Direct integration with STG-Pay for local distribution
+- Real-time production monitoring
+
+View production log: [Bio-Production Log](BIO_PRODUCTION_LOG.md)
+
 View production log: [Bio-Production Log](BIO_PRODUCTION_LOG.md)
 
 View resolver: [Bank Resolver](BANK_RESOLVER.md)
