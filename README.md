@@ -256,6 +256,15 @@ Unit 008 distributes AKSA directly to coastal wallets:
 
 View distribution: [Distribution Dashboard](welfare/distribution.html)
 
+## 🍎 Goods Distribution
+Unit 008 & 009 distribute real goods weekly:
+- 50,000 kg rice
+- 10,000 health packages
+- 5,000 bio-solar panels
+- Audit trail verified by Bio-Server
+
+View goods dashboard: [Goods Distribution](welfare/goods.html)
+
 View secure asset map: [Secure Asset Map](assets/asset-map-security.pdf)
 
 View interactive asset map: [Asset Map](assets/asset-map.pdf)
