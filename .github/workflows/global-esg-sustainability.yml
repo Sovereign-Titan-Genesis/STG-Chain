@@ -1,0 +1,35 @@
+name: Global ESG & Sustainability Dashboard
+
+on:
+  schedule:
+    - cron: "0 12 * * *"   # Update harian jam 12 UTC
+  workflow_dispatch:
+
+jobs:
+  global-esg-sustainability:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate ESG & Sustainability Report
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "## Global ESG & Sustainability Report" > GLOBAL_ESG_SUSTAINABILITY.md
+          echo "Last Update: $DATE" >> GLOBAL_ESG_SUSTAINABILITY.md
+          echo "" >> GLOBAL_ESG_SUSTAINABILITY.md
+          echo "| Region | ESG Focus | Progress | Impact Metrics | Status |" >> GLOBAL_ESG_SUSTAINABILITY.md
+          echo "| --- | --- | --- | --- | --- |" >> GLOBAL_ESG_SUSTAINABILITY.md
+          echo "| ASEAN | Carbon Reduction (Bio-Reactor) | 65% | -120,000 tons CO₂ | Active |" >> GLOBAL_ESG_SUSTAINABILITY.md
+          echo "| India | Renewable Energy Deployment | 70% | 50,000 households powered | Ongoing |" >> GLOBAL_ESG_SUSTAINABILITY.md
+          echo "| Africa | Sustainable Agriculture | 80% | 25,000 farmers supported | Active |" >> GLOBAL_ESG_SUSTAINABILITY.md
+          echo "| China | Green Tech Innovation | 60% | 15,000 units deployed | Ongoing |" >> GLOBAL_ESG_SUSTAINABILITY.md
+          echo "| Global | Governance Transparency | 75% | 12,000 reports published | Active |" >> GLOBAL_ESG_SUSTAINABILITY.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_ESG_SUSTAINABILITY.md
+          git commit -m "Global ESG & Sustainability Update: $DATE"
+          git push
