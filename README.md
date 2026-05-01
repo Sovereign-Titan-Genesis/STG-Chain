@@ -265,6 +265,14 @@ Unit 008 & 009 distribute real goods weekly:
 
 View goods dashboard: [Goods Distribution](welfare/goods.html)
 
+## 🎓 Education & Certification
+STG distributes weekly learning modules and issues digital certificates:
+- 1,000 initial members certified
+- AKSA training modules distributed
+- Certificates logged in EDUCATION_LOG.md
+
+View education log: [Education Log](EDUCATION_LOG.md)
+
 View secure asset map: [Secure Asset Map](assets/asset-map-security.pdf)
 
 View interactive asset map: [Asset Map](assets/asset-map.pdf)
