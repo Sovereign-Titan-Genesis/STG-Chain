@@ -392,6 +392,17 @@ STG protects humanity with real-time aid:
 
 View humanitarian report: [Global Humanitarian Response](GLOBAL_HUMANITARIAN_RESPONSE.md)
 
+## 🏗️🌍 Global Reconstruction Dashboard
+STG rebuilds physical infrastructure transparently:
+- Quantum-ready schools and smart hospitals
+- Smart irrigation systems for agriculture
+- Renewable energy plants powering communities
+- Local workforce involvement for sovereignty
+- Zero-leakage funding verified by Audit Sentinel
+- Updated every 12 hours
+
+View reconstruction report: [Global Reconstruction](GLOBAL_RECONSTRUCTION.md)
+
 ---
 
 ### Workflows dan Dashboard
