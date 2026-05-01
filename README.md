@@ -357,6 +357,17 @@ STG demonstrates financial strength and integrity:
 
 View liquidity report: [Global Liquidity & Timelock](GLOBAL_LIQUIDITY_TIMELOCK.md)
 
+## 📜🌍 Global Compliance & Governance Dashboard
+STG proves legal and governance integrity:
+- Compliance verified across London, Delaware, ASEAN, Global standards
+- Audit readiness always green
+- On-chain voting results transparent
+- Immutable governance logs as anti-corruption shield
+- Updated every 12 hours
+- Verified by Compliance Sentinel & Governance Auditor
+
+View compliance report: [Global Compliance & Governance](GLOBAL_COMPLIANCE_GOVERNANCE.md)
+
 ---
 
 ### Workflows dan Dashboard
