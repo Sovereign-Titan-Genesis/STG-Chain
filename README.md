@@ -247,6 +247,15 @@ The STG Dashboard includes a real-time welfare tracker:
 
 View dashboard: [Welfare Dashboard](welfare/index.html)
 
+## 💳 AKSA Distribution
+Unit 008 distributes AKSA directly to coastal wallets:
+- 1,000 wallets generated
+- 1,000,000,000 AKSA distributed
+- Average 1,000 AKSA per wallet
+- Audit trail verified by Bio-Server
+
+View distribution: [Distribution Dashboard](welfare/distribution.html)
+
 View secure asset map: [Secure Asset Map](assets/asset-map-security.pdf)
 
 View interactive asset map: [Asset Map](assets/asset-map.pdf)
