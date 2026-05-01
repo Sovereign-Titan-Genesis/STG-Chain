@@ -1,0 +1,35 @@
+name: Global Education & Curriculum Dashboard
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # Update harian jam 06 UTC
+  workflow_dispatch:
+
+jobs:
+  global-education-curriculum:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Education & Curriculum Report
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "## Global Education & Curriculum Report" > GLOBAL_EDUCATION_CURRICULUM.md
+          echo "Last Update: $DATE" >> GLOBAL_EDUCATION_CURRICULUM.md
+          echo "" >> GLOBAL_EDUCATION_CURRICULUM.md
+          echo "| Region | Curriculum Focus | Students | Modules Completed | Status |" >> GLOBAL_EDUCATION_CURRICULUM.md
+          echo "| --- | --- | --- | --- | --- |" >> GLOBAL_EDUCATION_CURRICULUM.md
+          echo "| ASEAN | AKSA Literacy & Governance | 5,000 | 70% | Active |" >> GLOBAL_EDUCATION_CURRICULUM.md
+          echo "| India | Quantum Basics & ESG | 8,000 | 65% | Ongoing |" >> GLOBAL_EDUCATION_CURRICULUM.md
+          echo "| Africa | Food Security & Digital Identity | 6,000 | 80% | Active |" >> GLOBAL_EDUCATION_CURRICULUM.md
+          echo "| China | AI-Quantum Fusion & Green Tech | 10,000 | 60% | Ongoing |" >> GLOBAL_EDUCATION_CURRICULUM.md
+          echo "| Global | Homeschool Curriculum Integration | 12,000 | 75% | Active |" >> GLOBAL_EDUCATION_CURRICULUM.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_EDUCATION_CURRICULUM.md
+          git commit -m "Global Education & Curriculum Update: $DATE"
+          git push
