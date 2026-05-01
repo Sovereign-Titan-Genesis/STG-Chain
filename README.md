@@ -403,6 +403,18 @@ STG rebuilds physical infrastructure transparently:
 
 View reconstruction report: [Global Reconstruction](GLOBAL_RECONSTRUCTION.md)
 
+## 📚🌍 Global Education & Homeschooling Dashboard
+STG educates future generations:
+- Quantum literacy modules for blockchain, AI, and quantum computing
+- ESG curriculum for sustainability and ethics
+- Digital identity management via Titan Psyche
+- Homeschooling kits for family empowerment
+- Multilingual outreach for global learners
+- Updated daily at 06 UTC
+- Verified by Education Sentinel
+
+View education report: [Global Education & Homeschooling](GLOBAL_EDUCATION_HOMESCHOOLING.md)
+
 ---
 
 ### Workflows dan Dashboard
