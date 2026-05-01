@@ -1,0 +1,36 @@
+name: Global Recovery & Resilience Dashboard
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # Update setiap 6 jam
+  workflow_dispatch:
+
+jobs:
+  global-recovery-resilience:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Recovery & Resilience Report
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          OUT="GLOBAL_RECOVERY_RESILIENCE.md"
+          echo "## Global Recovery & Resilience Report" > $OUT
+          echo "Timestamp: $DATE" >> $OUT
+          echo "" >> $OUT
+          echo "| Sector | Initiative | Value | Beneficiaries | Status |" >> $OUT
+          echo "| --- | --- | --- | --- | --- |" >> $OUT
+          echo "| Economy | UMKM Micro-Credit | $10M | 25,000 entrepreneurs | Active |" >> $OUT
+          echo "| Agriculture | Post-Crisis Farming Grants | $7M | 15,000 farmers | Ongoing |" >> $OUT
+          echo "| Infrastructure | Renewable Grid & Water Systems | $20M | 100,000 households | Active |" >> $OUT
+          echo "| Social | Titan Psyche Mono Support | $3M | 50,000 citizens | Verified |" >> $OUT
+          echo "| Stability | Antifragility Index | +30% | Global communities | Active |" >> $OUT
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_RECOVERY_RESILIENCE.md
+          git commit -m "Global Recovery & Resilience Update: $DATE" || echo "No changes to commit"
+          git push
