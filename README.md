@@ -332,7 +332,20 @@ STG monitors quantum readiness:
 - Legal attestations and Akte HKI readiness
 - Updated daily at 18:00 UTC
 - Artifacts checksummed and optionally signed
-- 
+
+
+  ## 🛡️🌍 Global Antifragile Systems Dashboard
+STG thrives under shocks:
+- Economy adapts to volatility
+- Food security strengthens under disruption
+- Energy expands via renewable microgrids
+- Governance gains transparency and participation
+- AI-Quantum fusion boosts antifragility
+- Updated every 6 hours
+- Verified by Bio-Server & Crisis Sentinel
+
+View antifragile report: [Global Antifragile Systems](GLOBAL_ANTIFRAGILE_SYSTEMS.md)
+
 ---
 
 ### Workflows dan Dashboard
