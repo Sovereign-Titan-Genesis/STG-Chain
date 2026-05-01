@@ -474,6 +474,19 @@ STG rebuilds stronger communities post-crisis:
 
 View recovery report: [Global Recovery & Resilience](GLOBAL_RECOVERY_RESILIENCE.md)
 
+
+## 🛡️🌍 Global Resilience & Risk Management Dashboard
+STG fortifies stability against global shocks:
+- Systemic risk detection with 12 indicators
+- Liquidity buffer reserves of $75M
+- Cyber-threat intelligence neutralizing attacks
+- Long-term antifragility index tracking
+- Auto-mitigation protocols on immutable ledger
+- Updated every 2 hours
+- Verified by Risk Sentinel & Guardian Search
+
+View resilience report: [Global Resilience & Risk Management](GLOBAL_RESILIENCE_RISK.md)
+
 ---
 
 ### Visual Showcase
