@@ -427,6 +427,18 @@ View humanitarian report: [Global Humanitarian Response](GLOBAL_HUMANITARIAN_RES
 - Gunakan `workflow_dispatch` untuk deploy manual.  
 - Semua perubahan dokumentasi wajib di‑commit oleh `CITO-STG-Bot` untuk audit.
 
+## 🌱🌍 Global Recovery & Resilience Dashboard
+STG rebuilds stronger communities post-crisis:
+- UMKM micro-credit for economic reboot
+- Farming grants for agricultural recovery
+- Renewable grid & clean water infrastructure
+- Titan Psyche Mono for social wellbeing
+- Antifragility index tracking long-term stability
+- Updated every 6 hours
+- Verified by Recovery Sentinel
+
+View recovery report: [Global Recovery & Resilience](GLOBAL_RECOVERY_RESILIENCE.md)
+
 ---
 
 ### Visual Showcase
