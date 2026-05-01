@@ -309,7 +309,16 @@ Drone Law established:
 - 10km no-fly zone above Bio-Store
 - Sentinel-Wing recognized as legal enforcer
 - Penalties for intrusion or sabotage
-   
+
+   ## 💳 STG-Pay
+STG-Pay enables real-time transactions:
+- Bio-Passport scan for authentication
+- AKSA balance deducted instantly
+- Audit trail logged in STG-Chain
+- Bank Resolver integration for wallet/bank mapping
+
+View transaction log: [STG-Pay Log](STG_PAY_LOG.md)
+
 View secure asset map: [Secure Asset Map](assets/asset-map-security.pdf)
 
 View interactive asset map: [Asset Map](assets/asset-map.pdf)
