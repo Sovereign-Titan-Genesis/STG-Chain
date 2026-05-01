@@ -273,6 +273,15 @@ STG distributes weekly learning modules and issues digital certificates:
 
 View education log: [Education Log](EDUCATION_LOG.md)
 
+## 🏪 Bio-Store
+STG deploys physical Bio-Store at Node-Alpha:
+- Rice, medicine, energy, fertilizer, water filters
+- Transactions via AKSA Wallet
+- Identity verified by Bio-Passport
+- Audit trail logged in STG-Chain
+
+View Bio-Store report: [Bio-Store](bio-store/report.pdf)
+
 View secure asset map: [Secure Asset Map](assets/asset-map-security.pdf)
 
 View interactive asset map: [Asset Map](assets/asset-map.pdf)
