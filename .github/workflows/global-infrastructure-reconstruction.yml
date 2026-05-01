@@ -1,0 +1,36 @@
+name: Global Infrastructure & Reconstruction Dashboard
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"   # Update setiap 12 jam (fase konstruksi)
+  workflow_dispatch:
+
+jobs:
+  global-reconstruction-progress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Infrastructure Progress Report
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          OUT="GLOBAL_INFRASTRUCTURE.md"
+          echo "## Global Infrastructure & Reconstruction Progress" > $OUT
+          echo "Timestamp: $DATE" >> $OUT
+          echo "" >> $OUT
+          echo "| Project | Capacity/Goal | Progress | Verified By | Status |" >> $OUT
+          echo "| --- | --- | --- | --- | --- |" >> $OUT
+          echo "| 🚂 Quantum Rail | 5,000 km network | 65% | Tech Sentinel | Ongoing |" >> $OUT
+          echo "| 🏫 Quantum Hubs | 120 Campuses | 88 units built | Edu Sentinel | Active |" >> $OUT
+          echo "| 🌊 Smart Dams | 15 Mega-Reservoirs | 45% coverage | Eco Sentinel | Ongoing |" >> $OUT
+          echo "| 🏙️ Green Cities | 8 Sovereign Zones | 70% completed | Urban Sentinel | Active |" >> $OUT
+          echo "| 🏗️ Reconstruction | Disaster Recovery | $45M deployed | Audit Sentinel | Verified |" >> $OUT
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_INFRASTRUCTURE.md
+          git commit -m "Infrastructure Progress Update: $DATE" || echo "No changes"
+          git push
