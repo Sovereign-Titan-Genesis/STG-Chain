@@ -248,6 +248,15 @@ STG delivers public services worldwide:
 
 View public services impact: [Global Public Services Report](GLOBAL_PUBLIC_SERVICES.md)
 
+## 🚑🌍 Global Humanitarian & Disaster Response Dashboard
+STG responds to global crises:
+- Floods, earthquakes, famine, pandemics
+- Food, medicine, shelters, education kits
+- Updated every 6 hours
+- Verified by Bio-Server & Drone Sentinel
+
+View humanitarian report: [Global Humanitarian Report](GLOBAL_HUMANITARIAN.md)
+
 ---
 
 ### Workflows dan Dashboard
