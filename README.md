@@ -102,6 +102,15 @@ STG governance system with fail-safe:
 
 View governance log: [Governance Sentinel Report](GOVERNANCE_LOG.md)
 
+## 🤖 AI Compliance Auditor Dashboard
+STG integrates QS Guardian Search + STG-1AI:
+- Automatic audit of smart contracts
+- AI verdict + Guardian verification
+- Alerts for anomalies
+- Updated every 6 hours
+
+View compliance log: [AI Compliance Audit Report](AI_COMPLIANCE_LOG.md)
+
 ---
 
 ### Workflows dan Dashboard
