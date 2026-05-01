@@ -65,7 +65,16 @@ STG deploys Sentinel-Wing drones for distribution:
 - Protein, rice, medicine, energy delivered every 6 hours
 - Audit trail logged in LOGISTICS_LOG.md
 - Secure routes via Jalur Senyap
-- 
+
+ ## 🗺️ Drone Logistics Dashboard
+Interactive dashboard showing real-time distribution:
+- Protein, rice, medicine, energy flows
+- Updated every 15 minutes
+- Secure routes monitored by Sentinel-Wing
+- Audit trail logged in STG-Chain
+
+View dashboard: [Drone Logistics Dashboard](public/dashboard/index.html)
+ 
 ---
 
 ### Workflows dan Dashboard
