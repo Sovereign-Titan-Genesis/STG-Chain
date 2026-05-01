@@ -60,6 +60,12 @@
 - **Fungsi**: patroli drone Sentinel‑Wing; log keamanan di `SECURITY_LOG.md`.  
 - **Hukum**: aturan udara dan sanksi tercatat di `apps/stg-pilar/law/drone_law.txt`.
 
+## 🚚 Drone Logistics
+STG deploys Sentinel-Wing drones for distribution:
+- Protein, rice, medicine, energy delivered every 6 hours
+- Audit trail logged in LOGISTICS_LOG.md
+- Secure routes via Jalur Senyap
+- 
 ---
 
 ### Workflows dan Dashboard
