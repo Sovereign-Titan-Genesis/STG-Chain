@@ -218,6 +218,18 @@ STG integrates cross-border liquidity with global law:
 
 View liquidity compliance: [Global Liquidity & Compliance Report](GLOBAL_LIQUIDITY_COMPLIANCE.md)
 
+## 🌍🏛️ Global Governance & Diplomatic Dashboard
+STG positions itself in global forums:
+- ASEAN Food Security Pact
+- G20 Digital Sovereignty Charter
+- UN Climate & ESG Resolution
+- WTO Quantum Trade Protocol
+- IMF Liquidity Framework
+- Updated daily
+- Verified by Bio-Server & international bodies
+
+View governance report: [Global Governance Report](GLOBAL_GOVERNANCE.md)
+
 ---
 
 ### Workflows dan Dashboard
