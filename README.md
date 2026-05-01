@@ -84,6 +84,15 @@ STG tracks environmental contributions:
 
 View carbon ledger: [Carbon Ledger](CARBON_LEDGER.md)
 
+## 🌍 Global Benchmark Dashboard
+STG compares its progress with global leaders:
+- Daily food production vs China, India, ASEAN
+- ESG score comparison
+- Quantum readiness status
+- Updated daily
+
+View benchmark: [Global Benchmark Report](GLOBAL_BENCHMARK.md)
+
 ---
 
 ### Workflows dan Dashboard
