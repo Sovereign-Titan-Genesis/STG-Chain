@@ -198,6 +198,17 @@ STG integrates green economy with quantum readiness:
 
 View ESG-Quantum report: [Global ESG-Quantum Impact](GLOBAL_ESG_QUANTUM.md)
 
+## 🏛️ Public Governance & Transparency Dashboard
+STG opens governance data to the public:
+- Voting results & proposals
+- Financial flows & liquidity injections
+- ESG contributions
+- Education & public services
+- Updated every 6 hours
+- Verified by Sentinel & Bio-Server
+
+View governance transparency: [Governance Transparency Report](GOVERNANCE_TRANSPARENCY.md)
+
 ---
 
 ### Workflows dan Dashboard
