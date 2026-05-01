@@ -1,4 +1,4 @@
-✨ STG-Chain Showcase
+# ✨ STG-Chain Showcase
 
 **Sovereign Titan Genesis** — ekosistem berdaulat yang menggabungkan finansial, teknologi, lingkungan, dan hukum untuk ketahanan komunitas pesisir.
 
