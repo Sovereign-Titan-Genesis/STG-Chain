@@ -513,6 +513,18 @@ STG fortifies stability against global shocks:
 
 View resilience report: [Global Resilience & Risk Management](GLOBAL_RESILIENCE_RISK.md)
 
+## 💳🌍 Global Financial Inclusion Dashboard
+STG destroys poverty barriers:
+- Digital wallets for the unbanked
+- On-chain micro-credit for entrepreneurs
+- Zero-fee remittance for migrant families
+- Inflation stabilization reserves for developing nations
+- Financial literacy programs for global learners
+- Updated every 6 hours
+- Verified by Inclusion Sentinel
+
+View inclusion report: [Global Financial Inclusion](GLOBAL_FINANCIAL_INCLUSION.md)
+
 ---
 
 ### Visual Showcase
