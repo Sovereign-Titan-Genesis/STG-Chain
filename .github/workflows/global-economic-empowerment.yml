@@ -1,0 +1,36 @@
+name: Global Economic Empowerment Dashboard
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"   # Update setiap 12 jam
+  workflow_dispatch:
+
+jobs:
+  global-economic-empowerment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Economic Empowerment Report
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          echo "## Global Economic Empowerment Report" > GLOBAL_ECONOMIC_EMPOWERMENT.md
+          echo "Timestamp: $DATE" >> GLOBAL_ECONOMIC_EMPOWERMENT.md
+          echo "" >> GLOBAL_ECONOMIC_EMPOWERMENT.md
+          echo "| Region | Program | Distribution | Beneficiaries | Status |" >> GLOBAL_ECONOMIC_EMPOWERMENT.md
+          echo "| --- | --- | --- | --- | --- |" >> GLOBAL_ECONOMIC_EMPOWERMENT.md
+          echo "| ASEAN | Micro-Credit Loans | 250,000,000 AKSA | 10,000 families | Active |" >> GLOBAL_ECONOMIC_EMPOWERMENT.md
+          echo "| India | Rural Development Grants | 500,000,000 AKSA | 20,000 farmers | Active |" >> GLOBAL_ECONOMIC_EMPOWERMENT.md
+          echo "| Africa | Food Security Subsidies | 750,000,000 AKSA | 25,000 families | Delivered |" >> GLOBAL_ECONOMIC_EMPOWERMENT.md
+          echo "| China | Green Tech Investments | 1,000,000,000 AKSA | 15,000 households | Ongoing |" >> GLOBAL_ECONOMIC_EMPOWERMENT.md
+          echo "| Global | Education & Skills Training | 300,000,000 AKSA | 12,000 students | Active |" >> GLOBAL_ECONOMIC_EMPOWERMENT.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_ECONOMIC_EMPOWERMENT.md
+          git commit -m "Global Economic Empowerment Update: $DATE"
+          git push
+          
