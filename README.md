@@ -1,62 +1,108 @@
-# ✨ STG‑Chain Showcase: The 12 Pillars
+# ✨ STG-Chain Showcase
 
-Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
-
-## 🧠 THE BRAIN & IDENTITY
-- [Sovereign‑Titan‑Genesis](https://github.com/bswcorp/Sovereign-Titan-Genesis) — Konstitusi & Identitas Induk
-- [Titan‑Psyche‑Mono](https://github.com/bswcorp/TITAN-PSYCHE-MONO) — Jiwa Digital & State Management
-
-## 🌉 THE BRIDGE
-- [Metaportation](https://github.com/bswcorp/METAPORTATION) — Gerbang RWA
-- [STG‑Metaportation‑Event](https://github.com/bswcorp/STG-METAPORTATION-EVENT) — Sistem Syaraf Event
-
-## 🛡️ THE DEFENDER
-- [Quorum‑State](https://github.com/bswcorp/Quorum-State) — Konsensus & Tata Kelola
-- [QS Guardian Search](https://github.com/bswcorp/qs-guardian-search) — Intelijen Compliance
-
-## 💰 THE ECONOMY
-- [Qubicoin](https://github.com/bswcorp/Qubicoin) — Native Coin & Liquidity
-- [Quantum Swap Engine](https://github.com/bswcorp/quantum-swap-engine) — Pertukaran Instan
-
-## 🗄️ THE RESOURCE & STORAGE
-- [Garage](https://github.com/bswcorp/Garage) — Sandbox Eksperimen
-- [Makronesia Act‑Ark](https://github.com/bswcorp/Makronesia-Act-Ark) — Ekologi Sosial & Aset Hijau
-
-## 🤖 THE INTELLIGENCE & SERVICE
-- [STG‑1AI](https://github.com/bswcorp/STG-1AI) — AI 5‑Stage Intelligence
-- [Jasawan](https://github.com/bswcorp/Jasawan) — Layanan Publik & Identitas Teritorial
+**Sovereign Titan Genesis** — ekosistem berdaulat yang menggabungkan finansial, teknologi, lingkungan, dan hukum untuk ketahanan komunitas pesisir.
 
 ---
-## 🛡️ Sovereign Manifesto
-*"Sovereign fintech turning crises into opportunity."*
-- Native Asset Supremacy
-- Gas Fee Independence
-- AI&Me Powered
-## 🏦 Bank Resolver
-STG-Pay integrates with Resolver DB:
-- Maps numbers to banks/wallets
-- Prevents misrouting transactions
-- Verified by Bio-Server
-- Updated weekly
-## 🧬 Bio-Reactor (Node-Alpha)
-Sustainable food production at the Deep Sea Node:
-- Powered by OTEC (Green Energy)
-- Produces high-quality organic protein
-- Direct integration with STG-Pay for local distribution
-- Real-time production monitoring
 
-## 🧬 Bio-Reactor (Node-Alpha)
-Sustainable food production at the Deep Sea Node:
-- Powered by OTEC (Green Energy)
-- Produces high-quality organic protein
-- Direct integration with STG-Pay for local distribution
-- Real-time production monitoring
+### Ringkasan Proyek
+**STG-Chain** adalah repositori kanonikal yang menampung integrasi pilar-pilar STG: identitas digital, infrastruktur pembayaran, produksi pangan berkelanjutan, keamanan otonom, dan layanan publik. Dokumentasi ini menuntun kontributor dan pemangku kepentingan untuk memahami arsitektur, workflows, dan artefak operasional.
 
-View production log: [Bio-Production Log](BIO_PRODUCTION_LOG.md)
+---
 
-View production log: [Bio-Production Log](BIO_PRODUCTION_LOG.md)
+### 12 Pilar STG
+| Pilar | Repo |
+| --- | --- |
+| **Brain & Identity** | [Sovereign‑Titan‑Genesis](https://github.com/bswcorp/Sovereign-Titan-Genesis) |
+| **Digital Soul** | [Titan‑Psyche‑Mono](https://github.com/bswcorp/TITAN-PSYCHE-MONO) |
+| **Bridge RWA** | [Metaportation](https://github.com/bswcorp/METAPORTATION) |
+| **Event Nervous System** | [STG‑Metaportation‑Event](https://github.com/bswcorp/STG-METAPORTATION-EVENT) |
+| **Consensus & Governance** | [Quorum‑State](https://github.com/bswcorp/Quorum-State) |
+| **Guardian Intelligence** | [QS Guardian Search](https://github.com/bswcorp/qs-guardian-search) |
+| **Native Coin & Liquidity** | [Qubicoin](https://github.com/bswcorp/Qubicoin) |
+| **Swap Engine** | [Quantum Swap Engine](https://github.com/bswcorp/quantum-swap-engine) |
+| **Sandbox & Labs** | [Garage](https://github.com/bswcorp/Garage) |
+| **Act Ark Social Ecology** | [Makronesia Act‑Ark](https://github.com/bswcorp/Makronesia-Act-Ark) |
+| **AI Intelligence** | [STG‑1AI](https://github.com/bswcorp/STG-1AI) |
+| **Public Services** | [Jasawan](https://github.com/bswcorp/Jasawan) |
 
-View resolver: [Bank Resolver](BANK_RESOLVER.md)
+---
 
-## 📸 Visual Showcase
-(Logo/ikon tiap repo akan ditempatkan di sini)
+### Sovereign Manifesto
+**Motto**  
+*Sovereign fintech turning crises into opportunity.*
+
+**Prinsip Inti**
+- **Native Asset Supremacy** — aset asli STG sebagai dasar kedaulatan.
+- **Gas Fee Independence** — biaya operasi minimal dan terprediksi.
+- **AI Powered** — otomasi dan verifikasi oleh Bio‑Server.
+
+---
+
+### Sistem Kunci
+**Bank Resolver**  
+- **Fungsi**: memetakan nomor telepon atau VA ke provider dan nama bank/wallet.  
+- **Manfaat**: mencegah salah kirim, mempercepat pencairan AKSA → IDR.  
+- **Lokasi log**: `BANK_RESOLVER.md`.
+
+**STG-Pay**  
+- **Fungsi**: pembayaran real‑time di Bio‑Store via Bio‑Passport scan.  
+- **Audit**: semua transaksi dicatat di `STG_PAY_LOG.md`.
+
+**Bio-Reactor Node-Alpha**  
+- **Fungsi**: produksi protein organik berbasis OTEC dan alga.  
+- **Output**: protein untuk distribusi ke Bio‑Store; produksi dipantau di `BIO_PRODUCTION_LOG.md`.
+
+**Bio-Store Node-Alpha**  
+- **Fungsi**: toko fisik kedaulatan untuk penukaran AKSA dengan barang nyata.  
+- **Integrasi**: stok live di `MARKET_STATUS.md` dan transaksi via STG‑Pay.
+
+**Security Patrol**  
+- **Fungsi**: patroli drone Sentinel‑Wing; log keamanan di `SECURITY_LOG.md`.  
+- **Hukum**: aturan udara dan sanksi tercatat di `apps/stg-pilar/law/drone_law.txt`.
+
+---
+
+### Workflows dan Dashboard
+**Workflows utama** (lokasi: `.github/workflows/`)  
+- `manifesto-qday.yml` — publikasi manifesto Q‑Day.  
+- `dashboard-welfare.yml` — Welfare Dashboard.  
+- `distribution.yml` — distribusi AKSA ke wallet warga.  
+- `distribution-goods.yml` — distribusi beras, obat, energi.  
+- `bio-store.yml` — laporan Bio‑Store.  
+- `security-patrol.yml` — log patroli drone.  
+- `bio-marketplace.yml` — update stok marketplace.  
+- `bank-resolver.yml` — sinkronisasi resolver DB.  
+- `stg-pay.yml` — pencatatan transaksi STG‑Pay.  
+- `bio-reaktor-env.yml` — monitoring produksi Bio‑Reactor.  
+- `drone-fleet.yml` — inventaris armada drone.
+
+**Cara cepat melihat status**  
+- **Dashboard Welfare**: `public/welfare/index.html`  
+- **Distribution Dashboard**: `public/welfare/distribution.html`  
+- **Goods Dashboard**: `public/welfare/goods.html`  
+- **Bio-Store Report**: `reports/bio-store/report.pdf`  
+- **Logs**: `STG_PAY_LOG.md`, `BANK_RESOLVER.md`, `BIO_PRODUCTION_LOG.md`, `SECURITY_LOG.md`, `FLEET_LOG.md`
+
+---
+
+### Kontribusi dan Panduan Operasional
+**Menambahkan pilar baru**
+1. Buat direktori pilar di `apps/stg-pilar/` dengan struktur `eng|fin|env|soc|law|med`.  
+2. Tambahkan workflow di `.github/workflows/` dengan nama yang jelas.  
+3. Update `README.md` ini dengan tautan ke artefak baru.
+
+**Proses release**
+- Gunakan `workflow_dispatch` untuk deploy manual.  
+- Semua perubahan dokumentasi wajib di‑commit oleh `CITO-STG-Bot` untuk audit.
+
+---
+
+### Visual Showcase
+**Logo dan ikon** tiap repo akan ditempatkan di folder `assets/visuals/` dan ditampilkan di halaman dokumentasi GitHub Pages.
+
+---
+
+**Kontak Operasional**  
+- **CITO STG** — cito@stg.internal  
+- **Repo Owner** — Sovereign Titan Genesis
+
