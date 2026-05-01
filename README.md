@@ -1,4 +1,4 @@
-# ✨ STG-Chain Showcase
+✨ STG-Chain Showcase
 
 **Sovereign Titan Genesis** — ekosistem berdaulat yang menggabungkan finansial, teknologi, lingkungan, dan hukum untuk ketahanan komunitas pesisir.
 
@@ -294,6 +294,16 @@ STG empowers communities worldwide:
 - Verified by Bio-Server & Sentinel
 
 View empowerment report: [Global Economic Empowerment](GLOBAL_ECONOMIC_EMPOWERMENT.md)
+
+## 🪪🌍 Global Digital Identity & Bio-Passport Dashboard
+STG enables secure digital identity:
+- Bio-Passport registration & verification
+- Real-time STG-Pay transactions
+- Access to food, health, housing, education
+- Updated every 12 hours
+- Verified by Bio-Server & Sentinel
+
+View identity report: [Global Digital Identity](GLOBAL_DIGITAL_IDENTITY.md)
 
 ---
 
