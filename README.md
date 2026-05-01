@@ -277,6 +277,15 @@ STG supports rebuilding after crises:
 
 View recovery report: [Global Recovery & Reconstruction](GLOBAL_RECOVERY_RECONSTRUCTION.md)
 
+## 🛡️🌍 Global Resilience & Recovery Dashboard
+STG supports resilience after crises:
+- Micro-credit, housing, agriculture, renewable energy
+- Education & skills training
+- Updated daily
+- Verified by Bio-Server & Sentinel
+
+View resilience report: [Global Resilience Report](GLOBAL_RESILIENCE.md)
+
 ---
 
 ### Workflows dan Dashboard
