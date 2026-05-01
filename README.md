@@ -230,6 +230,14 @@ STG issues a confidential manifesto for members:
 
 View manifesto: [Manifesto Q-Day](edu/manifesto_qday.pdf)
 
+## 📜 Manifesto Q-Day
+STG issues a confidential manifesto for members:
+- Definition of Q-Day
+- Guarantee of AKSA currency
+- Emergency communication via UMN
+- Member actions and survival protocol
+
+View manifesto: [Manifesto Q-Day](edu/manifesto_qday.pdf)
 
 View secure asset map: [Secure Asset Map](assets/asset-map-security.pdf)
 
