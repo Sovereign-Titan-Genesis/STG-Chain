@@ -1,0 +1,30 @@
+name: Bio-Marketplace Live Status
+
+on:
+  schedule:
+    - cron: "*/30 * * * *" # Update setiap 30 menit
+  workflow_dispatch:
+
+jobs:
+  update-inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync Inventory
+        run: |
+          echo "STG BIO-MARKETPLACE STATUS" > MARKET_STATUS.md
+          echo "Last Update: $(date)" >> MARKET_STATUS.md
+          echo "| Item | Stock | Price (AKSA) |" >> MARKET_STATUS.md
+          echo "| --- | --- | --- |" >> MARKET_STATUS.md
+          echo "| Rice | 48,500 kg | 10 |" >> MARKET_STATUS.md
+          echo "| Medicine | 9,800 pk | 25 |" >> MARKET_STATUS.md
+          
+      - name: Push Status
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add MARKET_STATUS.md
+          git commit -m "Marketplace Update: $(date)"
+          git push
