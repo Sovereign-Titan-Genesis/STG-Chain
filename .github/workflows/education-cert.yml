@@ -1,0 +1,27 @@
+name: Education & Certification Log
+
+on:
+  repository_dispatch:
+    types: [edu-cert-issued]
+  workflow_dispatch:
+
+jobs:
+  log-edu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update Education Archive
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          TOTAL_CERTS="1000" # Sesuai jumlah warga pertama
+          echo "| $DATE | Modul AKSA Dist | $TOTAL_CERTS Certs Issued |" >> EDUCATION_LOG.md
+          
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add EDUCATION_LOG.md
+          git commit -m "Education Update: $DATE"
+          git push
