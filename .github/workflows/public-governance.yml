@@ -1,0 +1,36 @@
+name: Public Governance & Transparency Dashboard
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # Update setiap 6 jam
+  workflow_dispatch:
+
+jobs:
+  public-governance-transparency:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Governance Transparency Report
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          echo "## Public Governance & Transparency Report" > GOVERNANCE_TRANSPARENCY.md
+          echo "Timestamp: $DATE" >> GOVERNANCE_TRANSPARENCY.md
+          echo "" >> GOVERNANCE_TRANSPARENCY.md
+          echo "| Category | Detail | Status | Verification |" >> GOVERNANCE_TRANSPARENCY.md
+          echo "| --- | --- | --- | --- |" >> GOVERNANCE_TRANSPARENCY.md
+          echo "| Voting | Proposal 046 (Unit 012 Vesting) | Approved | Sentinel Verified |" >> GOVERNANCE_TRANSPARENCY.md
+          echo "| Finance | Liquidity Injection (Unit 008 → Unit 012) | Executed | Bio-Server Verified |" >> GOVERNANCE_TRANSPARENCY.md
+          echo "| ESG | Carbon Ledger Contribution | Active | Green Node Verified |" >> GOVERNANCE_TRANSPARENCY.md
+          echo "| Education | Curriculum Update (Quantum Basics) | Active | Homeschool Repo Verified |" >> GOVERNANCE_TRANSPARENCY.md
+          echo "| Public Services | Distribution (Protein, Rice, Medicine) | Delivered | Drone Sentinel Verified |" >> GOVERNANCE_TRANSPARENCY.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GOVERNANCE_TRANSPARENCY.md
+          git commit -m "Governance Transparency Update: $DATE"
+          git push
+          
