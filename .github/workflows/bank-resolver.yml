@@ -1,0 +1,32 @@
+name: Bank Resolver Database
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 21 * * 1"   # Update setiap Senin jam 21:00 UTC
+
+jobs:
+  update-resolver:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync Resolver DB
+        run: |
+          echo "STG Bank Resolver Database" > BANK_RESOLVER.md
+          echo "Last Update: $(date)" >> BANK_RESOLVER.md
+          echo "| Number | Provider | Wallet/Bank | Status |" >> BANK_RESOLVER.md
+          echo "| --- | --- | --- | --- |" >> BANK_RESOLVER.md
+          echo "| 085817200806 | Indosat | DANA | Verified |" >> BANK_RESOLVER.md
+          echo "| 081234567890 | Telkomsel | GoPay | Verified |" >> BANK_RESOLVER.md
+          echo "| 082233445566 | XL Axiata | ShopeePay | Verified |" >> BANK_RESOLVER.md
+          echo "| 1234567890 | Bank Mandiri | VA Account | Verified |" >> BANK_RESOLVER.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add BANK_RESOLVER.md
+          git commit -m "Bank Resolver Update: $(date)"
+          git push
