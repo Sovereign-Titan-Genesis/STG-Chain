@@ -1,0 +1,54 @@
+name: Bio-Store Deployment
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 20 * * 1"   # setiap Senin jam 20:00 UTC
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  deploy-bio-store:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Bio-Store Report
+        run: |
+          mkdir -p reports/bio-store
+          cat > reports/bio-store/report.md <<'EOF'
+          # STG Bio-Store Deployment Report
+
+          ## Lokasi
+          - Node-Alpha (Sunda Trench)
+          - Status: Active
+
+          ## Barang Tersedia Minggu Ini
+          - Beras: 50,000 kg
+          - Obat-Obatan: 10,000 paket
+          - Energi: 5,000 panel bio-surya
+          - Pupuk Laut: 2,000 liter
+          - Filter Air Node: 1,000 unit
+
+          ## Mekanisme
+          - Semua transaksi menggunakan AKSA Wallet
+          - Validasi identitas dengan Bio-Passport
+          - Audit trail tercatat di STG-Chain
+
+          ## Catatan
+          Bio-Store adalah bukti nyata bahwa AKSA dapat ditukar langsung dengan barang fisik.
+          EOF
+
+      - name: Convert Report to PDF
+        uses: docker://pandoc/core:latest
+        with:
+          args: "reports/bio-store/report.md -o reports/bio-store/report.pdf"
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: reports/bio-store
