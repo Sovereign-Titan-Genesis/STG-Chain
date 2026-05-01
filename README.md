@@ -188,6 +188,16 @@ STG compares AI ↔ Quantum integration globally:
 
 View benchmark: [Global AI-Quantum Report](GLOBAL_AI_QUANTUM.md)
 
+## 🌱⚛️ Global ESG-Quantum Impact Dashboard
+STG integrates green economy with quantum readiness:
+- Daily CO2 reduction
+- ESG score + Quantum readiness
+- ESG-Quantum Index comparison vs China, India, ASEAN
+- Updated daily
+- Verified by Bio-Server
+
+View ESG-Quantum report: [Global ESG-Quantum Impact](GLOBAL_ESG_QUANTUM.md)
+
 ---
 
 ### Workflows dan Dashboard
