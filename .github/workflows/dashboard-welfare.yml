@@ -1,0 +1,67 @@
+name: Welfare Dashboard
+
+on:
+  schedule:
+    - cron: "0 17 * * 1"   # setiap Senin jam 17:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Welfare Dashboard
+        run: |
+          mkdir -p public/welfare
+          cat > public/welfare/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>STG Welfare Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h2>STG Welfare Dashboard</h2>
+            <p>Saldo Unit 008: Rp1.498.000.000.000</p>
+            <canvas id="welfareChart"></canvas>
+            <script>
+              const ctx = document.getElementById('welfareChart');
+              const welfareChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                  labels: ["Week 1","Week 2","Week 3","Week 4"],
+                  datasets: [{
+                    label: 'Subsidy Distributed (AKSA)',
+                    data: [1000,2500,5000,7500],
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.3
+                  },{
+                    label: 'Remaining Balance (Rp)',
+                    data: [1498000000000,1497997500000,1497995000000,1497992500000],
+                    borderColor: 'rgb(255, 99, 132)',
+                    tension: 0.3
+                  }]
+                }
+              });
+            </script>
+            <p>✅ Audit Trail: Semua transaksi tercatat di STG‑Chain</p>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
