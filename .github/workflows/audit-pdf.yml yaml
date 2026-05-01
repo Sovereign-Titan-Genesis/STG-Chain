@@ -1,0 +1,34 @@
+name: Generate Audit PDF
+
+on:
+  push:
+    paths:
+      - "AUDIT.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive
+
+      - name: Convert AUDIT.md to PDF
+        run: |
+          pandoc AUDIT.md -o AUDIT.pdf
+
+      - name: Commit & Push PDF
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add AUDIT.pdf
+          git commit -m "Auto-generate AUDIT.pdf from AUDIT.md"
+          git push
