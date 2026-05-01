@@ -346,6 +346,17 @@ STG thrives under shocks:
 
 View antifragile report: [Global Antifragile Systems](GLOBAL_ANTIFRAGILE_SYSTEMS.md)
 
+## 💰🌍 Global Liquidity & Timelock Dashboard
+STG demonstrates financial strength and integrity:
+- Liquidity pools across AKSA, Bio-Reactor, Quantum Nodes
+- Timelock mechanisms ensuring long-term stability
+- Governance treasury locked for transparency
+- Global reserve secured for 60 months
+- Updated every 8 hours
+- Verified by Financial Sentinel & Timelock Auditor
+
+View liquidity report: [Global Liquidity & Timelock](GLOBAL_LIQUIDITY_TIMELOCK.md)
+
 ---
 
 ### Workflows dan Dashboard
