@@ -167,6 +167,17 @@ STG tracks quantum sovereignty progress:
 
 View quantum log: [Quantum Readiness Report](QUANTUM_LOG.md)
 
+## 🤖⚛️ AI-Quantum Fusion Dashboard
+STG integrates AI cognition with quantum computation:
+- STG-1AI orchestrates decision-making
+- Quantum Nodes provide speed & encryption
+- Fusion Layer bridges AI ↔ Quantum
+- Governance Sentinel ensures fail-safe
+- Updated every 12 hours
+
+View fusion log: [AI-Quantum Fusion Report](AI_QUANTUM_LOG.md)
+
+
 ---
 
 ### Workflows dan Dashboard
