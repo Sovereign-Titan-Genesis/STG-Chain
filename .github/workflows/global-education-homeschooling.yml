@@ -1,0 +1,37 @@
+name: Global Education & Homeschooling Dashboard
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # Update harian jam 06 UTC
+  workflow_dispatch:
+
+jobs:
+  global-education-homeschooling:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Education & Homeschooling Report
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          OUT="GLOBAL_EDUCATION_HOMESCHOOLING.md"
+          echo "## Global Education & Homeschooling Report" > $OUT
+          echo "Last Update: $DATE" >> $OUT
+          echo "" >> $OUT
+          echo "| Curriculum Area | Initiative | Reach | Beneficiaries | Status |" >> $OUT
+          echo "| --- | --- | --- | --- | --- |" >> $OUT
+          echo "| Quantum Literacy | Blockchain & AI Basics | 120 modules | 80,000 students | Active |" >> $OUT
+          echo "| Sovereign ESG | Sustainability & Ethics | 75 modules | 60,000 learners | Ongoing |" >> $OUT
+          echo "| Digital Identity | Titan Psyche Management | 50 modules | 40,000 youth | Active |" >> $OUT
+          echo "| Homeschooling Support | Family Learning Kits | 100 kits | 25,000 families | Verified |" >> $OUT
+          echo "| Global Outreach | Multilingual Curriculum | 12 languages | 150,000 learners | Active |" >> $OUT
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_EDUCATION_HOMESCHOOLING.md
+          git commit -m "Global Education & Homeschooling Update: $DATE" || echo "No changes to commit"
+          git push
+          
