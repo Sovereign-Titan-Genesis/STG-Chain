@@ -139,6 +139,15 @@ STG simulates collateral flow:
 
 View liquidity log: [Liquidity Injection Report](LIQUIDITY_LOG.md)
 
+## 🏛️ Public Services Dashboard (JASAWAN)
+STG delivers public services in real-time:
+- Protein, rice, medicine, energy, education kits
+- Updated every 6 hours
+- Verified by Bio-Server
+- Transparent audit trail
+
+View public services log: [Public Services Report](PUBLIC_SERVICES_LOG.md)
+
 ---
 
 ### Workflows dan Dashboard
