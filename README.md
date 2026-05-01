@@ -209,6 +209,15 @@ STG opens governance data to the public:
 
 View governance transparency: [Governance Transparency Report](GOVERNANCE_TRANSPARENCY.md)
 
+## 🌍💰 Global Liquidity & Compliance Dashboard
+STG integrates cross-border liquidity with global law:
+- ASEAN, India, China, Africa flows
+- Compliance with Basel III, FATF, ISO 20022, AML/KYC
+- Updated every 12 hours
+- Verified by Bio-Server & Sentinel
+
+View liquidity compliance: [Global Liquidity & Compliance Report](GLOBAL_LIQUIDITY_COMPLIANCE.md)
+
 ---
 
 ### Workflows dan Dashboard
