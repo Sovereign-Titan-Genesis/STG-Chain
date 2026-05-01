@@ -1,0 +1,35 @@
+name: Global Public Services Impact Dashboard
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"   # Update setiap 12 jam
+  workflow_dispatch:
+
+jobs:
+  global-public-services-impact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Public Services Impact Report
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          echo "## Global Public Services Impact Report" > GLOBAL_PUBLIC_SERVICES.md
+          echo "Timestamp: $DATE" >> GLOBAL_PUBLIC_SERVICES.md
+          echo "" >> GLOBAL_PUBLIC_SERVICES.md
+          echo "| Region | Service | Quantity | Beneficiaries | Status |" >> GLOBAL_PUBLIC_SERVICES.md
+          echo "| --- | --- | --- | --- | --- |" >> GLOBAL_PUBLIC_SERVICES.md
+          echo "| ASEAN | Protein Packages | 10,000 kg | 5,000 families | Delivered |" >> GLOBAL_PUBLIC_SERVICES.md
+          echo "| India | Rice | 100,000 kg | 20,000 families | Delivered |" >> GLOBAL_PUBLIC_SERVICES.md
+          echo "| Africa | Medicine | 50,000 pk | 10,000 patients | Delivered |" >> GLOBAL_PUBLIC_SERVICES.md
+          echo "| China | Bio-Solar Panels | 20,000 units | 15,000 households | Delivered |" >> GLOBAL_PUBLIC_SERVICES.md
+          echo "| Global | Education Kits | 5,000 sets | 3,000 students | Active |" >> GLOBAL_PUBLIC_SERVICES.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_PUBLIC_SERVICES.md
+          git commit -m "Global Public Services Impact Update: $DATE"
+          git push
