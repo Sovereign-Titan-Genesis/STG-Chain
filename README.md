@@ -157,6 +157,16 @@ STG integrates homeschooling curriculum:
 
 View education log: [Education Report](EDUCATION_LOG.md)
 
+## ⚛️ Quantum Readiness Dashboard
+STG tracks quantum sovereignty progress:
+- Active quantum nodes
+- Research level & readiness score
+- Comparison with China, India, ASEAN
+- Updated daily
+- Verified by Bio-Server
+
+View quantum log: [Quantum Readiness Report](QUANTUM_LOG.md)
+
 ---
 
 ### Workflows dan Dashboard
