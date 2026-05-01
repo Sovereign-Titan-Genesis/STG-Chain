@@ -415,6 +415,18 @@ STG educates future generations:
 
 View education report: [Global Education & Homeschooling](GLOBAL_EDUCATION_HOMESCHOOLING.md)
 
+## 💹🌍 Global Liquidity & Market Dynamics Dashboard
+STG monitors global economic pulse:
+- Real-time liquidity inflows
+- AI-driven market sentiment analysis
+- Quantum Swap velocity metrics
+- Integration score across major markets
+- Asset dynamics of Qubicoin & RWA
+- Updated every 30 minutes
+- Verified by Market Sentinel
+
+View market report: [Global Liquidity & Market Dynamics](GLOBAL_LIQUIDITY_MARKET.md)
+
 ---
 
 ### Workflows dan Dashboard
