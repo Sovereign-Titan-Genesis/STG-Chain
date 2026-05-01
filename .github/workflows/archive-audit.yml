@@ -1,0 +1,32 @@
+name: Archive Encrypted Audit PDF
+
+on:
+  push:
+    paths:
+      - "AUDIT.pdf"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  archive-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Encrypt Audit PDF
+        run: |
+          mkdir -p archives
+          DATE=$(date +'%Y-%m-%d')
+          # Encrypt using OpenSSL AES-256
+          openssl enc -aes-256-cbc -salt -in AUDIT.pdf -out archives/AUDIT-$DATE.enc -pass pass:${{ secrets.ARCHIVE_KEY }}
+
+      - name: Commit & Push Archive
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add archives/AUDIT-*.enc
+          git commit -m "Archive encrypted AUDIT.pdf ($DATE)"
+          git push
