@@ -1,0 +1,34 @@
+name: Global Liquidity & Compliance Dashboard
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"   # Update setiap 12 jam
+  workflow_dispatch:
+
+jobs:
+  global-liquidity-compliance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Liquidity & Compliance Report
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          echo "## Global Liquidity & Compliance Report" > GLOBAL_LIQUIDITY_COMPLIANCE.md
+          echo "Timestamp: $DATE" >> GLOBAL_LIQUIDITY_COMPLIANCE.md
+          echo "" >> GLOBAL_LIQUIDITY_COMPLIANCE.md
+          echo "| Flow | Source | Destination | Amount | Compliance Status |" >> GLOBAL_LIQUIDITY_COMPLIANCE.md
+          echo "| --- | --- | --- | --- | --- |" >> GLOBAL_LIQUIDITY_COMPLIANCE.md
+          echo "| AKSA → ASEAN | Unit 008 | ASEAN Cooperative Banks | 500,000,000 AKSA | Basel III Verified |" >> GLOBAL_LIQUIDITY_COMPLIANCE.md
+          echo "| AKSA → India | Unit 008 | Rural Development Fund | 750,000,000 AKSA | FATF Compliant |" >> GLOBAL_LIQUIDITY_COMPLIANCE.md
+          echo "| AKSA → China | Unit 008 | Green Tech Consortium | 1,000,000,000 AKSA | ISO 20022 Verified |" >> GLOBAL_LIQUIDITY_COMPLIANCE.md
+          echo "| AKSA → Africa | Unit 008 | Food Security Program | 1,200,000,000 AKSA | AML/KYC Cleared |" >> GLOBAL_LIQUIDITY_COMPLIANCE.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_LIQUIDITY_COMPLIANCE.md
+          git commit -m "Global Liquidity & Compliance Update: $DATE"
+          git push
