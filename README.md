@@ -267,6 +267,16 @@ STG supports post-crisis recovery:
 
 View resilience report: [Global Resilience & Recovery](GLOBAL_RESILIENCE_RECOVERY.md)
 
+## 🏗️🌍 Global Recovery & Reconstruction Dashboard
+STG supports rebuilding after crises:
+- Infrastructure repair (roads, bridges)
+- School & hospital reconstruction
+- Irrigation & renewable energy
+- Updated daily
+- Verified by Bio-Server & Sentinel
+
+View recovery report: [Global Recovery & Reconstruction](GLOBAL_RECOVERY_RECONSTRUCTION.md)
+
 ---
 
 ### Workflows dan Dashboard
