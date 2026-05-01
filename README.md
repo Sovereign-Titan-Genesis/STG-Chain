@@ -453,6 +453,18 @@ STG drives sustainable sovereignty:
 
 View climate report: [Global ESG & Climate Action](GLOBAL_ESG_CLIMATE.md)
 
+## 🏛️🌍 Global Governance & Diplomatic Dashboard
+STG asserts sovereignty in global diplomacy:
+- Presence in ASEAN, G20, UN forums
+- Full compliance with FATF, ISO, Basel III
+- 18 inter-sovereign treaties signed
+- Transparent diplomatic logs on immutable ledger
+- Strategic alliances across continents
+- Updated every 12 hours
+- Verified by Governance Sentinel
+
+View diplomatic report: [Global Governance & Diplomatic](GLOBAL_GOVERNANCE_DIPLOMATIC.md)
+
 ---
 
 ### Workflows dan Dashboard
