@@ -1,0 +1,35 @@
+name: Global Resilience & Recovery Dashboard
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # Update harian
+  workflow_dispatch:
+
+jobs:
+  global-resilience-recovery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Resilience Report
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "## Global Resilience & Recovery Report" > GLOBAL_RESILIENCE.md
+          echo "Last Update: $DATE" >> GLOBAL_RESILIENCE.md
+          echo "" >> GLOBAL_RESILIENCE.md
+          echo "| Region | Resilience Focus | Progress | Beneficiaries | Status |" >> GLOBAL_RESILIENCE.md
+          echo "| --- | --- | --- | --- | --- |" >> GLOBAL_RESILIENCE.md
+          echo "| ASEAN | Micro-Credit & Food Security | 70% | 15,000 families | Active |" >> GLOBAL_RESILIENCE.md
+          echo "| India | Housing & Infrastructure | 65% | 8,000 households | Ongoing |" >> GLOBAL_RESILIENCE.md
+          echo "| Africa | Agricultural Recovery | 80% | 25,000 farmers | Active |" >> GLOBAL_RESILIENCE.md
+          echo "| China | Renewable Energy Deployment | 60% | 10,000 households | Ongoing |" >> GLOBAL_RESILIENCE.md
+          echo "| Global | Education & Skills Training | 75% | 12,000 students | Active |" >> GLOBAL_RESILIENCE.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_RESILIENCE.md
+          git commit -m "Global Resilience Update: $DATE"
+          git push
