@@ -1,0 +1,42 @@
+name: Vesting Wallet Dashboard
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # Update harian
+  workflow_dispatch:
+
+jobs:
+  vesting-wallet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Vesting Report
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "## Vesting Wallet Report" > VESTING_LOG.md
+          echo "Timestamp: $DATE" >> VESTING_LOG.md
+          echo "" >> VESTING_LOG.md
+          echo "| Unit | Allocation | Release Schedule | Status |" >> VESTING_LOG.md
+          echo "| --- | --- | --- | --- |" >> VESTING_LOG.md
+          echo "| Unit 001 | 100,000,000 AKSA | Monthly | Locked |" >> VESTING_LOG.md
+          echo "| Unit 002 | 200,000,000 AKSA | Quarterly | Locked |" >> VESTING_LOG.md
+          echo "| Unit 003 | 150,000,000 AKSA | Bi-Annual | Locked |" >> VESTING_LOG.md
+          echo "| Unit 004 | 250,000,000 AKSA | Annual | Locked |" >> VESTING_LOG.md
+          echo "| Unit 005 | 300,000,000 AKSA | Monthly | Locked |" >> VESTING_LOG.md
+          echo "| Unit 006 | 400,000,000 AKSA | Quarterly | Locked |" >> VESTING_LOG.md
+          echo "| Unit 007 | 500,000,000 AKSA | Bi-Annual | Locked |" >> VESTING_LOG.md
+          echo "| Unit 008 | 1,498,000,000,000,000 AKSA | Governance Controlled | Locked |" >> VESTING_LOG.md
+          echo "| Unit 009 | 350,000,000 AKSA | Monthly | Locked |" >> VESTING_LOG.md
+          echo "| Unit 010 | 450,000,000 AKSA | Quarterly | Locked |" >> VESTING_LOG.md
+          echo "| Unit 011 | 600,000,000 AKSA | Annual | Locked |" >> VESTING_LOG.md
+          echo "| Unit 012 (JASAWAN) | 700,000,000 AKSA | Governance Controlled | Locked |" >> VESTING_LOG.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add VESTING_LOG.md
+          git commit -m "Vesting Wallet Update: $DATE"
+          git push
