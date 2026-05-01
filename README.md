@@ -467,6 +467,18 @@ View recovery report: [Global Recovery & Resilience](GLOBAL_RECOVERY_RESILIENCE.
 ### Visual Showcase
 **Logo dan ikon** tiap repo akan ditempatkan di folder `assets/visuals/` dan ditampilkan di halaman dokumentasi GitHub Pages.
 
+## 📊🌍 Global Governance & Transparency Dashboard
+STG crowns honesty with radical transparency:
+- Real-time on-chain voting
+- Total financial transparency with audit trails
+- Asset distribution maps for fairness
+- Immutable governance logs
+- Daily corruption-free certification
+- Updated every 6 hours
+- Verified by Transparency Sentinel
+
+View governance report: [Global Governance & Transparency](GLOBAL_GOVERNANCE_TRANSPARENCY.md)
+
 ---
 
 **Kontak Operasional**  
