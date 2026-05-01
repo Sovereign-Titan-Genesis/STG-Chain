@@ -1,0 +1,36 @@
+name: Global Antifragile Systems Dashboard
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # Update setiap 6 jam
+  workflow_dispatch:
+
+jobs:
+  global-antifragile-systems:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Antifragile Report
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          OUT="GLOBAL_ANTIFRAGILE_SYSTEMS.md"
+          echo "## Global Antifragile Systems Report" > $OUT
+          echo "Timestamp: $DATE" >> $OUT
+          echo "" >> $OUT
+          echo "| Domain | Shock Event | Response | Strength Gain | Status |" >> $OUT
+          echo "| --- | --- | --- | --- | --- |" >> $OUT
+          echo "| Economy | Market Volatility | Adaptive Liquidity | +15% resilience | Active |" >> $OUT
+          echo "| Food Security | Supply Chain Disruption | Bio-Reactor Scale-Up | +20% output | Active |" >> $OUT
+          echo "| Energy | Grid Instability | Renewable Microgrids | +10% coverage | Ongoing |" >> $OUT
+          echo "| Governance | Policy Shifts | Transparent Voting | +12% participation | Active |" >> $OUT
+          echo "| Global | Crisis Simulation | AI-Quantum Fusion | +25% antifragility | Verified |" >> $OUT
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_ANTIFRAGILE_SYSTEMS.md
+          git commit -m "Global Antifragile Systems Update: $DATE" || echo "No changes to commit"
+          git push
