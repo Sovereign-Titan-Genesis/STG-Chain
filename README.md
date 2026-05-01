@@ -499,6 +499,19 @@ STG builds the physical foundation of the future:
 - Verified by Infrastructure & Audit Sentinels
 
 View progress report: [Global Infrastructure](GLOBAL_INFRASTRUCTURE.md)
+
+## 🏗️🚂 Global Infrastructure & Reconstruction Dashboard
+STG rebuilds the world transparently:
+- 18 quantum-ready schools completed
+- 12 smart hospitals expanding healthcare
+- 3 mega dams irrigating 5M households
+- 1,200 km quantum rail lines connecting 15 regions
+- 500 MW green power plants energizing 3M families
+- Updated every 6 hours
+- Verified by Infrastructure Sentinel
+
+View reconstruction report: [Global Infrastructure & Reconstruction](GLOBAL_INFRASTRUCTURE_RECONSTRUCTION.md)
+
 ---
 
 ### Workflows dan Dashboard
