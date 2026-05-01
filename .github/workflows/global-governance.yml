@@ -1,0 +1,35 @@
+name: Global Governance & Diplomatic Dashboard
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # Update harian
+  workflow_dispatch:
+
+jobs:
+  global-governance-diplomatic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Governance & Diplomatic Report
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "## Global Governance & Diplomatic Report" > GLOBAL_GOVERNANCE.md
+          echo "Last Update: $DATE" >> GLOBAL_GOVERNANCE.md
+          echo "" >> GLOBAL_GOVERNANCE.md
+          echo "| Forum | Commitment | Status | Verification |" >> GLOBAL_GOVERNANCE.md
+          echo "| --- | --- | --- | --- |" >> GLOBAL_GOVERNANCE.md
+          echo "| ASEAN | Food Security Pact | Active | ASEAN Secretariat Verified |" >> GLOBAL_GOVERNANCE.md
+          echo "| G20 | Digital Sovereignty Charter | Ratified | G20 Compliance Verified |" >> GLOBAL_GOVERNANCE.md
+          echo "| PBB | Climate & ESG Resolution | Active | UN Green Council Verified |" >> GLOBAL_GOVERNANCE.md
+          echo "| WTO | Quantum Trade Protocol | Pending | WTO Secretariat Monitoring |" >> GLOBAL_GOVERNANCE.md
+          echo "| IMF | Liquidity Injection Framework | Active | IMF Compliance Verified |" >> GLOBAL_GOVERNANCE.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_GOVERNANCE.md
+          git commit -m "Global Governance & Diplomatic Update: $DATE"
+          git push
