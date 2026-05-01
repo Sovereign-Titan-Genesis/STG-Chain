@@ -1,0 +1,27 @@
+name: STG Drone Fleet Inventory
+
+on:
+  repository_dispatch:
+    types: [drone-assembled]
+  workflow_dispatch:
+
+jobs:
+  update-fleet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update Fleet Count
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "| $DATE | Sentinel-Wing | Unit SW-001 | ONLINE |" >> FLEET_LOG.md
+          
+      - name: Push Fleet Log
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add FLEET_LOG.md
+          git commit -m "Fleet Update: Unit SW-001 Ready"
+          git push
+          
