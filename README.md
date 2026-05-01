@@ -257,6 +257,16 @@ STG responds to global crises:
 
 View humanitarian report: [Global Humanitarian Report](GLOBAL_HUMANITARIAN.md)
 
+## 🛡️🌍 Global Resilience & Recovery Dashboard
+STG supports post-crisis recovery:
+- Economic micro-credit, housing, food security
+- Renewable energy deployment
+- Education & training programs
+- Updated daily
+- Verified by Bio-Server & Sentinel
+
+View resilience report: [Global Resilience & Recovery](GLOBAL_RESILIENCE_RECOVERY.md)
+
 ---
 
 ### Workflows dan Dashboard
