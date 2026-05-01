@@ -440,6 +440,19 @@ STG expands sovereignty across continents:
 
 View expansion report: [Global Innovation & Frontier Expansion](GLOBAL_INNOVATION_EXPANSION.md)
 
+
+## 🌳🌍 Global ESG & Climate Action Dashboard
+STG drives sustainable sovereignty:
+- Real-time CO₂ emission reduction
+- 85% renewable energy mining
+- Climate action funding for reforestation
+- ESG transparency score of 92/100
+- Global climate alliances across continents
+- Updated every 6 hours
+- Verified by ESG Sentinel
+
+View climate report: [Global ESG & Climate Action](GLOBAL_ESG_CLIMATE.md)
+
 ---
 
 ### Workflows dan Dashboard
