@@ -60,20 +60,7 @@
 - **Fungsi**: patroli drone Sentinel‑Wing; log keamanan di `SECURITY_LOG.md`.  
 - **Hukum**: aturan udara dan sanksi tercatat di `apps/stg-pilar/law/drone_law.txt`.
 
-## 🚚 Drone Logistics
-STG deploys Sentinel-Wing drones for distribution:
-- Protein, rice, medicine, energy delivered every 6 hours
-- Audit trail logged in LOGISTICS_LOG.md
-- Secure routes via Jalur Senyap
-
- ## 🗺️ Drone Logistics Dashboard
-Interactive dashboard showing real-time distribution:
-- Protein, rice, medicine, energy flows
-- Updated every 15 minutes
-- Secure routes monitored by Sentinel-Wing
-- Audit trail logged in STG-Chain
-
-View dashboard: [Drone Logistics Dashboard](public/dashboard/index.html)
+#Dashboard](public/dashboard/index.html)
 
  ## 🌱 Carbon Ledger & ESG Dashboard
 STG tracks environmental contributions:
@@ -304,6 +291,15 @@ STG enables secure digital identity:
 - Verified by Bio-Server & Sentinel
 
 View identity report: [Global Digital Identity](GLOBAL_DIGITAL_IDENTITY.md)
+
+## 📚🌍 Global Education & Curriculum Dashboard
+STG integrates homeschooling curriculum worldwide:
+- AKSA literacy, Quantum basics, ESG, Governance
+- Regional & global student progress
+- Updated daily
+- Verified by Bio-Server & Homeschool Repo
+
+View education report: [Global Education & Curriculum](GLOBAL_EDUCATION_CURRICULUM.md)
 
 ---
 
