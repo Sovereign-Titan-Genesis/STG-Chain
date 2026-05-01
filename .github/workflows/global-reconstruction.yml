@@ -1,0 +1,36 @@
+name: Global Reconstruction Dashboard
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"   # Update setiap 12 jam
+  workflow_dispatch:
+
+jobs:
+  global-reconstruction:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Reconstruction Report
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          OUT="GLOBAL_RECONSTRUCTION.md"
+          echo "## Global Reconstruction Report" > $OUT
+          echo "Timestamp: $DATE" >> $OUT
+          echo "" >> $OUT
+          echo "| Sector | Project | Value | Progress | Status |" >> $OUT
+          echo "| --- | --- | --- | --- | --- |" >> $OUT
+          echo "| Education | Quantum-Ready Schools | $15M | 12 campuses built | Active |" >> $OUT
+          echo "| Health | Smart Hospitals | $20M | 8 facilities operational | Ongoing |" >> $OUT
+          echo "| Agriculture | Smart Irrigation Systems | $10M | 5,000 hectares covered | Active |" >> $OUT
+          echo "| Energy | Renewable Power Plants | $25M | 100 MW capacity online | Verified |" >> $OUT
+          echo "| Community | Local Workforce Involvement | $5M | 10,000 workers engaged | Active |" >> $OUT
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_RECONSTRUCTION.md
+          git commit -m "Global Reconstruction Update: $DATE" || echo "No changes to commit"
+          git push
