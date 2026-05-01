@@ -282,6 +282,14 @@ STG deploys physical Bio-Store at Node-Alpha:
 
 View Bio-Store report: [Bio-Store](bio-store/report.pdf)
 
+## 🛸 Security Patrol
+STG deploys Sentinel-Wing bio-hybrid drones:
+- Hourly patrols of Bio-Store and supply routes
+- Logs recorded in SECURITY_LOG.md
+- Alerts sent to Bio-Server if intrusion detected
+
+View security log: [Security Log](SECURITY_LOG.md)
+
 View secure asset map: [Secure Asset Map](assets/asset-map-security.pdf)
 
 View interactive asset map: [Asset Map](assets/asset-map.pdf)
