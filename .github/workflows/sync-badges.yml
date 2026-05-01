@@ -1,0 +1,51 @@
+name: Sync Showcase Badges
+
+on:
+  push:
+    paths:
+      - "AUDIT.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-badges:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Parse Audit File
+        id: parse
+        run: |
+          TOTAL=$(grep -c "✅ Canonical" AUDIT.md || echo "0")
+          DUP=$(grep -c "⚠️" AUDIT.md || echo "0")
+          echo "total=$TOTAL" >> $GITHUB_OUTPUT
+          echo "duplicates=$DUP" >> $GITHUB_OUTPUT
+
+      - name: Update README-Showup.md
+        run: |
+          TOTAL=${{ steps.parse.outputs.total }}
+          DUP=${{ steps.parse.outputs.duplicates }}
+          BADGES="![Canonical Workflows](https://img.shields.io/badge/Workflows-${TOTAL}%20Canonical-brightgreen)\n"
+          BADGES="${BADGES}![Duplicates Archived](https://img.shields.io/badge/Duplicates-${DUP}-yellow)\n"
+          BADGES="${BADGES}![Audit Status](https://img.shields.io/badge/Audit-Complete-blue)\n"
+
+          # Replace section in README-Showup.md
+          awk -v badges="$BADGES" '
+            BEGIN {in_section=0}
+            /^## 📊 Health Badges/ {print; print badges; in_section=1; next}
+            in_section && /^---/ {in_section=0}
+            !in_section {print}
+          ' README-Showup.md > README-Showup.new
+
+          mv README-Showup.new README-Showup.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add README-Showup.md
+          git commit -m "Auto-update badges from AUDIT.md"
+          git push
