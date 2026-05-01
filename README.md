@@ -111,6 +111,15 @@ STG integrates QS Guardian Search + STG-1AI:
 
 View compliance log: [AI Compliance Audit Report](AI_COMPLIANCE_LOG.md)
 
+## 💰 Vesting Wallet Dashboard
+STG ensures secure allocation of funds:
+- Units 001–012 allocations locked
+- Release schedules (monthly, quarterly, annual)
+- Governance-controlled for Unit 008 & Unit 012
+- Verified by Bio-Server
+
+View vesting log: [Vesting Wallet Report](VESTING_LOG.md)
+
 ---
 
 ### Workflows dan Dashboard
