@@ -323,6 +323,16 @@ STG drives sustainability worldwide:
 
 View ESG report: [Global ESG & Sustainability](GLOBAL_ESG_SUSTAINABILITY.md)
 
+## ⚛️ Global Quantum Readiness Dashboard
+STG monitors quantum readiness:
+- PQC defense and sealed PQC Logic
+- Quantum testbeds and simulators
+- Quantum-safe key management (HSM + KMS)
+- AI-Quantum model hardening
+- Legal attestations and Akte HKI readiness
+- Updated daily at 18:00 UTC
+- Artifacts checksummed and optionally signed
+- 
 ---
 
 ### Workflows dan Dashboard
