@@ -148,6 +148,15 @@ STG delivers public services in real-time:
 
 View public services log: [Public Services Report](PUBLIC_SERVICES_LOG.md)
 
+## 🎓 Education & Knowledge Hub Dashboard
+STG integrates homeschooling curriculum:
+- AKSA literacy, Quantum basics, ESG, Digital Identity, Governance
+- Updated daily from stg-homeschooling-curriculum repo
+- Verified by Bio-Server
+- Transparent audit trail
+
+View education log: [Education Report](EDUCATION_LOG.md)
+
 ---
 
 ### Workflows dan Dashboard
