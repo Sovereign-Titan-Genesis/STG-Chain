@@ -32,6 +32,14 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 - Native Asset Supremacy
 - Gas Fee Independence
 - AI&Me Powered
+## 🏦 Bank Resolver
+STG-Pay integrates with Resolver DB:
+- Maps numbers to banks/wallets
+- Prevents misrouting transactions
+- Verified by Bio-Server
+- Updated weekly
+
+View resolver: [Bank Resolver](BANK_RESOLVER.md)
 
 ## 📸 Visual Showcase
 (Logo/ikon tiap repo akan ditempatkan di sini)
