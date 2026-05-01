@@ -1,0 +1,36 @@
+name: Global Humanitarian Response Dashboard
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # Update setiap 30 menit
+  workflow_dispatch:
+
+jobs:
+  global-humanitarian-response:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Humanitarian Report
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          OUT="GLOBAL_HUMANITARIAN_RESPONSE.md"
+          echo "## Global Humanitarian Response Report" > $OUT
+          echo "Timestamp: $DATE" >> $OUT
+          echo "" >> $OUT
+          echo "| Crisis | Aid Type | Distributed Value | Beneficiaries | Status |" >> $OUT
+          echo "| --- | --- | --- | --- | --- |" >> $OUT
+          echo "| Flood (ASEAN) | Emergency Funds | $2M | 15,000 families | Active |" >> $OUT
+          echo "| Earthquake (India) | Bio-Reactor Food | 200 tons | 50,000 people | Ongoing |" >> $OUT
+          echo "| Pandemic (Africa) | Medical Supplies | $5M | 100,000 patients | Active |" >> $OUT
+          echo "| Famine (Global) | P2P Donations | $3M | 75,000 households | Verified |" >> $OUT
+          echo "| Recovery (Latin America) | Reconstruction Grants | $4M | 20,000 citizens | Active |" >> $OUT
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GLOBAL_HUMANITARIAN_RESPONSE.md
+          git commit -m "Global Humanitarian Response Update: $DATE" || echo "No changes to commit"
+          git push
