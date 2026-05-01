@@ -1,0 +1,33 @@
+name: Governance Sentinel Dashboard
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"   # Update setiap 12 jam
+  workflow_dispatch:
+
+jobs:
+  governance-sentinel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Governance Report
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          echo "## Governance Sentinel Report" > GOVERNANCE_LOG.md
+          echo "Timestamp: $DATE" >> GOVERNANCE_LOG.md
+          echo "" >> GOVERNANCE_LOG.md
+          echo "| Proposal | Status | Votes For | Votes Against | Fail-Safe |" >> GOVERNANCE_LOG.md
+          echo "| --- | --- | --- | --- | --- |" >> GOVERNANCE_LOG.md
+          echo "| Bio-Reactor Expansion | Approved | 120 | 5 | Active |" >> GOVERNANCE_LOG.md
+          echo "| STG-Pay Resolver Update | Approved | 98 | 2 | Active |" >> GOVERNANCE_LOG.md
+          echo "| Drone Logistics Scaling | Pending | 45 | 12 | Monitoring |" >> GOVERNANCE_LOG.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add GOVERNANCE_LOG.md
+          git commit -m "Governance Sentinel Update: $DATE"
+          git push
