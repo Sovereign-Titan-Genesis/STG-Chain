@@ -311,6 +311,18 @@ STG educates citizens on governance:
 
 View governance education report: [Global Governance Education](GLOBAL_GOVERNANCE_EDUCATION.md)
 
+## 🌱🌍 Global ESG & Sustainability Dashboard
+STG drives sustainability worldwide:
+- Carbon reduction via Bio-Reactor
+- Renewable energy deployment
+- Sustainable agriculture programs
+- Green tech innovation
+- Governance transparency
+- Updated daily
+- Verified by Bio-Server & ESG Sentinel
+
+View ESG report: [Global ESG & Sustainability](GLOBAL_ESG_SUSTAINABILITY.md)
+
 ---
 
 ### Workflows dan Dashboard
