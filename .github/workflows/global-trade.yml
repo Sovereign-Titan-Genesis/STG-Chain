@@ -1,0 +1,54 @@
+name: Monthly Global Trade & Exchange Report
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  global-trade-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Trade Data
+        run: |
+          DEX=$(grep -c "DEX" AUDIT.md || echo "0")
+          EXPORT=$(grep -c "Export" AUDIT.md || echo "0")
+          CROSS=$(grep -c "Cross-Border" AUDIT.md || echo "0")
+          echo "dex=$DEX" >> $GITHUB_ENV
+          echo "export=$EXPORT" >> $GITHUB_ENV
+          echo "cross=$CROSS" >> $GITHUB_ENV
+
+      - name: Build REPORT-TRADE.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Global Trade & Exchange Report — $DATE" > REPORT-TRADE.md
+          echo "" >> REPORT-TRADE.md
+          echo "## 💱 DEX Activity" >> REPORT-TRADE.md
+          echo "- Entries: ${{ env.dex }}" >> REPORT-TRADE.md
+          echo "" >> REPORT-TRADE.md
+          echo "## 📦 Export Operations" >> REPORT-TRADE.md
+          echo "- Entries: ${{ env.export }}" >> REPORT-TRADE.md
+          echo "" >> REPORT-TRADE.md
+          echo "## 🌐 Cross-Border Integration" >> REPORT-TRADE.md
+          echo "- Entries: ${{ env.cross }}" >> REPORT-TRADE.md
+          echo "" >> REPORT-TRADE.md
+          echo "## 📜 Statement" >> REPORT-TRADE.md
+          echo "This report certifies STG-Chain’s monthly contribution to global trade and exchange." >> REPORT-TRADE.md
+
+      - name: Convert REPORT-TRADE.md to PDF
+        run: |
+          pandoc REPORT-TRADE.md -o REPORT-TRADE.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-TRADE.md REPORT-TRADE.pdf
+          git commit -m "Monthly Global Trade & Exchange Report generated"
+          git push
