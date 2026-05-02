@@ -1,0 +1,49 @@
+name: Annual Diplomatic Relations Report
+
+on:
+  schedule:
+    - cron: "0 0 1 1 *"   # Run at midnight on January 1st every year
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diplomatic-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Collect Diplomatic Data
+        run: |
+          INT=$(grep -c "International" AUDIT.md || echo "0")
+          DIP=$(grep -c "Diplomatic" AUDIT.md || echo "0")
+          echo "int=$INT" >> $GITHUB_ENV
+          echo "dip=$DIP" >> $GITHUB_ENV
+
+      - name: Build REPORT-DIP.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Diplomatic Relations Report — $DATE" > REPORT-DIP.md
+          echo "" >> REPORT-DIP.md
+          echo "## 🌐 International References" >> REPORT-DIP.md
+          echo "- International Entries: ${{ env.int }}" >> REPORT-DIP.md
+          echo "" >> REPORT-DIP.md
+          echo "## 🤝 Diplomatic Relations" >> REPORT-DIP.md
+          echo "- Diplomatic Entries: ${{ env.dip }}" >> REPORT-DIP.md
+          echo "" >> REPORT-DIP.md
+          echo "## 📜 Statement" >> REPORT-DIP.md
+          echo "This report certifies STG-Chain’s diplomatic relations and international legitimacy for the year." >> REPORT-DIP.md
+
+      - name: Convert REPORT-DIP.md to PDF
+        run: |
+          pandoc REPORT-DIP.md -o REPORT-DIP.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-DIP.md REPORT-DIP.pdf
+          git commit -m "Annual Diplomatic Relations Report generated"
+          git push
