@@ -1,0 +1,54 @@
+name: Monthly Global ESG & Carbon Report
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  global-esg-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect ESG Data
+        run: |
+          CARBON=$(grep -c "Carbon Reduction" AUDIT.md || echo "0")
+          ESG=$(grep -c "ESG Project" AUDIT.md || echo "0")
+          GREEN=$(grep -c "Green Energy" AUDIT.md || echo "0")
+          echo "carbon=$CARBON" >> $GITHUB_ENV
+          echo "esg=$ESG" >> $GITHUB_ENV
+          echo "green=$GREEN" >> $GITHUB_ENV
+
+      - name: Build REPORT-ESG.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Global ESG & Carbon Report — $DATE" > REPORT-ESG.md
+          echo "" >> REPORT-ESG.md
+          echo "## 🌱 ESG Projects" >> REPORT-ESG.md
+          echo "- Entries: ${{ env.esg }}" >> REPORT-ESG.md
+          echo "" >> REPORT-ESG.md
+          echo "## 🌍 Carbon Reduction" >> REPORT-ESG.md
+          echo "- Entries: ${{ env.carbon }}" >> REPORT-ESG.md
+          echo "" >> REPORT-ESG.md
+          echo "## ☀️ Green Energy Initiatives" >> REPORT-ESG.md
+          echo "- Entries: ${{ env.green }}" >> REPORT-ESG.md
+          echo "" >> REPORT-ESG.md
+          echo "## 📜 Statement" >> REPORT-ESG.md
+          echo "This report certifies STG-Chain’s monthly contribution to ESG compliance and carbon reduction." >> REPORT-ESG.md
+
+      - name: Convert REPORT-ESG.md to PDF
+        run: |
+          pandoc REPORT-ESG.md -o REPORT-ESG.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-ESG.md REPORT-ESG.pdf
+          git commit -m "Monthly Global ESG & Carbon Report generated"
+          git push
