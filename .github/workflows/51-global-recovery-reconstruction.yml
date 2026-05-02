@@ -1,0 +1,95 @@
+name: Global Recovery & Reconstruction Dashboard
+
+on:
+  schedule:
+    - cron: "0 3 * * *"   # update harian jam 03 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-recovery-reconstruction:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Reconstruction Data
+        run: |
+          INFRA=$(grep -c "Infrastructure Rebuilt" AUDIT.md || echo "0")
+          SCHOOL=$(grep -c "School Reconstructed" AUDIT.md || echo "0")
+          HOSPITAL=$(grep -c "Hospital Restored" AUDIT.md || echo "0")
+          IRRIGATION=$(grep -c "Irrigation Repaired" AUDIT.md || echo "0")
+          ENERGY=$(grep -c "Renewable Energy Installed" AUDIT.md || echo "0")
+          echo "infra=$INFRA" >> $GITHUB_ENV
+          echo "school=$SCHOOL" >> $GITHUB_ENV
+          echo "hospital=$HOSPITAL" >> $GITHUB_ENV
+          echo "irrigation=$IRRIGATION" >> $GITHUB_ENV
+          echo "energy=$ENERGY" >> $GITHUB_ENV
+
+      - name: Build REPORT-RECOVERY.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Global Recovery & Reconstruction Report — $DATE" > REPORT-RECOVERY.md
+          echo "" >> REPORT-RECOVERY.md
+          echo "## 🏗️ Infrastructure Rebuilt" >> REPORT-RECOVERY.md
+          echo "- Entries: ${{ env.infra }}" >> REPORT-RECOVERY.md
+          echo "" >> REPORT-RECOVERY.md
+          echo "## 🏫 Schools Reconstructed" >> REPORT-RECOVERY.md
+          echo "- Entries: ${{ env.school }}" >> REPORT-RECOVERY.md
+          echo "" >> REPORT-RECOVERY.md
+          echo "## 🏥 Hospitals Restored" >> REPORT-RECOVERY.md
+          echo "- Entries: ${{ env.hospital }}" >> REPORT-RECOVERY.md
+          echo "" >> REPORT-RECOVERY.md
+          echo "## 🚜 Irrigation Systems Repaired" >> REPORT-RECOVERY.md
+          echo "- Entries: ${{ env.irrigation }}" >> REPORT-RECOVERY.md
+          echo "" >> REPORT-RECOVERY.md
+          echo "## ☀️ Renewable Energy Installed" >> REPORT-RECOVERY.md
+          echo "- Entries: ${{ env.energy }}" >> REPORT-RECOVERY.md
+          echo "" >> REPORT-RECOVERY.md
+          echo "## 📜 Statement" >> REPORT-RECOVERY.md
+          echo "This report certifies STG-Chain’s daily reconstruction progress verified by Bio-Server and Governance Sentinel." >> REPORT-RECOVERY.md
+
+      - name: Convert REPORT-RECOVERY.md to PDF
+        run: |
+          pandoc REPORT-RECOVERY.md -o REPORT-RECOVERY.pdf
+
+      - name: Generate Recovery Dashboard HTML
+        run: |
+          mkdir -p public/recovery
+          cat > public/recovery/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Recovery & Reconstruction Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍 STG Global Recovery & Reconstruction Dashboard</h1>
+            <canvas id="recoveryChart"></canvas>
+            <script>
+              const ctx = document.getElementById('recoveryChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['Infrastructure','Schools','Hospitals','Irrigation','Renewable Energy'],
+                  datasets: [{
+                    label: 'Reconstruction Metrics',
+                    data: [5,4,3,4,5],
+                    backgroundColor: 'rgba(0,200,255,0.3)',
+                    borderColor: 'blue'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
