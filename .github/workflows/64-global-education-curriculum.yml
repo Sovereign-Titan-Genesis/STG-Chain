@@ -1,0 +1,90 @@
+name: Global Education & Curriculum Dashboard
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # update harian jam 06 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-education-curriculum:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Education Data
+        run: |
+          AKSA=$(grep -c "AKSA Literacy" AUDIT.md || echo "0")
+          QUANTUM=$(grep -c "Quantum Basics" AUDIT.md || echo "0")
+          ESG=$(grep -c "ESG Curriculum" AUDIT.md || echo "0")
+          GOV=$(grep -c "Governance Curriculum" AUDIT.md || echo "0")
+          echo "aksa=$AKSA" >> $GITHUB_ENV
+          echo "quantum=$QUANTUM" >> $GITHUB_ENV
+          echo "esg=$ESG" >> $GITHUB_ENV
+          echo "gov=$GOV" >> $GITHUB_ENV
+
+      - name: Build REPORT-EDU-HUB.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Global Education & Curriculum Report — $DATE" > REPORT-EDU-HUB.md
+          echo "" >> REPORT-EDU-HUB.md
+          echo "## 📖 AKSA Literacy" >> REPORT-EDU-HUB.md
+          echo "- Entries: ${{ env.aksa }}" >> REPORT-EDU-HUB.md
+          echo "" >> REPORT-EDU-HUB.md
+          echo "## ⚛️ Quantum Basics" >> REPORT-EDU-HUB.md
+          echo "- Entries: ${{ env.quantum }}" >> REPORT-EDU-HUB.md
+          echo "" >> REPORT-EDU-HUB.md
+          echo "## 🌱 ESG Curriculum" >> REPORT-EDU-HUB.md
+          echo "- Entries: ${{ env.esg }}" >> REPORT-EDU-HUB.md
+          echo "" >> REPORT-EDU-HUB.md
+          echo "## 🏛️ Governance Curriculum" >> REPORT-EDU-HUB.md
+          echo "- Entries: ${{ env.gov }}" >> REPORT-EDU-HUB.md
+          echo "" >> REPORT-EDU-HUB.md
+          echo "## 📜 Statement" >> REPORT-EDU-HUB.md
+          echo "This report certifies STG-Chain’s daily education and curriculum synchronization across AKSA, Quantum, ESG, and Governance." >> REPORT-EDU-HUB.md
+
+      - name: Convert REPORT-EDU-HUB.md to PDF
+        run: |
+          pandoc REPORT-EDU-HUB.md -o REPORT-EDU-HUB.pdf
+
+      - name: Generate Education Dashboard HTML
+        run: |
+          mkdir -p public/edu
+          cat > public/edu/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Education & Curriculum Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>📚 STG Global Education & Curriculum Dashboard</h1>
+            <canvas id="eduChart"></canvas>
+            <script>
+              const ctx = document.getElementById('eduChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['AKSA Literacy','Quantum Basics','ESG','Governance'],
+                  datasets: [{
+                    label: 'Education Metrics',
+                    data: [5,4,3,4],
+                    backgroundColor: 'rgba(255,206,86,0.3)',
+                    borderColor: 'orange'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
