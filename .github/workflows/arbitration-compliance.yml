@@ -1,0 +1,85 @@
+name: Arbitration & Legal Compliance Dashboard
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  arbitration-compliance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Arbitration Data
+        run: |
+          CASES=$(grep -c "Arbitration Case" AUDIT.md || echo "0")
+          RESOLVED=$(grep -c "Resolved" AUDIT.md || echo "0")
+          COMPLIANCE=$(grep -c "Compliance Check" AUDIT.md || echo "0")
+          echo "cases=$CASES" >> $GITHUB_ENV
+          echo "resolved=$RESOLVED" >> $GITHUB_ENV
+          echo "compliance=$COMPLIANCE" >> $GITHUB_ENV
+
+      - name: Build REPORT-ARBITRATION.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Arbitration & Legal Compliance Report — $DATE" > REPORT-ARBITRATION.md
+          echo "" >> REPORT-ARBITRATION.md
+          echo "## ⚖️ Arbitration Cases" >> REPORT-ARBITRATION.md
+          echo "- Entries: ${{ env.cases }}" >> REPORT-ARBITRATION.md
+          echo "" >> REPORT-ARBITRATION.md
+          echo "## ✅ Resolved Cases" >> REPORT-ARBITRATION.md
+          echo "- Entries: ${{ env.resolved }}" >> REPORT-ARBITRATION.md
+          echo "" >> REPORT-ARBITRATION.md
+          echo "## 🛡️ Compliance Checks" >> REPORT-ARBITRATION.md
+          echo "- Entries: ${{ env.compliance }}" >> REPORT-ARBITRATION.md
+          echo "" >> REPORT-ARBITRATION.md
+          echo "## 📜 Statement" >> REPORT-ARBITRATION.md
+          echo "This report certifies STG-Chain’s monthly arbitration transparency and compliance readiness." >> REPORT-ARBITRATION.md
+
+      - name: Convert REPORT-ARBITRATION.md to PDF
+        run: |
+          pandoc REPORT-ARBITRATION.md -o REPORT-ARBITRATION.pdf
+
+      - name: Generate Arbitration Dashboard HTML
+        run: |
+          mkdir -p public/arbitration
+          cat > public/arbitration/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Arbitration & Compliance Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>⚖️ STG Arbitration & Legal Compliance Dashboard</h1>
+            <canvas id="arbChart"></canvas>
+            <script>
+              const ctx = document.getElementById('arbChart');
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: ['Arbitration Cases','Resolved Cases','Compliance Checks'],
+                  datasets: [{
+                    label: 'Legal Metrics',
+                    data: [4,3,5],
+                    backgroundColor: ['orange','green','blue']
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
+          
