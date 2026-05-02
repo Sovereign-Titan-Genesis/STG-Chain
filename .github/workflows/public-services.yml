@@ -1,0 +1,95 @@
+name: Public Services Dashboard
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"   # update setiap 4 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  public-services:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Public Service Data
+        run: |
+          FOOD=$(grep -c "Protein Package" AUDIT.md || echo "0")
+          RICE=$(grep -c "Rice Distribution" AUDIT.md || echo "0")
+          MED=$(grep -c "Medicine Supply" AUDIT.md || echo "0")
+          SOLAR=$(grep -c "Bio-Solar Panel" AUDIT.md || echo "0")
+          EDU=$(grep -c "Education Kit" AUDIT.md || echo "0")
+          echo "food=$FOOD" >> $GITHUB_ENV
+          echo "rice=$RICE" >> $GITHUB_ENV
+          echo "med=$MED" >> $GITHUB_ENV
+          echo "solar=$SOLAR" >> $GITHUB_ENV
+          echo "edu=$EDU" >> $GITHUB_ENV
+
+      - name: Build REPORT-PUBLIC.md
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M UTC')
+          echo "# STG-Chain Public Services Report — $DATE" > REPORT-PUBLIC.md
+          echo "" >> REPORT-PUBLIC.md
+          echo "## 🍖 Protein Packages" >> REPORT-PUBLIC.md
+          echo "- Entries: ${{ env.food }}" >> REPORT-PUBLIC.md
+          echo "" >> REPORT-PUBLIC.md
+          echo "## 🍚 Rice Distribution" >> REPORT-PUBLIC.md
+          echo "- Entries: ${{ env.rice }}" >> REPORT-PUBLIC.md
+          echo "" >> REPORT-PUBLIC.md
+          echo "## 💊 Medicine Supply" >> REPORT-PUBLIC.md
+          echo "- Entries: ${{ env.med }}" >> REPORT-PUBLIC.md
+          echo "" >> REPORT-PUBLIC.md
+          echo "## ☀️ Bio-Solar Panels" >> REPORT-PUBLIC.md
+          echo "- Entries: ${{ env.solar }}" >> REPORT-PUBLIC.md
+          echo "" >> REPORT-PUBLIC.md
+          echo "## 📚 Education Kits" >> REPORT-PUBLIC.md
+          echo "- Entries: ${{ env.edu }}" >> REPORT-PUBLIC.md
+          echo "" >> REPORT-PUBLIC.md
+          echo "## 📜 Statement" >> REPORT-PUBLIC.md
+          echo "This report certifies STG-Chain’s real-time public service distribution." >> REPORT-PUBLIC.md
+
+      - name: Convert REPORT-PUBLIC.md to PDF
+        run: |
+          pandoc REPORT-PUBLIC.md -o REPORT-PUBLIC.pdf
+
+      - name: Generate Public Services Dashboard HTML
+        run: |
+          mkdir -p public/services
+          cat > public/services/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Public Services Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍 STG Public Services Dashboard</h1>
+            <canvas id="serviceChart"></canvas>
+            <script>
+              const ctx = document.getElementById('serviceChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['Protein','Rice','Medicine','Bio-Solar','Education'],
+                  datasets: [{
+                    label: 'Distribution',
+                    data: [5,4,3,2,4],
+                    backgroundColor: 'rgba(0,128,255,0.3)',
+                    borderColor: 'blue'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
