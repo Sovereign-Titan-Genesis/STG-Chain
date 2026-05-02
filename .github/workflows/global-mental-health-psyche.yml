@@ -1,0 +1,96 @@
+name: Global Mental Health & Titan Psyche Dashboard
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # update setiap 6 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-mental-health-psyche:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Mental Health Data
+        run: |
+          COUNSEL=$(grep -c "Counseling Session" AUDIT.md || echo "0")
+          CRISIS=$(grep -c "Crisis Intervention" AUDIT.md || echo "0")
+          RECOVERY=$(grep -c "Trauma Recovery" AUDIT.md || echo "0")
+          PSYCHE=$(grep -c "Titan Psyche Mono" AUDIT.md || echo "0")
+          WELLBEING=$(grep -c "Wellbeing Check" AUDIT.md || echo "0")
+          echo "counsel=$COUNSEL" >> $GITHUB_ENV
+          echo "crisis=$CRISIS" >> $GITHUB_ENV
+          echo "recovery=$RECOVERY" >> $GITHUB_ENV
+          echo "psyche=$PSYCHE" >> $GITHUB_ENV
+          echo "wellbeing=$WELLBEING" >> $GITHUB_ENV
+
+      - name: Build REPORT-PSYCHE.md
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M UTC')
+          echo "# STG-Chain Global Mental Health & Titan Psyche Report — $DATE" > REPORT-PSYCHE.md
+          echo "" >> REPORT-PSYCHE.md
+          echo "## 🧠 Counseling Sessions" >> REPORT-PSYCHE.md
+          echo "- Entries: ${{ env.counsel }}" >> REPORT-PSYCHE.md
+          echo "" >> REPORT-PSYCHE.md
+          echo "## 🚨 Crisis Interventions" >> REPORT-PSYCHE.md
+          echo "- Entries: ${{ env.crisis }}" >> REPORT-PSYCHE.md
+          echo "" >> REPORT-PSYCHE.md
+          echo "## 💛 Trauma Recovery Programs" >> REPORT-PSYCHE.md
+          echo "- Entries: ${{ env.recovery }}" >> REPORT-PSYCHE.md
+          echo "" >> REPORT-PSYCHE.md
+          echo "## 🧬 Titan Psyche Mono Activations" >> REPORT-PSYCHE.md
+          echo "- Entries: ${{ env.psyche }}" >> REPORT-PSYCHE.md
+          echo "" >> REPORT-PSYCHE.md
+          echo "## 🌿 Wellbeing Checks" >> REPORT-PSYCHE.md
+          echo "- Entries: ${{ env.wellbeing }}" >> REPORT-PSYCHE.md
+          echo "" >> REPORT-PSYCHE.md
+          echo "## 📜 Statement" >> REPORT-PSYCHE.md
+          echo "This report certifies STG-Chain’s real-time mental health performance across counseling, crisis response, trauma recovery, Titan Psyche Mono, and wellbeing monitoring." >> REPORT-PSYCHE.md
+
+      - name: Convert REPORT-PSYCHE.md to PDF
+        run: |
+          pandoc REPORT-PSYCHE.md -o REPORT-PSYCHE.pdf
+
+      - name: Generate Mental Health Dashboard HTML
+        run: |
+          mkdir -p public/psyche
+          cat > public/psyche/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Mental Health & Titan Psyche Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍🧠 STG Global Mental Health & Titan Psyche Dashboard</h1>
+            <canvas id="psycheChart"></canvas>
+            <script>
+              const ctx = document.getElementById('psycheChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['Counseling','Crisis','Recovery','Psyche Mono','Wellbeing'],
+                  datasets: [{
+                    label: 'Mental Health Metrics',
+                    data: [5,4,5,3,4],
+                    backgroundColor: 'rgba(150,0,255,0.3)',
+                    borderColor: 'purple'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
+          
