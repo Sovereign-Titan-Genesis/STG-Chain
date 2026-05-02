@@ -1,0 +1,50 @@
+name: Quarterly ESG & Carbon Ledger Report
+
+on:
+  schedule:
+    - cron: "0 0 1 */3 *"   # Run at midnight on the 1st day every 3 months
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  esg-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Collect ESG Data
+        run: |
+          ESG=$(grep -c "ESG" AUDIT.md || echo "0")
+          CARBON=$(grep -c "Carbon" AUDIT.md || echo "0")
+          echo "esg=$ESG" >> $GITHUB_ENV
+          echo "carbon=$CARBON" >> $GITHUB_ENV
+
+      - name: Build REPORT-ESG.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain ESG & Carbon Ledger Report — $DATE" > REPORT-ESG.md
+          echo "" >> REPORT-ESG.md
+          echo "## 🌱 ESG Summary" >> REPORT-ESG.md
+          echo "- ESG Workflows: ${{ env.esg }}" >> REPORT-ESG.md
+          echo "- Carbon Ledger Entries: ${{ env.carbon }}" >> REPORT-ESG.md
+          echo "" >> REPORT-ESG.md
+          echo "## 📈 Dashboard" >> REPORT-ESG.md
+          echo "See interactive ESG charts at: https://<org>.github.io/<repo>/dashboard/" >> REPORT-ESG.md
+          echo "" >> REPORT-ESG.md
+          echo "## 📜 Notes" >> REPORT-ESG.md
+          echo "This report is auto-generated quarterly for ESG compliance and carbon tracking." >> REPORT-ESG.md
+
+      - name: Convert REPORT-ESG.md to PDF
+        run: |
+          pandoc REPORT-ESG.md -o REPORT-ESG.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-ESG.md REPORT-ESG.pdf
+          git commit -m "Quarterly ESG & Carbon Ledger Report generated"
+          git push
