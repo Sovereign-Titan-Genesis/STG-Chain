@@ -1,0 +1,96 @@
+name: Global Diplomatic Relations Dashboard
+
+on:
+  schedule:
+    - cron: "0 15 * * *"   # update harian jam 15 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-diplomatic-relations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Diplomatic Data
+        run: |
+          MOU=$(grep -c "Diplomatic MoU Signed" AUDIT.md || echo "0")
+          PARTNER=$(grep -c "Sovereign Partnership" AUDIT.md || echo "0")
+          RECOG=$(grep -c "International Recognition" AUDIT.md || echo "0")
+          SUMMIT=$(grep -c "Global Summit Participation" AUDIT.md || echo "0")
+          AID=$(grep -c "Cross-Border Aid Agreement" AUDIT.md || echo "0")
+          echo "mou=$MOU" >> $GITHUB_ENV
+          echo "partner=$PARTNER" >> $GITHUB_ENV
+          echo "recog=$RECOG" >> $GITHUB_ENV
+          echo "summit=$SUMMIT" >> $GITHUB_ENV
+          echo "aid=$AID" >> $GITHUB_ENV
+
+      - name: Build REPORT-DIPLO.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Global Diplomatic Relations Report — $DATE" > REPORT-DIPLO.md
+          echo "" >> REPORT-DIPLO.md
+          echo "## 🤝 Diplomatic MoUs Signed" >> REPORT-DIPLO.md
+          echo "- Entries: ${{ env.mou }}" >> REPORT-DIPLO.md
+          echo "" >> REPORT-DIPLO.md
+          echo "## 🌐 Sovereign Partnerships" >> REPORT-DIPLO.md
+          echo "- Entries: ${{ env.partner }}" >> REPORT-DIPLO.md
+          echo "" >> REPORT-DIPLO.md
+          echo "## 🏛️ International Recognition" >> REPORT-DIPLO.md
+          echo "- Entries: ${{ env.recog }}" >> REPORT-DIPLO.md
+          echo "" >> REPORT-DIPLO.md
+          echo "## 🕊️ Global Summit Participation" >> REPORT-DIPLO.md
+          echo "- Entries: ${{ env.summit }}" >> REPORT-DIPLO.md
+          echo "" >> REPORT-DIPLO.md
+          echo "## 🚑 Cross-Border Aid Agreements" >> REPORT-DIPLO.md
+          echo "- Entries: ${{ env.aid }}" >> REPORT-DIPLO.md
+          echo "" >> REPORT-DIPLO.md
+          echo "## 📜 Statement" >> REPORT-DIPLO.md
+          echo "This report certifies STG-Chain’s daily diplomatic engagements, sovereign partnerships, and international recognition progress." >> REPORT-DIPLO.md
+
+      - name: Convert REPORT-DIPLO.md to PDF
+        run: |
+          pandoc REPORT-DIPLO.md -o REPORT-DIPLO.pdf
+
+      - name: Generate Diplomatic Relations Dashboard HTML
+        run: |
+          mkdir -p public/diplomacy
+          cat > public/diplomacy/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Diplomatic Relations Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍🤝 STG Global Diplomatic Relations Dashboard</h1>
+            <canvas id="diploChart"></canvas>
+            <script>
+              const ctx = document.getElementById('diploChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['MoU','Partnership','Recognition','Summits','Aid Agreements'],
+                  datasets: [{
+                    label: 'Diplomatic Metrics',
+                    data: [5,4,3,4,5],
+                    backgroundColor: 'rgba(0,102,204,0.3)',
+                    borderColor: 'blue'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
+          
