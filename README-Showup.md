@@ -18,6 +18,19 @@ STG‑Chain is not just another blockchain. It is a **sovereign digital infrastr
 - [Audit Reports](./AUDIT.md)  
 - [Verification Dashboard](./REPORT‑VERIFY.md)  
 
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js v18+
+- Solidity compiler (solc 0.8.x)
+- Git & GitHub Actions
+- Docker (optional, for running nodes)
+
+### Clone the Repository
+```bash
+git clone https://github.com/Sovereign-Titan-Genesis/STG-Chain.git
+cd STG-Chain
 ---
 
 *"Sovereign fintech turning crises into opportunity."*
