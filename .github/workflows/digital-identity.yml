@@ -1,0 +1,54 @@
+name: Monthly Digital Identity Ledger Report
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  digital-identity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Identity Data
+        run: |
+          BIO=$(grep -c "Bio-Passport" AUDIT.md || echo "0")
+          KEY=$(grep -c "Master Key" AUDIT.md || echo "0")
+          NODE=$(grep -c "Node" AUDIT.md || echo "0")
+          echo "bio=$BIO" >> $GITHUB_ENV
+          echo "key=$KEY" >> $GITHUB_ENV
+          echo "node=$NODE" >> $GITHUB_ENV
+
+      - name: Build REPORT-ID.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Digital Identity Ledger Report — $DATE" > REPORT-ID.md
+          echo "" >> REPORT-ID.md
+          echo "## 🪪 Bio-Passport" >> REPORT-ID.md
+          echo "- Entries: ${{ env.bio }}" >> REPORT-ID.md
+          echo "" >> REPORT-ID.md
+          echo "## 🔑 Master Key" >> REPORT-ID.md
+          echo "- Entries: ${{ env.key }}" >> REPORT-ID.md
+          echo "" >> REPORT-ID.md
+          echo "## 🌐 Sovereign Nodes" >> REPORT-ID.md
+          echo "- Entries: ${{ env.node }}" >> REPORT-ID.md
+          echo "" >> REPORT-ID.md
+          echo "## 📜 Statement" >> REPORT-ID.md
+          echo "This report certifies the monthly status of digital identities in STG-Chain." >> REPORT-ID.md
+
+      - name: Convert REPORT-ID.md to PDF
+        run: |
+          pandoc REPORT-ID.md -o REPORT-ID.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-ID.md REPORT-ID.pdf
+          git commit -m "Monthly Digital Identity Ledger Report generated"
+          git push
