@@ -1,0 +1,84 @@
+name: Governance Sentinel Dashboard
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  governance-sentinel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Governance Data
+        run: |
+          VOTE=$(grep -c "Voting" AUDIT.md || echo "0")
+          CONS=$(grep -c "Consensus" AUDIT.md || echo "0")
+          ANOM=$(grep -c "Anomaly" AUDIT.md || echo "0")
+          echo "vote=$VOTE" >> $GITHUB_ENV
+          echo "consensus=$CONS" >> $GITHUB_ENV
+          echo "anomaly=$ANOM" >> $GITHUB_ENV
+
+      - name: Build REPORT-GOV.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Governance Sentinel Report — $DATE" > REPORT-GOV.md
+          echo "" >> REPORT-GOV.md
+          echo "## 🗳️ Voting Records" >> REPORT-GOV.md
+          echo "- Entries: ${{ env.vote }}" >> REPORT-GOV.md
+          echo "" >> REPORT-GOV.md
+          echo "## 🤝 Consensus Decisions" >> REPORT-GOV.md
+          echo "- Entries: ${{ env.consensus }}" >> REPORT-GOV.md
+          echo "" >> REPORT-GOV.md
+          echo "## ⚠️ Anomaly Detection" >> REPORT-GOV.md
+          echo "- Entries: ${{ env.anomaly }}" >> REPORT-GOV.md
+          echo "" >> REPORT-GOV.md
+          echo "## 📜 Statement" >> REPORT-GOV.md
+          echo "This report certifies STG-Chain’s governance transparency and fail-safe mechanisms." >> REPORT-GOV.md
+
+      - name: Convert REPORT-GOV.md to PDF
+        run: |
+          pandoc REPORT-GOV.md -o REPORT-GOV.pdf
+
+      - name: Generate Governance Dashboard HTML
+        run: |
+          mkdir -p public/governance
+          cat > public/governance/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Governance Sentinel Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🛡️ STG Governance Sentinel Dashboard</h1>
+            <canvas id="govChart"></canvas>
+            <script>
+              const ctx = document.getElementById('govChart');
+              new Chart(ctx, {
+                type: 'pie',
+                data: {
+                  labels: ['Voting', 'Consensus', 'Anomaly Detection'],
+                  datasets: [{
+                    label: 'Governance Metrics',
+                    data: [5,4,1],
+                    backgroundColor: ['green','blue','red']
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
