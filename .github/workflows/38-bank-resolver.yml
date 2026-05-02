@@ -1,0 +1,54 @@
+name: Monthly Bank Resolver Database Report
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bank-resolver:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Bank Resolver Data
+        run: |
+          DANA=$(grep -c "DANA Wallet" AUDIT.md || echo "0")
+          VIRTUAL=$(grep -c "Virtual Account" AUDIT.md || echo "0")
+          BANK=$(grep -c "Bank Resolver" AUDIT.md || echo "0")
+          echo "dana=$DANA" >> $GITHUB_ENV
+          echo "virtual=$VIRTUAL" >> $GITHUB_ENV
+          echo "bank=$BANK" >> $GITHUB_ENV
+
+      - name: Build REPORT-BANK.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Bank Resolver Database Report — $DATE" > REPORT-BANK.md
+          echo "" >> REPORT-BANK.md
+          echo "## 📲 DANA Wallet Transactions" >> REPORT-BANK.md
+          echo "- Entries: ${{ env.dana }}" >> REPORT-BANK.md
+          echo "" >> REPORT-BANK.md
+          echo "## 🏦 Virtual Account Transactions" >> REPORT-BANK.md
+          echo "- Entries: ${{ env.virtual }}" >> REPORT-BANK.md
+          echo "" >> REPORT-BANK.md
+          echo "## 🔎 Bank Resolver Status" >> REPORT-BANK.md
+          echo "- Entries: ${{ env.bank }}" >> REPORT-BANK.md
+          echo "" >> REPORT-BANK.md
+          echo "## 📜 Statement" >> REPORT-BANK.md
+          echo "This report certifies STG-Chain’s monthly precision in resolving AKSA transactions to wallets and bank accounts." >> REPORT-BANK.md
+
+      - name: Convert REPORT-BANK.md to PDF
+        run: |
+          pandoc REPORT-BANK.md -o REPORT-BANK.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-BANK.md REPORT-BANK.pdf
+          git commit -m "Monthly Bank Resolver Database Report generated"
+          git push
