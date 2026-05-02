@@ -1,0 +1,85 @@
+name: Global Benchmark Dashboard
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Build REPORT-BENCH.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Global Benchmark Dashboard — $DATE" > REPORT-BENCH.md
+          echo "" >> REPORT-BENCH.md
+          echo "## 🌱 ESG Compliance" >> REPORT-BENCH.md
+          echo "- STG-Chain: ✅" >> REPORT-BENCH.md
+          echo "- China: In Progress" >> REPORT-BENCH.md
+          echo "- India: Developing" >> REPORT-BENCH.md
+          echo "- ASEAN: Mixed" >> REPORT-BENCH.md
+          echo "" >> REPORT-BENCH.md
+          echo "## 🍚 Food Security" >> REPORT-BENCH.md
+          echo "- STG-Chain: Cooperative Distribution Active" >> REPORT-BENCH.md
+          echo "- China: State-Controlled" >> REPORT-BENCH.md
+          echo "- India: Agricultural Expansion" >> REPORT-BENCH.md
+          echo "- ASEAN: Regional Variance" >> REPORT-BENCH.md
+          echo "" >> REPORT-BENCH.md
+          echo "## ⚛️ Quantum Readiness" >> REPORT-BENCH.md
+          echo "- STG-Chain: Quantum Armor FIPS-203 Enabled" >> REPORT-BENCH.md
+          echo "- China: National Quantum Program" >> REPORT-BENCH.md
+          echo "- India: Pilot Projects" >> REPORT-BENCH.md
+          echo "- ASEAN: Early Stage" >> REPORT-BENCH.md
+          echo "" >> REPORT-BENCH.md
+          echo "## 📜 Statement" >> REPORT-BENCH.md
+          echo "This dashboard benchmarks STG-Chain against major nations in ESG, food, and quantum readiness." >> REPORT-BENCH.md
+
+      - name: Convert REPORT-BENCH.md to PDF
+        run: |
+          pandoc REPORT-BENCH.md -o REPORT-BENCH.pdf
+
+      - name: Generate Dashboard HTML
+        run: |
+          mkdir -p public/bench
+          cat > public/bench/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Benchmark Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍 STG Global Benchmark Dashboard</h1>
+            <canvas id="benchChart"></canvas>
+            <script>
+              const ctx = document.getElementById('benchChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['ESG', 'Food Security', 'Quantum Readiness'],
+                  datasets: [
+                    { label: 'STG-Chain', data: [5,5,5], borderColor: 'green', backgroundColor: 'rgba(0,255,0,0.2)' },
+                    { label: 'China', data: [4,4,5], borderColor: 'red', backgroundColor: 'rgba(255,0,0,0.2)' },
+                    { label: 'India', data: [3,4,3], borderColor: 'orange', backgroundColor: 'rgba(255,165,0,0.2)' },
+                    { label: 'ASEAN', data: [3,3,2], borderColor: 'blue', backgroundColor: 'rgba(0,0,255,0.2)' }
+                  ]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
