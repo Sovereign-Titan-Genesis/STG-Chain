@@ -1,49 +1,37 @@
-# Sovereign Titan Genesis — Canonical README
+# ✨ STG‑Chain Showcase: The 12 Pillars
 
-## 📌 Overview
-This repository contains **91 canonical workflows** forming the STG‑Chain ecosystem.  
-All workflows have been audited, uniquely numbered, and documented.
+Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 
----
+## 🧠 THE BRAIN & IDENTITY
+- [Sovereign‑Titan‑Genesis](https://github.com/bswcorp/Sovereign-Titan-Genesis) — Konstitusi & Identitas Induk
+- [Titan‑Psyche‑Mono](https://github.com/bswcorp/TITAN-PSYCHE-MONO) — Jiwa Digital & State Management
 
-## 📑 Workflows 1–91
-All workflows are located in:
+## 🌉 THE BRIDGE
+- [Metaportation](https://github.com/bswcorp/METAPORTATION) — Gerbang RWA
+- [STG‑Metaportation‑Event](https://github.com/bswcorp/STG-METAPORTATION-EVENT) — Sistem Syaraf Event
 
+## 🛡️ THE DEFENDER
+- [Quorum‑State](https://github.com/bswcorp/Quorum-State) — Konsensus & Tata Kelola
+- [QS Guardian Search](https://github.com/bswcorp/qs-guardian-search) — Intelijen Compliance
 
-Examples:
-- `workflow-3-health-alert.yml` → Health Monitoring Alert  
-- `workflow-20-distribution.yml` → AKSA Distribution  
-- `workflow-23-education-certification.yml` → Education & Certification Log  
-- `workflow-46-humanitarian-response.yml` → Global Humanitarian Response  
-- `workflow-54-quantum-readiness.yml` → Global Quantum Readiness  
-- `workflow-86-ai-quantum-fusion.yml` → AI‑Quantum Fusion  
-- `workflow-88-public-services.yml` → Public Services Dashboard  
-- `workflow-91-humanitarian-response.yml` → Humanitarian Response  
+## 💰 THE ECONOMY
+- [Qubicoin](https://github.com/bswcorp/Qubicoin) — Native Coin & Liquidity
+- [Quantum Swap Engine](https://github.com/bswcorp/quantum-swap-engine) — Pertukaran Instan
 
----
+## 🗄️ THE RESOURCE & STORAGE
+- [Garage](https://github.com/bswcorp/Garage) — Sandbox Eksperimen
+- [Makronesia Act‑Ark](https://github.com/bswcorp/Makronesia-Act-Ark) — Ekologi Sosial & Aset Hijau
 
-## 📑 Audit Trail
-- All workflows have been audited and numbered.  
-- Duplicate files remain archived, but **canonical workflows always carry a number**.  
-- Full audit trail is available in `AUDIT.md`.
-
----
-
-## 📜 License
-This project is protected under the **STG‑Chain Sovereign License**.  
-See `LICENSE.md` for details.
+## 🤖 THE INTELLIGENCE & SERVICE
+- [STG‑1AI](https://github.com/bswcorp/STG-1AI) — AI 5‑Stage Intelligence
+- [Jasawan](https://github.com/bswcorp/Jasawan) — Layanan Publik & Identitas Teritorial
 
 ---
+## 🛡️ Sovereign Manifesto
+*"Sovereign fintech turning crises into opportunity."*
+- Native Asset Supremacy
+- Gas Fee Independence
+- AI&Me Powered
 
-## 🤝 Contribution
-1. Fork this repository.  
-2. Create a new branch for your changes.  
-3. Ensure new workflows follow the naming pattern:
-4.4. Submit a Pull Request with audit trail description.
-
----
-
-## 📌 Notes
-- **This README.md is the canonical document.**  
-- For visual showcase, see `README-Showup.md`.
--  
+## 📸 Visual Showcase
+(Logo/ikon tiap repo akan ditempatkan di sini)
