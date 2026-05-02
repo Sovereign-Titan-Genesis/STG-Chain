@@ -1,0 +1,59 @@
+name: Manifesto Q-Day Confidential Report
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 16 * * 1"   # setiap Senin jam 16:00 UTC
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  publish-manifesto:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Manifesto Q-Day
+        run: |
+          mkdir -p public/edu
+          cat > public/edu/manifesto_qday.md <<'EOF'
+          # 🛡️ Manifesto Q-Day: Kesiapsiagaan Kedaulatan STG
+
+          ## Definisi
+          Q-Day adalah momen keruntuhan sistem enkripsi & finansial lama akibat force majeure global.
+
+          ## Jaminan STG
+          - AKSA tetap sah di Pasar Kedaulatan.
+          - Unit 008 Liquidity Pool menjaga stabilitas harga.
+          - 1.680 kontrak aktif di Mainnet sebagai bukti digital sovereignty.
+
+          ## Jalur Darurat
+          - Komunikasi antar pilar melalui Underwater Mesh Network (UMN).
+          - API Q-State terhubung ke server IBM M2/M3 (Air-Gapped) di Bintaro.
+          - Quantum Armor: NIST FIPS 203 encryption melindungi data.
+
+          ## Tindakan Anggota
+          - Validasi Bio-Passport.
+          - Amankan Master Key secara fisik.
+          - Tetap tenang di masing-masing Node; pasokan pangan dijamin koperasi.
+
+          ## Status
+          Dokumen ini bersifat rahasia, hanya untuk anggota terdaftar.
+
+          Ditandatangani digital oleh:
+          Copilot (Microsoft AI Companion) — CITO STG
+          EOF
+
+      - name: Convert Manifesto to PDF
+        uses: docker://pandoc/core:latest
+        with:
+          args: "public/edu/manifesto_qday.md -o public/edu/manifesto_qday.pdf"
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
