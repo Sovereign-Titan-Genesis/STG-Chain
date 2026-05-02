@@ -1,0 +1,96 @@
+name: Global Economic Empowerment Dashboard
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"   # update setiap 12 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-economic-empowerment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Economic Data
+        run: |
+          MICRO=$(grep -c "Micro-Credit Program" AUDIT.md || echo "0")
+          AKSA=$(grep -c "AKSA Distribution" AUDIT.md || echo "0")
+          SUBSIDY=$(grep -c "Subsidy Granted" AUDIT.md || echo "0")
+          GREEN=$(grep -c "Green Tech Investment" AUDIT.md || echo "0")
+          EDU=$(grep -c "Education Empowerment" AUDIT.md || echo "0")
+          echo "micro=$MICRO" >> $GITHUB_ENV
+          echo "aksa=$AKSA" >> $GITHUB_ENV
+          echo "subsidy=$SUBSIDY" >> $GITHUB_ENV
+          echo "green=$GREEN" >> $GITHUB_ENV
+          echo "edu=$EDU" >> $GITHUB_ENV
+
+      - name: Build REPORT-ECON.md
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M UTC')
+          echo "# STG-Chain Global Economic Empowerment Report — $DATE" > REPORT-ECON.md
+          echo "" >> REPORT-ECON.md
+          echo "## 💳 Micro-Credit Programs" >> REPORT-ECON.md
+          echo "- Entries: ${{ env.micro }}" >> REPORT-ECON.md
+          echo "" >> REPORT-ECON.md
+          echo "## 💰 AKSA Distribution" >> REPORT-ECON.md
+          echo "- Entries: ${{ env.aksa }}" >> REPORT-ECON.md
+          echo "" >> REPORT-ECON.md
+          echo "## 🏛️ Subsidies Granted" >> REPORT-ECON.md
+          echo "- Entries: ${{ env.subsidy }}" >> REPORT-ECON.md
+          echo "" >> REPORT-ECON.md
+          echo "## 🌱 Green Tech Investments" >> REPORT-ECON.md
+          echo "- Entries: ${{ env.green }}" >> REPORT-ECON.md
+          echo "" >> REPORT-ECON.md
+          echo "## 📚 Education Empowerment" >> REPORT-ECON.md
+          echo "- Entries: ${{ env.edu }}" >> REPORT-ECON.md
+          echo "" >> REPORT-ECON.md
+          echo "## 📜 Statement" >> REPORT-ECON.md
+          echo "This report certifies STG-Chain’s bi-daily economic empowerment progress across micro-credit, AKSA, subsidies, green tech, and education." >> REPORT-ECON.md
+
+      - name: Convert REPORT-ECON.md to PDF
+        run: |
+          pandoc REPORT-ECON.md -o REPORT-ECON.pdf
+
+      - name: Generate Economic Dashboard HTML
+        run: |
+          mkdir -p public/econ
+          cat > public/econ/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Economic Empowerment Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍💰 STG Global Economic Empowerment Dashboard</h1>
+            <canvas id="econChart"></canvas>
+            <script>
+              const ctx = document.getElementById('econChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['Micro-Credit','AKSA','Subsidy','Green Tech','Education'],
+                  datasets: [{
+                    label: 'Economic Metrics',
+                    data: [5,4,3,4,5],
+                    backgroundColor: 'rgba(0,255,128,0.3)',
+                    borderColor: 'green'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
+          
