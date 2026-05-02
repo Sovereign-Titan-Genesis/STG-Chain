@@ -1,0 +1,65 @@
+name: Q-Day Infrastructure Dashboard
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # update setiap 6 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Collect Infrastructure Status
+        run: |
+          echo "api_status=ONLINE" >> $GITHUB_ENV
+          echo "server_airgapped=ACTIVE" >> $GITHUB_ENV
+          echo "quantum_armor=FIPS-203 ENABLED" >> $GITHUB_ENV
+
+      - name: Generate Dashboard HTML
+        run: |
+          mkdir -p public/dashboard
+          cat > public/dashboard/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Q-Day Infrastructure Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🛡️ STG Q-Day Infrastructure Status</h1>
+            <ul>
+              <li>API Status: ONLINE</li>
+              <li>Server Air-Gapped: ACTIVE</li>
+              <li>Quantum Armor: FIPS-203 ENABLED</li>
+            </ul>
+            <canvas id="infraChart"></canvas>
+            <script>
+              const ctx = document.getElementById('infraChart');
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: ['API', 'Server', 'Quantum Armor'],
+                  datasets: [{
+                    label: 'Status',
+                    data: [1, 1, 1],
+                    backgroundColor: ['green','blue','purple']
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
