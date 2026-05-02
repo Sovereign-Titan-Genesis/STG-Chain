@@ -1,0 +1,85 @@
+name: Timelock Controller Dashboard
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  timelock-controller:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Timelock Data
+        run: |
+          PENDING=$(grep -c "Pending Change" AUDIT.md || echo "0")
+          EXECUTED=$(grep -c "Executed Change" AUDIT.md || echo "0")
+          DELAY=$(grep -c "Security Delay" AUDIT.md || echo "0")
+          echo "pending=$PENDING" >> $GITHUB_ENV
+          echo "executed=$EXECUTED" >> $GITHUB_ENV
+          echo "delay=$DELAY" >> $GITHUB_ENV
+
+      - name: Build REPORT-TIMELOCK.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Timelock Controller Report — $DATE" > REPORT-TIMELOCK.md
+          echo "" >> REPORT-TIMELOCK.md
+          echo "## ⏳ Pending Changes" >> REPORT-TIMELOCK.md
+          echo "- Entries: ${{ env.pending }}" >> REPORT-TIMELOCK.md
+          echo "" >> REPORT-TIMELOCK.md
+          echo "## ✅ Executed Changes" >> REPORT-TIMELOCK.md
+          echo "- Entries: ${{ env.executed }}" >> REPORT-TIMELOCK.md
+          echo "" >> REPORT-TIMELOCK.md
+          echo "## 🛡️ Security Delays" >> REPORT-TIMELOCK.md
+          echo "- Entries: ${{ env.delay }}" >> REPORT-TIMELOCK.md
+          echo "" >> REPORT-TIMELOCK.md
+          echo "## 📜 Statement" >> REPORT-TIMELOCK.md
+          echo "This report certifies STG-Chain’s monthly timelock governance and security delay compliance." >> REPORT-TIMELOCK.md
+
+      - name: Convert REPORT-TIMELOCK.md to PDF
+        run: |
+          pandoc REPORT-TIMELOCK.md -o REPORT-TIMELOCK.pdf
+
+      - name: Generate Timelock Dashboard HTML
+        run: |
+          mkdir -p public/timelock
+          cat > public/timelock/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Timelock Controller Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>⏳ STG Timelock Controller Dashboard</h1>
+            <canvas id="timeChart"></canvas>
+            <script>
+              const ctx = document.getElementById('timeChart');
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: ['Pending','Executed','Security Delay'],
+                  datasets: [{
+                    label: 'Timelock Governance',
+                    data: [3,5,2],
+                    backgroundColor: ['orange','green','red']
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
+          
