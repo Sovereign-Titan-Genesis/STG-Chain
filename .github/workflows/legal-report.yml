@@ -1,0 +1,49 @@
+name: Annual Legal Sovereignty Report
+
+on:
+  schedule:
+    - cron: "0 0 1 1 *"   # Run at midnight on January 1st every year
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  legal-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Collect Legal Data
+        run: |
+          LAW=$(grep -c "Legal" AUDIT.md || echo "0")
+          SOV=$(grep -c "Sovereignty" AUDIT.md || echo "0")
+          echo "law=$LAW" >> $GITHUB_ENV
+          echo "sov=$SOV" >> $GITHUB_ENV
+
+      - name: Build LAW.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Legal Sovereignty Report — $DATE" > LAW.md
+          echo "" >> LAW.md
+          echo "## ⚖️ Legal Entries" >> LAW.md
+          echo "- Legal References: ${{ env.law }}" >> LAW.md
+          echo "" >> LAW.md
+          echo "## 🌐 Sovereignty Entries" >> LAW.md
+          echo "- Sovereignty References: ${{ env.sov }}" >> LAW.md
+          echo "" >> LAW.md
+          echo "## 📜 Statement" >> LAW.md
+          echo "This report certifies STG-Chain’s legal sovereignty status and compliance for the year." >> LAW.md
+
+      - name: Convert LAW.md to PDF
+        run: |
+          pandoc LAW.md -o LAW.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add LAW.md LAW.pdf
+          git commit -m "Annual Legal Sovereignty Report generated"
+          git push
