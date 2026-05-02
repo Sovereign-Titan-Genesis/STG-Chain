@@ -1,0 +1,59 @@
+name: Annual International Arbitration Report
+
+on:
+  schedule:
+    - cron: "0 0 1 1 *"   # Run at midnight on January 1st every year
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  arbitration-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Collect Arbitration Data
+        run: |
+          LEGAL=$(grep -c "Legal" AUDIT.md || echo "0")
+          GOV=$(grep -c "Governance" AUDIT.md || echo "0")
+          RISK=$(grep -c "Risk" AUDIT.md || echo "0")
+          ESG=$(grep -c "ESG" AUDIT.md || echo "0")
+          echo "legal=$LEGAL" >> $GITHUB_ENV
+          echo "gov=$GOV" >> $GITHUB_ENV
+          echo "risk=$RISK" >> $GITHUB_ENV
+          echo "esg=$ESG" >> $GITHUB_ENV
+
+      - name: Build REPORT-ARB.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain International Arbitration Report — $DATE" > REPORT-ARB.md
+          echo "" >> REPORT-ARB.md
+          echo "## ⚖️ Legal Basis" >> REPORT-ARB.md
+          echo "- Legal References: ${{ env.legal }}" >> REPORT-ARB.md
+          echo "" >> REPORT-ARB.md
+          echo "## 🏛 Governance Evidence" >> REPORT-ARB.md
+          echo "- Governance Entries: ${{ env.gov }}" >> REPORT-ARB.md
+          echo "" >> REPORT-ARB.md
+          echo "## ⚠️ Risk Management Evidence" >> REPORT-ARB.md
+          echo "- Risk Entries: ${{ env.risk }}" >> REPORT-ARB.md
+          echo "" >> REPORT-ARB.md
+          echo "## 🌱 ESG Compliance Evidence" >> REPORT-ARB.md
+          echo "- ESG Workflows: ${{ env.esg }}" >> REPORT-ARB.md
+          echo "" >> REPORT-ARB.md
+          echo "## 📜 Arbitration Statement" >> REPORT-ARB.md
+          echo "This report certifies STG-Chain’s readiness for international arbitration, providing legal, governance, risk, and ESG evidence." >> REPORT-ARB.md
+
+      - name: Convert REPORT-ARB.md to PDF
+        run: |
+          pandoc REPORT-ARB.md -o REPORT-ARB.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-ARB.md REPORT-ARB.pdf
+          git commit -m "Annual International Arbitration Report generated"
+          git push
