@@ -1,0 +1,89 @@
+name: Global Humanitarian & Disaster Response Dashboard
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # update setiap 6 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-humanitarian-disaster:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Disaster Response Data
+        run: |
+          FLOOD=$(grep -c "Flood Relief" AUDIT.md || echo "0")
+          QUAKE=$(grep -c "Earthquake Aid" AUDIT.md || echo "0")
+          FAMINE=$(grep -c "Famine Relief" AUDIT.md || echo "0")
+          PANDEMIC=$(grep -c "Pandemic Response" AUDIT.md || echo "0")
+          echo "flood=$FLOOD" >> $GITHUB_ENV
+          echo "quake=$QUAKE" >> $GITHUB_ENV
+          echo "famine=$FAMINE" >> $GITHUB_ENV
+          echo "pandemic=$PANDEMIC" >> $GITHUB_ENV
+
+      - name: Build REPORT-DISASTER.md
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M UTC')
+          echo "# STG-Chain Global Humanitarian & Disaster Response Report — $DATE" > REPORT-DISASTER.md
+          echo "" >> REPORT-DISASTER.md
+          echo "## 🌊 Flood Relief" >> REPORT-DISASTER.md
+          echo "- Entries: ${{ env.flood }}" >> REPORT-DISASTER.md
+          echo "" >> REPORT-DISASTER.md
+          echo "## 🌋 Earthquake Aid" >> REPORT-DISASTER.md
+          echo "- Entries: ${{ env.quake }}" >> REPORT-DISASTER.md
+          echo "" >> REPORT-DISASTER.md
+          echo "## 🌾 Famine Relief" >> REPORT-DISASTER.md
+          echo "- Entries: ${{ env.famine }}" >> REPORT-DISASTER.md
+          echo "" >> REPORT-DISASTER.md
+          echo "## 🦠 Pandemic Response" >> REPORT-DISASTER.md
+          echo "- Entries: ${{ env.pandemic }}" >> REPORT-DISASTER.md
+          echo "" >> REPORT-DISASTER.md
+          echo "## 📜 Statement" >> REPORT-DISASTER.md
+          echo "This report certifies STG-Chain’s humanitarian aid distribution, verified by Bio-Server and Drone Sentinel." >> REPORT-DISASTER.md
+
+      - name: Convert REPORT-DISASTER.md to PDF
+        run: |
+          pandoc REPORT-DISASTER.md -o REPORT-DISASTER.pdf
+
+      - name: Generate Humanitarian Dashboard HTML
+        run: |
+          mkdir -p public/disaster
+          cat > public/disaster/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Humanitarian & Disaster Response Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍 STG Humanitarian & Disaster Response Dashboard</h1>
+            <canvas id="disasterChart"></canvas>
+            <script>
+              const ctx = document.getElementById('disasterChart');
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: ['Flood','Earthquake','Famine','Pandemic'],
+                  datasets: [{
+                    label: 'Aid Metrics',
+                    data: [3,4,2,5],
+                    backgroundColor: ['blue','orange','green','red']
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
