@@ -1,0 +1,54 @@
+name: Monthly Cybersecurity Sentinel Report
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cybersecurity-sentinel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Cybersecurity Data
+        run: |
+          FIREWALL=$(grep -c "Quantum Firewall" AUDIT.md || echo "0")
+          IDS=$(grep -c "Intrusion Detection" AUDIT.md || echo "0")
+          SENTINEL=$(grep -c "Sentinel Node" AUDIT.md || echo "0")
+          echo "firewall=$FIREWALL" >> $GITHUB_ENV
+          echo "ids=$IDS" >> $GITHUB_ENV
+          echo "sentinel=$SENTINEL" >> $GITHUB_ENV
+
+      - name: Build REPORT-CYBER.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Cybersecurity Sentinel Report — $DATE" > REPORT-CYBER.md
+          echo "" >> REPORT-CYBER.md
+          echo "## 🔐 Quantum Firewall" >> REPORT-CYBER.md
+          echo "- Entries: ${{ env.firewall }}" >> REPORT-CYBER.md
+          echo "" >> REPORT-CYBER.md
+          echo "## 🛡️ Intrusion Detection Systems" >> REPORT-CYBER.md
+          echo "- Entries: ${{ env.ids }}" >> REPORT-CYBER.md
+          echo "" >> REPORT-CYBER.md
+          echo "## 🌐 Sentinel Nodes" >> REPORT-CYBER.md
+          echo "- Entries: ${{ env.sentinel }}" >> REPORT-CYBER.md
+          echo "" >> REPORT-CYBER.md
+          echo "## 📜 Statement" >> REPORT-CYBER.md
+          echo "This report certifies STG-Chain’s monthly cybersecurity readiness." >> REPORT-CYBER.md
+
+      - name: Convert REPORT-CYBER.md to PDF
+        run: |
+          pandoc REPORT-CYBER.md -o REPORT-CYBER.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-CYBER.md REPORT-CYBER.pdf
+          git commit -m "Monthly Cybersecurity Sentinel Report generated"
+          git push
