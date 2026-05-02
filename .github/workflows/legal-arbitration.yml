@@ -1,0 +1,54 @@
+name: Monthly Legal Arbitration Report
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  legal-arbitration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Legal Data
+        run: |
+          CONTRACT=$(grep -c "Contract" AUDIT.md || echo "0")
+          ARBITRATION=$(grep -c "Arbitration" AUDIT.md || echo "0")
+          COMPLIANCE=$(grep -c "Compliance" AUDIT.md || echo "0")
+          echo "contract=$CONTRACT" >> $GITHUB_ENV
+          echo "arbitration=$ARBITRATION" >> $GITHUB_ENV
+          echo "compliance=$COMPLIANCE" >> $GITHUB_ENV
+
+      - name: Build REPORT-LEGAL.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Legal Arbitration Report — $DATE" > REPORT-LEGAL.md
+          echo "" >> REPORT-LEGAL.md
+          echo "## 📜 Contract Status" >> REPORT-LEGAL.md
+          echo "- Entries: ${{ env.contract }}" >> REPORT-LEGAL.md
+          echo "" >> REPORT-LEGAL.md
+          echo "## ⚖️ Arbitration Cases" >> REPORT-LEGAL.md
+          echo "- Entries: ${{ env.arbitration }}" >> REPORT-LEGAL.md
+          echo "" >> REPORT-LEGAL.md
+          echo "## 🛡️ Compliance Records" >> REPORT-LEGAL.md
+          echo "- Entries: ${{ env.compliance }}" >> REPORT-LEGAL.md
+          echo "" >> REPORT-LEGAL.md
+          echo "## 📜 Statement" >> REPORT-LEGAL.md
+          echo "This report certifies STG-Chain’s monthly legal and arbitration readiness." >> REPORT-LEGAL.md
+
+      - name: Convert REPORT-LEGAL.md to PDF
+        run: |
+          pandoc REPORT-LEGAL.md -o REPORT-LEGAL.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-LEGAL.md REPORT-LEGAL.pdf
+          git commit -m "Monthly Legal Arbitration Report generated"
+          git push
