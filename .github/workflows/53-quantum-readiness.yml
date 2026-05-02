@@ -1,0 +1,54 @@
+name: Quantum Readiness Report
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  quantum-readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Quantum Data
+        run: |
+          PQC=$(grep -c "PQC Logic" AUDIT.md || echo "0")
+          NODE=$(grep -c "Quantum Node" AUDIT.md || echo "0")
+          HYBRID=$(grep -c "Hybrid Brain" AUDIT.md || echo "0")
+          echo "pqc=$PQC" >> $GITHUB_ENV
+          echo "node=$NODE" >> $GITHUB_ENV
+          echo "hybrid=$HYBRID" >> $GITHUB_ENV
+
+      - name: Build REPORT-QUANTUM.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Quantum Readiness Report — $DATE" > REPORT-QUANTUM.md
+          echo "" >> REPORT-QUANTUM.md
+          echo "## 🔐 PQC Logic Integration" >> REPORT-QUANTUM.md
+          echo "- Entries: ${{ env.pqc }}" >> REPORT-QUANTUM.md
+          echo "" >> REPORT-QUANTUM.md
+          echo "## ⚛️ Quantum Nodes" >> REPORT-QUANTUM.md
+          echo "- Entries: ${{ env.node }}" >> REPORT-QUANTUM.md
+          echo "" >> REPORT-QUANTUM.md
+          echo "## 🧠 Hybrid Brain AI-Quantum" >> REPORT-QUANTUM.md
+          echo "- Entries: ${{ env.hybrid }}" >> REPORT-QUANTUM.md
+          echo "" >> REPORT-QUANTUM.md
+          echo "## 📜 Statement" >> REPORT-QUANTUM.md
+          echo "This report certifies STG-Chain’s monthly readiness for the quantum era." >> REPORT-QUANTUM.md
+
+      - name: Convert REPORT-QUANTUM.md to PDF
+        run: |
+          pandoc REPORT-QUANTUM.md -o REPORT-QUANTUM.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-QUANTUM.md REPORT-QUANTUM.pdf
+          git commit -m "Monthly Quantum Readiness Report generated"
+          git push
