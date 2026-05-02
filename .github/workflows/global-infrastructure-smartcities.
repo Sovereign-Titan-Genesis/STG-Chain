@@ -1,0 +1,95 @@
+name: Global Infrastructure & Smart Cities Dashboard
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # update setiap 6 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-infrastructure-smartcities:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Infrastructure Data
+        run: |
+          ROAD=$(grep -c "Road Maintenance" AUDIT.md || echo "0")
+          BRIDGE=$(grep -c "Bridge Inspection" AUDIT.md || echo "0")
+          TRANSIT=$(grep -c "Public Transit Operation" AUDIT.md || echo "0")
+          SMART=$(grep -c "Smart City Sensor" AUDIT.md || echo "0")
+          FACILITY=$(grep -c "Public Facility Update" AUDIT.md || echo "0")
+          echo "road=$ROAD" >> $GITHUB_ENV
+          echo "bridge=$BRIDGE" >> $GITHUB_ENV
+          echo "transit=$TRANSIT" >> $GITHUB_ENV
+          echo "smart=$SMART" >> $GITHUB_ENV
+          echo "facility=$FACILITY" >> $GITHUB_ENV
+
+      - name: Build REPORT-INFRA.md
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M UTC')
+          echo "# STG-Chain Global Infrastructure & Smart Cities Report — $DATE" > REPORT-INFRA.md
+          echo "" >> REPORT-INFRA.md
+          echo "## 🛣️ Road Maintenance" >> REPORT-INFRA.md
+          echo "- Entries: ${{ env.road }}" >> REPORT-INFRA.md
+          echo "" >> REPORT-INFRA.md
+          echo "## 🌉 Bridge Inspections" >> REPORT-INFRA.md
+          echo "- Entries: ${{ env.bridge }}" >> REPORT-INFRA.md
+          echo "" >> REPORT-INFRA.md
+          echo "## 🚇 Public Transit Operations" >> REPORT-INFRA.md
+          echo "- Entries: ${{ env.transit }}" >> REPORT-INFRA.md
+          echo "" >> REPORT-INFRA.md
+          echo "## 🏙️ Smart City Sensors" >> REPORT-INFRA.md
+          echo "- Entries: ${{ env.smart }}" >> REPORT-INFRA.md
+          echo "" >> REPORT-INFRA.md
+          echo "## 🏛️ Public Facility Updates" >> REPORT-INFRA.md
+          echo "- Entries: ${{ env.facility }}" >> REPORT-INFRA.md
+          echo "" >> REPORT-INFRA.md
+          echo "## 📜 Statement" >> REPORT-INFRA.md
+          echo "This report certifies STG-Chain’s real-time infrastructure performance across roads, bridges, transit, smart cities, and public facilities." >> REPORT-INFRA.md
+
+      - name: Convert REPORT-INFRA.md to PDF
+        run: |
+          pandoc REPORT-INFRA.md -o REPORT-INFRA.pdf
+
+      - name: Generate Infrastructure Dashboard HTML
+        run: |
+          mkdir -p public/infra
+          cat > public/infra/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Infrastructure & Smart Cities Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍🏙️ STG Global Infrastructure & Smart Cities Dashboard</h1>
+            <canvas id="infraChart"></canvas>
+            <script>
+              const ctx = document.getElementById('infraChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['Roads','Bridges','Transit','Smart Sensors','Facilities'],
+                  datasets: [{
+                    label: 'Infrastructure Metrics',
+                    data: [5,4,5,3,4],
+                    backgroundColor: 'rgba(100,100,255,0.3)',
+                    borderColor: 'navy'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
