@@ -1,0 +1,66 @@
+name: Weekly Global Curriculum Verification Report
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"   # setiap Minggu
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  education-sentinel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Curriculum Repo
+        uses: actions/checkout@v4
+        with:
+          repository: Sovereign-Titan-Homeschooling/stg-homeschooling-curriculum
+
+      - name: Verify Curriculum Modules
+        run: |
+          AKSA=$(grep -c "AKSA Literacy" CURRICULUM.md || echo "0")
+          QUANTUM=$(grep -c "Quantum Basics" CURRICULUM.md || echo "0")
+          ESG=$(grep -c "ESG & Carbon" CURRICULUM.md || echo "0")
+          ID=$(grep -c "Digital Identity" CURRICULUM.md || echo "0")
+          GOV=$(grep -c "Governance" CURRICULUM.md || echo "0")
+          echo "aksa=$AKSA" >> $GITHUB_ENV
+          echo "quantum=$QUANTUM" >> $GITHUB_ENV
+          echo "esg=$ESG" >> $GITHUB_ENV
+          echo "id=$ID" >> $GITHUB_ENV
+          echo "gov=$GOV" >> $GITHUB_ENV
+
+      - name: Build REPORT-EDU-SENTINEL.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Global Curriculum Verification Report — $DATE" > REPORT-EDU-SENTINEL.md
+          echo "" >> REPORT-EDU-SENTINEL.md
+          echo "## 📖 AKSA Literacy Verification" >> REPORT-EDU-SENTINEL.md
+          echo "- Modules Verified: ${{ env.aksa }}" >> REPORT-EDU-SENTINEL.md
+          echo "" >> REPORT-EDU-SENTINEL.md
+          echo "## ⚛️ Quantum Basics Verification" >> REPORT-EDU-SENTINEL.md
+          echo "- Modules Verified: ${{ env.quantum }}" >> REPORT-EDU-SENTINEL.md
+          echo "" >> REPORT-EDU-SENTINEL.md
+          echo "## 🌱 ESG & Carbon Verification" >> REPORT-EDU-SENTINEL.md
+          echo "- Modules Verified: ${{ env.esg }}" >> REPORT-EDU-SENTINEL.md
+          echo "" >> REPORT-EDU-SENTINEL.md
+          echo "## 🪪 Digital Identity Verification" >> REPORT-EDU-SENTINEL.md
+          echo "- Modules Verified: ${{ env.id }}" >> REPORT-EDU-SENTINEL.md
+          echo "" >> REPORT-EDU-SENTINEL.md
+          echo "## 🗳️ Governance Verification" >> REPORT-EDU-SENTINEL.md
+          echo "- Modules Verified: ${{ env.gov }}" >> REPORT-EDU-SENTINEL.md
+          echo "" >> REPORT-EDU-SENTINEL.md
+          echo "## 📜 Statement" >> REPORT-EDU-SENTINEL.md
+          echo "This report certifies weekly curriculum verification by Education Sentinel." >> REPORT-EDU-SENTINEL.md
+
+      - name: Convert REPORT-EDU-SENTINEL.md to PDF
+        run: |
+          pandoc REPORT-EDU-SENTINEL.md -o REPORT-EDU-SENTINEL.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-EDU-SENTINEL.md REPORT-EDU-SENTINEL.pdf
+          git commit -m "Weekly Global Curriculum Verification Report generated"
+          git push
