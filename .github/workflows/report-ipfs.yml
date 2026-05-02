@@ -1,0 +1,53 @@
+name: Upload Shareholder Report to IPFS
+
+on:
+  workflow_run:
+    workflows: ["Monthly Shareholder Report"]
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  upload-ipfs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install IPFS CLI
+        run: |
+          curl -fsSL https://get.ipfs.tech | sh
+          sudo mv ipfs /usr/local/bin/
+
+      - name: Encrypt Report
+        run: |
+          mkdir -p blockchain
+          DATE=$(date +'%Y-%m-%d')
+          openssl enc -aes-256-cbc -salt -in REPORT.pdf -out blockchain/REPORT-$DATE.enc -pass pass:${{ secrets.IPFS_KEY }}
+
+      - name: Upload to IPFS
+        run: |
+          ipfs init
+          HASH=$(ipfs add -q blockchain/REPORT-*.enc)
+          echo "IPFS_HASH=$HASH" >> $GITHUB_ENV
+
+      - name: Save IPFS Hash
+        run: |
+          echo "## Immutable Audit Record" > IPFS.md
+          echo "" >> IPFS.md
+          echo "- Date: $(date +'%Y-%m-%d')" >> IPFS.md
+          echo "- File: REPORT.enc" >> IPFS.md
+          echo "- IPFS Hash: ${{ env.IPFS_HASH }}" >> IPFS.md
+          echo "" >> IPFS.md
+          echo "This hash can be verified on any IPFS gateway." >> IPFS.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add IPFS.md
+          git commit -m "Immutable audit record uploaded to IPFS"
+          git push
