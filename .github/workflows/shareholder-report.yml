@@ -1,0 +1,50 @@
+name: Monthly Shareholder Report
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # Run at midnight on the 1st of every month
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Collect Audit Data
+        run: |
+          TOTAL=$(grep -c "✅ Canonical" AUDIT.md || echo "0")
+          DUP=$(grep -c "⚠️" AUDIT.md || echo "0")
+          echo "total=$TOTAL" >> $GITHUB_ENV
+          echo "duplicates=$DUP" >> $GITHUB_ENV
+
+      - name: Build REPORT.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Shareholder Report — $DATE" > REPORT.md
+          echo "" >> REPORT.md
+          echo "## 📊 Audit Summary" >> REPORT.md
+          echo "- Canonical Workflows: ${{ env.total }}" >> REPORT.md
+          echo "- Duplicates Archived: ${{ env.duplicates }}" >> REPORT.md
+          echo "" >> REPORT.md
+          echo "## 📈 Dashboard" >> REPORT.md
+          echo "See interactive charts at: https://<org>.github.io/<repo>/dashboard/" >> REPORT.md
+          echo "" >> REPORT.md
+          echo "## 📜 Notes" >> REPORT.md
+          echo "This report is auto-generated monthly for shareholders." >> REPORT.md
+
+      - name: Convert REPORT.md to PDF
+        run: |
+          pandoc REPORT.md -o REPORT.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT.md REPORT.pdf
+          git commit -m "Monthly Shareholder Report generated"
+          git push
