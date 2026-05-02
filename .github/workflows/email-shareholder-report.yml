@@ -1,0 +1,40 @@
+name: Email Shareholder Report
+
+on:
+  workflow_run:
+    workflows: ["Monthly Shareholder Report"]
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  email-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Send Report via Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.office365.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASS }}
+          subject: "STG-Chain Monthly Shareholder Report"
+          to: ${{ secrets.SHAREHOLDER_EMAILS }}
+          from: "cito@stg.internal"
+          body: |
+            Dear Shareholder,
+
+            The monthly STG-Chain audit report has been generated and is attached.
+
+            Repository: Sovereign Titan Genesis
+            Report Date: $(date +'%Y-%m-%d')
+
+            Regards,
+            STG-CITO Bot
+          attachments: REPORT.pdf
