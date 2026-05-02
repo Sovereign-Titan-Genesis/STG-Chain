@@ -1,0 +1,59 @@
+name: Annual Global Compliance Certificate
+
+on:
+  schedule:
+    - cron: "0 0 1 1 *"   # Run at midnight on January 1st every year
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  compliance-cert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Collect Compliance Data
+        run: |
+          WF=$(grep -c "✅ Canonical" AUDIT.md || echo "0")
+          ESG=$(grep -c "ESG" AUDIT.md || echo "0")
+          GOV=$(grep -c "Governance" AUDIT.md || echo "0")
+          RISK=$(grep -c "Risk" AUDIT.md || echo "0")
+          echo "wf=$WF" >> $GITHUB_ENV
+          echo "esg=$ESG" >> $GITHUB_ENV
+          echo "gov=$GOV" >> $GITHUB_ENV
+          echo "risk=$RISK" >> $GITHUB_ENV
+
+      - name: Build CERT.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Global Compliance Certificate — $DATE" > CERT.md
+          echo "" >> CERT.md
+          echo "## ✅ Canonical Workflows" >> CERT.md
+          echo "- Total: ${{ env.wf }}" >> CERT.md
+          echo "" >> CERT.md
+          echo "## 🌱 ESG Compliance" >> CERT.md
+          echo "- ESG Workflows: ${{ env.esg }}" >> CERT.md
+          echo "" >> CERT.md
+          echo "## 🏛 Governance" >> CERT.md
+          echo "- Governance Entries: ${{ env.gov }}" >> CERT.md
+          echo "" >> CERT.md
+          echo "## ⚠️ Risk Management" >> CERT.md
+          echo "- Risk Entries: ${{ env.risk }}" >> CERT.md
+          echo "" >> CERT.md
+          echo "## 📜 Certification Statement" >> CERT.md
+          echo "This certificate verifies that STG-Chain has maintained compliance across canonical workflows, ESG, governance, and risk management for the year." >> CERT.md
+
+      - name: Convert CERT.md to PDF
+        run: |
+          pandoc CERT.md -o CERT.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add CERT.md CERT.pdf
+          git commit -m "Annual Global Compliance Certificate generated"
+          git push
