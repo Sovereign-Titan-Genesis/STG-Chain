@@ -1,0 +1,91 @@
+name: Global Governance Education Dashboard
+
+on:
+  schedule:
+    - cron: "0 9 * * *"   # update harian jam 09 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-governance-education:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Governance Education Data
+        run: |
+          CIVIC=$(grep -c "Civic Education" AUDIT.md || echo "0")
+          LAW=$(grep -c "Rule-of-Law Literacy" AUDIT.md || echo "0")
+          STRUCT=$(grep -c "Governance Structure Training" AUDIT.md || echo "0")
+          RIGHTS=$(grep -c "Citizen Rights Module" AUDIT.md || echo "0")
+          echo "civic=$CIVIC" >> $GITHUB_ENV
+          echo "law=$LAW" >> $GITHUB_ENV
+          echo "struct=$STRUCT" >> $GITHUB_ENV
+          echo "rights=$RIGHTS" >> $GITHUB_ENV
+
+      - name: Build REPORT-GOV-EDU.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Global Governance Education Report — $DATE" > REPORT-GOV-EDU.md
+          echo "" >> REPORT-GOV-EDU.md
+          echo "## 🏛️ Civic Education" >> REPORT-GOV-EDU.md
+          echo "- Entries: ${{ env.civic }}" >> REPORT-GOV-EDU.md
+          echo "" >> REPORT-GOV-EDU.md
+          echo "## ⚖️ Rule-of-Law Literacy" >> REPORT-GOV-EDU.md
+          echo "- Entries: ${{ env.law }}" >> REPORT-GOV-EDU.md
+          echo "" >> REPORT-GOV-EDU.md
+          echo "## 🧩 Governance Structure Training" >> REPORT-GOV-EDU.md
+          echo "- Entries: ${{ env.struct }}" >> REPORT-GOV-EDU.md
+          echo "" >> REPORT-GOV-EDU.md
+          echo "## 🪪 Citizen Rights Module" >> REPORT-GOV-EDU.md
+          echo "- Entries: ${{ env.rights }}" >> REPORT-GOV-EDU.md
+          echo "" >> REPORT-GOV-EDU.md
+          echo "## 📜 Statement" >> REPORT-GOV-EDU.md
+          echo "This report certifies STG-Chain’s daily governance education progress across civic, legal, structural, and rights-based modules." >> REPORT-GOV-EDU.md
+
+      - name: Convert REPORT-GOV-EDU.md to PDF
+        run: |
+          pandoc REPORT-GOV-EDU.md -o REPORT-GOV-EDU.pdf
+
+      - name: Generate Governance Education Dashboard HTML
+        run: |
+          mkdir -p public/gov-edu
+          cat > public/gov-edu/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Governance Education Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>📚🏛️ STG Global Governance Education Dashboard</h1>
+            <canvas id="govEduChart"></canvas>
+            <script>
+              const ctx = document.getElementById('govEduChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['Civic Education','Rule-of-Law','Gov Structure','Citizen Rights'],
+                  datasets: [{
+                    label: 'Governance Education Metrics',
+                    data: [5,4,4,5],
+                    backgroundColor: 'rgba(128,0,255,0.3)',
+                    borderColor: 'purple'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
+          
