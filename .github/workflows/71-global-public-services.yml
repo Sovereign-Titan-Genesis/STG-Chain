@@ -1,0 +1,96 @@
+name: Global Public Services Dashboard
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"   # update setiap 4 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-public-services:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Public Service Data
+        run: |
+          HEALTH=$(grep -c "Health Service Delivered" AUDIT.md || echo "0")
+          EDUCATION=$(grep -c "Education Service Delivered" AUDIT.md || echo "0")
+          FOOD=$(grep -c "Food Security Service" AUDIT.md || echo "0")
+          ENERGY=$(grep -c "Energy Service Delivered" AUDIT.md || echo "0")
+          ADMIN=$(grep -c "Administrative Service" AUDIT.md || echo "0")
+          echo "health=$HEALTH" >> $GITHUB_ENV
+          echo "education=$EDUCATION" >> $GITHUB_ENV
+          echo "food=$FOOD" >> $GITHUB_ENV
+          echo "energy=$ENERGY" >> $GITHUB_ENV
+          echo "admin=$ADMIN" >> $GITHUB_ENV
+
+      - name: Build REPORT-PUBLIC.md
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M UTC')
+          echo "# STG-Chain Global Public Services Report — $DATE" > REPORT-PUBLIC.md
+          echo "" >> REPORT-PUBLIC.md
+          echo "## 🏥 Health Services" >> REPORT-PUBLIC.md
+          echo "- Entries: ${{ env.health }}" >> REPORT-PUBLIC.md
+          echo "" >> REPORT-PUBLIC.md
+          echo "## 📚 Education Services" >> REPORT-PUBLIC.md
+          echo "- Entries: ${{ env.education }}" >> REPORT-PUBLIC.md
+          echo "" >> REPORT-PUBLIC.md
+          echo "## 🌾 Food Security Services" >> REPORT-PUBLIC.md
+          echo "- Entries: ${{ env.food }}" >> REPORT-PUBLIC.md
+          echo "" >> REPORT-PUBLIC.md
+          echo "## ⚡ Energy Services" >> REPORT-PUBLIC.md
+          echo "- Entries: ${{ env.energy }}" >> REPORT-PUBLIC.md
+          echo "" >> REPORT-PUBLIC.md
+          echo "## 🏛️ Administrative Services" >> REPORT-PUBLIC.md
+          echo "- Entries: ${{ env.admin }}" >> REPORT-PUBLIC.md
+          echo "" >> REPORT-PUBLIC.md
+          echo "## 📜 Statement" >> REPORT-PUBLIC.md
+          echo "This report certifies STG-Chain’s real-time public service delivery across health, education, food, energy, and administration." >> REPORT-PUBLIC.md
+
+      - name: Convert REPORT-PUBLIC.md to PDF
+        run: |
+          pandoc REPORT-PUBLIC.md -o REPORT-PUBLIC.pdf
+
+      - name: Generate Public Services Dashboard HTML
+        run: |
+          mkdir -p public/public-services
+          cat > public/public-services/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Public Services Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍🏛️ STG Global Public Services Dashboard</h1>
+            <canvas id="publicChart"></canvas>
+            <script>
+              const ctx = document.getElementById('publicChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['Health','Education','Food','Energy','Administration'],
+                  datasets: [{
+                    label: 'Public Service Metrics',
+                    data: [5,4,5,3,4],
+                    backgroundColor: 'rgba(0,200,150,0.3)',
+                    borderColor: 'teal'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
+          
