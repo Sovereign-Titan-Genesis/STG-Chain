@@ -1,0 +1,44 @@
+name: Send Weekly Audit Report to Shareholders
+
+on:
+  schedule:
+    - cron: "0 9 * * MON" # setiap Senin pukul 09:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  send-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Audit PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-pdf
+          path: audits/AUDIT.pdf
+
+      - name: Send Email to Shareholders
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.office365.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Weekly Audit Report - STG-Chain"
+          body: |
+            Dear Shareholders,
+
+            Please find attached the latest weekly audit report (PDF).
+            Repository: STG-Chain
+            Timestamp: ${{ github.run_id }}
+
+            Regards,
+            STG-Chain Automation
+          to: ${{ secrets.SHAREHOLDER_EMAILS }}
+          from: "report-bot@stg-chain.org"
+          attachments: audits/AUDIT.pdf
+
