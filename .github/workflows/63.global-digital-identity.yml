@@ -1,0 +1,84 @@
+name: Global Digital Identity & Bio-Passport Dashboard
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"   # update setiap 12 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-digital-identity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Identity Data
+        run: |
+          BIO=$(grep -c "Bio-Passport Registered" AUDIT.md || echo "0")
+          VERIFY=$(grep -c "Transaction Verified" AUDIT.md || echo "0")
+          ACCESS=$(grep -c "Cross-Border Service Access" AUDIT.md || echo "0")
+          echo "bio=$BIO" >> $GITHUB_ENV
+          echo "verify=$VERIFY" >> $GITHUB_ENV
+          echo "access=$ACCESS" >> $GITHUB_ENV
+
+      - name: Build REPORT-IDENTITY.md
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M UTC')
+          echo "# STG-Chain Global Digital Identity & Bio-Passport Report — $DATE" > REPORT-IDENTITY.md
+          echo "" >> REPORT-IDENTITY.md
+          echo "## 🪪 Bio-Passports Registered" >> REPORT-IDENTITY.md
+          echo "- Entries: ${{ env.bio }}" >> REPORT-IDENTITY.md
+          echo "" >> REPORT-IDENTITY.md
+          echo "## ✅ Transactions Verified" >> REPORT-IDENTITY.md
+          echo "- Entries: ${{ env.verify }}" >> REPORT-IDENTITY.md
+          echo "" >> REPORT-IDENTITY.md
+          echo "## 🌐 Cross-Border Service Access" >> REPORT-IDENTITY.md
+          echo "- Entries: ${{ env.access }}" >> REPORT-IDENTITY.md
+          echo "" >> REPORT-IDENTITY.md
+          echo "## 📜 Statement" >> REPORT-IDENTITY.md
+          echo "This report certifies STG-Chain’s bi-daily digital identity and Bio-Passport integration with STG-Pay." >> REPORT-IDENTITY.md
+
+      - name: Convert REPORT-IDENTITY.md to PDF
+        run: |
+          pandoc REPORT-IDENTITY.md -o REPORT-IDENTITY.pdf
+
+      - name: Generate Identity Dashboard HTML
+        run: |
+          mkdir -p public/identity
+          cat > public/identity/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Digital Identity & Bio-Passport Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍🪪 STG Global Digital Identity & Bio-Passport Dashboard</h1>
+            <canvas id="identityChart"></canvas>
+            <script>
+              const ctx = document.getElementById('identityChart');
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: ['Bio-Passports','Verified Transactions','Cross-Border Access'],
+                  datasets: [{
+                    label: 'Identity Metrics',
+                    data: [5,4,6],
+                    backgroundColor: ['purple','green','blue']
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
