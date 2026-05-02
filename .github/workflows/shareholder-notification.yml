@@ -1,0 +1,55 @@
+name: Monthly Shareholder Notification Report
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  shareholder-notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Shareholder Data
+        run: |
+          OPS=$(grep -c "Operational Status" AUDIT.md || echo "0")
+          DIST=$(grep -c "Distribution" AUDIT.md || echo "0")
+          QDAY=$(grep -c "Q-Day" AUDIT.md || echo "0")
+          echo "ops=$OPS" >> $GITHUB_ENV
+          echo "dist=$DIST" >> $GITHUB_ENV
+          echo "qday=$QDAY" >> $GITHUB_ENV
+
+      - name: Build REPORT-SHARE.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Shareholder Notification Report — $DATE" > REPORT-SHARE.md
+          echo "" >> REPORT-SHARE.md
+          echo "## ⚙️ Operational Status" >> REPORT-SHARE.md
+          echo "- Entries: ${{ env.ops }}" >> REPORT-SHARE.md
+          echo "" >> REPORT-SHARE.md
+          echo "## 📦 Distribution Updates" >> REPORT-SHARE.md
+          echo "- Entries: ${{ env.dist }}" >> REPORT-SHARE.md
+          echo "" >> REPORT-SHARE.md
+          echo "## 🛡️ Q-Day Readiness" >> REPORT-SHARE.md
+          echo "- Entries: ${{ env.qday }}" >> REPORT-SHARE.md
+          echo "" >> REPORT-SHARE.md
+          echo "## 📜 Statement" >> REPORT-SHARE.md
+          echo "This report certifies STG-Chain’s monthly operational status and readiness, distributed to shareholders." >> REPORT-SHARE.md
+
+      - name: Convert REPORT-SHARE.md to PDF
+        run: |
+          pandoc REPORT-SHARE.md -o REPORT-SHARE.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-SHARE.md REPORT-SHARE.pdf
+          git commit -m "Monthly Shareholder Notification Report generated"
+          git push
+          
