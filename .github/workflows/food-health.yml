@@ -1,0 +1,54 @@
+name: Monthly Global Food & Health Distribution Report
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  food-health-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Distribution Data
+        run: |
+          RICE=$(grep -c "Rice" AUDIT.md || echo "0")
+          HEALTH=$(grep -c "Health" AUDIT.md || echo "0")
+          ENERGY=$(grep -c "Energy" AUDIT.md || echo "0")
+          echo "rice=$RICE" >> $GITHUB_ENV
+          echo "health=$HEALTH" >> $GITHUB_ENV
+          echo "energy=$ENERGY" >> $GITHUB_ENV
+
+      - name: Build REPORT-FOOD.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Global Food & Health Distribution Report — $DATE" > REPORT-FOOD.md
+          echo "" >> REPORT-FOOD.md
+          echo "## 🍚 Rice Distribution" >> REPORT-FOOD.md
+          echo "- Entries: ${{ env.rice }}" >> REPORT-FOOD.md
+          echo "" >> REPORT-FOOD.md
+          echo "## 🏥 Health Packages" >> REPORT-FOOD.md
+          echo "- Entries: ${{ env.health }}" >> REPORT-FOOD.md
+          echo "" >> REPORT-FOOD.md
+          echo "## 🔋 Energy Units" >> REPORT-FOOD.md
+          echo "- Entries: ${{ env.energy }}" >> REPORT-FOOD.md
+          echo "" >> REPORT-FOOD.md
+          echo "## 📜 Statement" >> REPORT-FOOD.md
+          echo "This report certifies STG-Chain’s monthly contribution to food, health, and energy distribution." >> REPORT-FOOD.md
+
+      - name: Convert REPORT-FOOD.md to PDF
+        run: |
+          pandoc REPORT-FOOD.md -o REPORT-FOOD.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-FOOD.md REPORT-FOOD.pdf
+          git commit -m "Monthly Global Food & Health Distribution Report generated"
+          git push
