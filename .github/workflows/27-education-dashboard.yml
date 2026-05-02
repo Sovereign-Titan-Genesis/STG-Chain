@@ -1,0 +1,49 @@
+name: Global Education & Curriculum Dashboard
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # update setiap hari jam 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-edu-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Checkout Homeschooling Curriculum
+        uses: actions/checkout@v4
+        with:
+          repository: Sovereign-Titan-Homeschooling/stg-homeschooling-curriculum
+          path: curriculum
+
+      - name: Generate Education Dashboard
+        run: |
+          mkdir -p public/edu
+          DATE=$(date +'%Y-%m-%d')
+          echo "# 🌍 STG Global Education Dashboard — $DATE" > public/edu/index.md
+          echo "" >> public/edu/index.md
+          echo "## 📚 Curriculum Modules" >> public/edu/index.md
+          echo "- AKSA Literacy" >> public/edu/index.md
+          echo "- Quantum Basics" >> public/edu/index.md
+          echo "- ESG & Carbon" >> public/edu/index.md
+          echo "- Digital Identity" >> public/edu/index.md
+          echo "- Governance" >> public/edu/index.md
+          echo "" >> public/edu/index.md
+          echo "## 📊 Status" >> public/edu/index.md
+          echo "Curriculum synced from homeschooling repository." >> public/edu/index.md
+
+      - name: Convert Dashboard to HTML
+        run: |
+          pandoc public/edu/index.md -o public/edu/index.html
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
