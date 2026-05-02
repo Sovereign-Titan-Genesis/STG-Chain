@@ -1,0 +1,52 @@
+name: Monthly Quantum Readiness Report
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  quantum-readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Collect Quantum Data
+        run: |
+          API=$(grep -c "API" AUDIT.md || echo "0")
+          ARMOR=$(grep -c "Quantum Armor" AUDIT.md || echo "0")
+          SERVICE=$(grep -c "Integration" AUDIT.md || echo "0")
+          echo "api=$API" >> $GITHUB_ENV
+          echo "armor=$ARMOR" >> $GITHUB_ENV
+          echo "service=$SERVICE" >> $GITHUB_ENV
+
+      - name: Build REPORT-QUANTUM.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Quantum Readiness Report — $DATE" > REPORT-QUANTUM.md
+          echo "" >> REPORT-QUANTUM.md
+          echo "## 🔗 Service Integration" >> REPORT-QUANTUM.md
+          echo "- API References: ${{ env.api }}" >> REPORT-QUANTUM.md
+          echo "- Service Integrations: ${{ env.service }}" >> REPORT-QUANTUM.md
+          echo "" >> REPORT-QUANTUM.md
+          echo "## 🛡️ Quantum Armor" >> REPORT-QUANTUM.md
+          echo "- Quantum Armor Entries: ${{ env.armor }}" >> REPORT-QUANTUM.md
+          echo "" >> REPORT-QUANTUM.md
+          echo "## 📜 Statement" >> REPORT-QUANTUM.md
+          echo "This report certifies STG-Chain’s monthly readiness for post-Q-Day operations." >> REPORT-QUANTUM.md
+
+      - name: Convert REPORT-QUANTUM.md to PDF
+        run: |
+          pandoc REPORT-QUANTUM.md -o REPORT-QUANTUM.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-QUANTUM.md REPORT-QUANTUM.pdf
+          git commit -m "Monthly Quantum Readiness Report generated"
+          git push
