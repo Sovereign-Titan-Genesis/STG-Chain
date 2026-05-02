@@ -1,0 +1,52 @@
+name: Semiannual Governance & Risk Report
+
+on:
+  schedule:
+    - cron: "0 0 1 */6 *"   # Run at midnight on the 1st day every 6 months
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  grc-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Collect Governance & Risk Data
+        run: |
+          GOV=$(grep -c "Governance" AUDIT.md || echo "0")
+          RISK=$(grep -c "Risk" AUDIT.md || echo "0")
+          echo "gov=$GOV" >> $GITHUB_ENV
+          echo "risk=$RISK" >> $GITHUB_ENV
+
+      - name: Build REPORT-GRC.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Governance & Risk Report — $DATE" > REPORT-GRC.md
+          echo "" >> REPORT-GRC.md
+          echo "## 🏛 Governance Summary" >> REPORT-GRC.md
+          echo "- Governance Workflows: ${{ env.gov }}" >> REPORT-GRC.md
+          echo "" >> REPORT-GRC.md
+          echo "## ⚠️ Risk Management Summary" >> REPORT-GRC.md
+          echo "- Risk Entries: ${{ env.risk }}" >> REPORT-GRC.md
+          echo "" >> REPORT-GRC.md
+          echo "## 📈 Dashboard" >> REPORT-GRC.md
+          echo "See interactive GRC charts at: https://<org>.github.io/<repo>/dashboard/" >> REPORT-GRC.md
+          echo "" >> REPORT-GRC.md
+          echo "## 📜 Notes" >> REPORT-GRC.md
+          echo "This report is auto-generated every 6 months for governance and risk transparency." >> REPORT-GRC.md
+
+      - name: Convert REPORT-GRC.md to PDF
+        run: |
+          pandoc REPORT-GRC.md -o REPORT-GRC.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-GRC.md REPORT-GRC.pdf
+          git commit -m "Semiannual Governance & Risk Report generated"
+          git push
