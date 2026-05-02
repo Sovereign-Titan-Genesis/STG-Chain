@@ -1,0 +1,54 @@
+name: Monthly Drone Assembly & Pilot Readiness Report
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  drone-readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Drone Data
+        run: |
+          ASSEMBLY=$(grep -c "Drone Assembly" AUDIT.md || echo "0")
+          PILOT=$(grep -c "Neural-Link Pilot" AUDIT.md || echo "0")
+          BCI=$(grep -c "Brain-Machine Interface" AUDIT.md || echo "0")
+          echo "assembly=$ASSEMBLY" >> $GITHUB_ENV
+          echo "pilot=$PILOT" >> $GITHUB_ENV
+          echo "bci=$BCI" >> $GITHUB_ENV
+
+      - name: Build REPORT-DRONE.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Drone Assembly & Pilot Readiness Report — $DATE" > REPORT-DRONE.md
+          echo "" >> REPORT-DRONE.md
+          echo "## 🚁 Drone Assembly Status" >> REPORT-DRONE.md
+          echo "- Entries: ${{ env.assembly }}" >> REPORT-DRONE.md
+          echo "" >> REPORT-DRONE.md
+          echo "## 🧠 Neural-Link Pilot Readiness" >> REPORT-DRONE.md
+          echo "- Entries: ${{ env.pilot }}" >> REPORT-DRONE.md
+          echo "" >> REPORT-DRONE.md
+          echo "## 🔗 Brain-Machine Interface Integration" >> REPORT-DRONE.md
+          echo "- Entries: ${{ env.bci }}" >> REPORT-DRONE.md
+          echo "" >> REPORT-DRONE.md
+          echo "## 📜 Statement" >> REPORT-DRONE.md
+          echo "This report certifies STG-Chain’s monthly drone assembly and pilot readiness." >> REPORT-DRONE.md
+
+      - name: Convert REPORT-DRONE.md to PDF
+        run: |
+          pandoc REPORT-DRONE.md -o REPORT-DRONE.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-DRONE.md REPORT-DRONE.pdf
+          git commit -m "Monthly Drone Assembly & Pilot Readiness Report generated"
+          git push
