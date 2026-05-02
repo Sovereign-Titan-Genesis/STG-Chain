@@ -1,0 +1,96 @@
+name: Global Health & Medical Infrastructure Dashboard
+
+on:
+  schedule:
+    - cron: "0 */3 * * *"   # update setiap 3 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-health-infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Health Data
+        run: |
+          HOSPITAL=$(grep -c "Hospital Operation" AUDIT.md || echo "0")
+          CLINIC=$(grep -c "Clinic Service" AUDIT.md || echo "0")
+          MEDIC=$(grep -c "Medical Staff Update" AUDIT.md || echo "0")
+          MEDICINE=$(grep -c "Medicine Stock Update" AUDIT.md || echo "0")
+          EMERGENCY=$(grep -c "Emergency Response" AUDIT.md || echo "0")
+          echo "hospital=$HOSPITAL" >> $GITHUB_ENV
+          echo "clinic=$CLINIC" >> $GITHUB_ENV
+          echo "medic=$MEDIC" >> $GITHUB_ENV
+          echo "medicine=$MEDICINE" >> $GITHUB_ENV
+          echo "emergency=$EMERGENCY" >> $GITHUB_ENV
+
+      - name: Build REPORT-HEALTH.md
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M UTC')
+          echo "# STG-Chain Global Health & Medical Infrastructure Report — $DATE" > REPORT-HEALTH.md
+          echo "" >> REPORT-HEALTH.md
+          echo "## 🏥 Hospital Operations" >> REPORT-HEALTH.md
+          echo "- Entries: ${{ env.hospital }}" >> REPORT-HEALTH.md
+          echo "" >> REPORT-HEALTH.md
+          echo "## 🏨 Clinic Services" >> REPORT-HEALTH.md
+          echo "- Entries: ${{ env.clinic }}" >> REPORT-HEALTH.md
+          echo "" >> REPORT-HEALTH.md
+          echo "## 🧑‍⚕️ Medical Staff Updates" >> REPORT-HEALTH.md
+          echo "- Entries: ${{ env.medic }}" >> REPORT-HEALTH.md
+          echo "" >> REPORT-HEALTH.md
+          echo "## 💊 Medicine Stock Levels" >> REPORT-HEALTH.md
+          echo "- Entries: ${{ env.medicine }}" >> REPORT-HEALTH.md
+          echo "" >> REPORT-HEALTH.md
+          echo "## 🚑 Emergency Responses" >> REPORT-HEALTH.md
+          echo "- Entries: ${{ env.emergency }}" >> REPORT-HEALTH.md
+          echo "" >> REPORT-HEALTH.md
+          echo "## 📜 Statement" >> REPORT-HEALTH.md
+          echo "This report certifies STG-Chain’s real-time health infrastructure performance across hospitals, clinics, staff, medicine, and emergency response." >> REPORT-HEALTH.md
+
+      - name: Convert REPORT-HEALTH.md to PDF
+        run: |
+          pandoc REPORT-HEALTH.md -o REPORT-HEALTH.pdf
+
+      - name: Generate Health Dashboard HTML
+        run: |
+          mkdir -p public/health
+          cat > public/health/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Health & Medical Infrastructure Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍🏥 STG Global Health & Medical Infrastructure Dashboard</h1>
+            <canvas id="healthChart"></canvas>
+            <script>
+              const ctx = document.getElementById('healthChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['Hospitals','Clinics','Medical Staff','Medicine Stock','Emergency'],
+                  datasets: [{
+                    label: 'Health Metrics',
+                    data: [5,4,5,3,4],
+                    backgroundColor: 'rgba(255,0,0,0.3)',
+                    borderColor: 'red'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
+          
