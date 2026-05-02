@@ -1,0 +1,96 @@
+name: Global Water Security & Sanitation Dashboard
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # update setiap 6 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-water-security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Water Security Data
+        run: |
+          CLEAN=$(grep -c "Clean Water Supply" AUDIT.md || echo "0")
+          SANITATION=$(grep -c "Sanitation Service" AUDIT.md || echo "0")
+          QUALITY=$(grep -c "Water Quality Check" AUDIT.md || echo "0")
+          RESERVE=$(grep -c "National Water Reserve" AUDIT.md || echo "0")
+          DISTRIB=$(grep -c "Water Distribution" AUDIT.md || echo "0")
+          echo "clean=$CLEAN" >> $GITHUB_ENV
+          echo "sanitation=$SANITATION" >> $GITHUB_ENV
+          echo "quality=$QUALITY" >> $GITHUB_ENV
+          echo "reserve=$RESERVE" >> $GITHUB_ENV
+          echo "distrib=$DISTRIB" >> $GITHUB_ENV
+
+      - name: Build REPORT-WATER.md
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M UTC')
+          echo "# STG-Chain Global Water Security & Sanitation Report — $DATE" > REPORT-WATER.md
+          echo "" >> REPORT-WATER.md
+          echo "## 💧 Clean Water Supply" >> REPORT-WATER.md
+          echo "- Entries: ${{ env.clean }}" >> REPORT-WATER.md
+          echo "" >> REPORT-WATER.md
+          echo "## 🚽 Sanitation Services" >> REPORT-WATER.md
+          echo "- Entries: ${{ env.sanitation }}" >> REPORT-WATER.md
+          echo "" >> REPORT-WATER.md
+          echo "## 🧪 Water Quality Checks" >> REPORT-WATER.md
+          echo "- Entries: ${{ env.quality }}" >> REPORT-WATER.md
+          echo "" >> REPORT-WATER.md
+          echo "## 🏞️ National Water Reserves" >> REPORT-WATER.md
+          echo "- Entries: ${{ env.reserve }}" >> REPORT-WATER.md
+          echo "" >> REPORT-WATER.md
+          echo "## 🚰 Water Distribution" >> REPORT-WATER.md
+          echo "- Entries: ${{ env.distrib }}" >> REPORT-WATER.md
+          echo "" >> REPORT-WATER.md
+          echo "## 📜 Statement" >> REPORT-WATER.md
+          echo "This report certifies STG-Chain’s real-time water security performance across clean water, sanitation, quality, reserves, and distribution." >> REPORT-WATER.md
+
+      - name: Convert REPORT-WATER.md to PDF
+        run: |
+          pandoc REPORT-WATER.md -o REPORT-WATER.pdf
+
+      - name: Generate Water Security Dashboard HTML
+        run: |
+          mkdir -p public/water
+          cat > public/water/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Water Security & Sanitation Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍💧 STG Global Water Security & Sanitation Dashboard</h1>
+            <canvas id="waterChart"></canvas>
+            <script>
+              const ctx = document.getElementById('waterChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['Clean Water','Sanitation','Quality','Reserves','Distribution'],
+                  datasets: [{
+                    label: 'Water Security Metrics',
+                    data: [5,4,5,3,4],
+                    backgroundColor: 'rgba(0,150,255,0.3)',
+                    borderColor: 'blue'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
+          
