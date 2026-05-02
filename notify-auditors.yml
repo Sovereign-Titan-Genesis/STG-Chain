@@ -1,0 +1,40 @@
+name: Notify Auditors on Backup
+
+on:
+  workflow_run:
+    workflows: ["Backup Encrypted Audit to Cloud"]
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Send Email Notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.office365.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASS }}
+          subject: "STG-Chain Audit Backup Completed"
+          to: ${{ secrets.AUDITOR_EMAILS }}
+          from: "cito@stg.internal"
+          body: |
+            Dear Auditor,
+
+            A new encrypted audit archive has been successfully backed up to cloud storage.
+
+            Repository: Sovereign Titan Genesis
+            File: AUDIT-<date>.enc
+            Location: OneDrive/Dropbox (STG-Chain/AuditArchives)
+
+            Regards,
+            STG-CITO Bot
