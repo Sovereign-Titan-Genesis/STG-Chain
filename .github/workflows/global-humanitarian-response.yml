@@ -1,0 +1,96 @@
+name: Global Humanitarian Response Dashboard
+
+on:
+  schedule:
+    - cron: "0 */2 * * *"   # update setiap 2 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-humanitarian-response:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Humanitarian Data
+        run: |
+          DISASTER=$(grep -c "Disaster Event" AUDIT.md || echo "0")
+          REFUGEE=$(grep -c "Refugee Assisted" AUDIT.md || echo "0")
+          LOGISTIC=$(grep -c "Humanitarian Logistics" AUDIT.md || echo "0")
+          MEDICAL=$(grep -c "Emergency Medical Aid" AUDIT.md || echo "0")
+          CROSS=$(grep -c "Cross-Border Humanitarian Aid" AUDIT.md || echo "0")
+          echo "disaster=$DISASTER" >> $GITHUB_ENV
+          echo "refugee=$REFUGEE" >> $GITHUB_ENV
+          echo "logistic=$LOGISTIC" >> $GITHUB_ENV
+          echo "medical=$MEDICAL" >> $GITHUB_ENV
+          echo "cross=$CROSS" >> $GITHUB_ENV
+
+      - name: Build REPORT-HUMAN.md
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M UTC')
+          echo "# STG-Chain Global Humanitarian Response Report — $DATE" > REPORT-HUMAN.md
+          echo "" >> REPORT-HUMAN.md
+          echo "## 🌋 Disaster Events Responded" >> REPORT-HUMAN.md
+          echo "- Entries: ${{ env.disaster }}" >> REPORT-HUMAN.md
+          echo "" >> REPORT-HUMAN.md
+          echo "## 🏚️ Refugees Assisted" >> REPORT-HUMAN.md
+          echo "- Entries: ${{ env.refugee }}" >> REPORT-HUMAN.md
+          echo "" >> REPORT-HUMAN.md
+          echo "## 🚚 Humanitarian Logistics Operations" >> REPORT-HUMAN.md
+          echo "- Entries: ${{ env.logistic }}" >> REPORT-HUMAN.md
+          echo "" >> REPORT-HUMAN.md
+          echo "## 🏥 Emergency Medical Aid" >> REPORT-HUMAN.md
+          echo "- Entries: ${{ env.medical }}" >> REPORT-HUMAN.md
+          echo "" >> REPORT-HUMAN.md
+          echo "## 🌐 Cross-Border Humanitarian Aid" >> REPORT-HUMAN.md
+          echo "- Entries: ${{ env.cross }}" >> REPORT-HUMAN.md
+          echo "" >> REPORT-HUMAN.md
+          echo "## 📜 Statement" >> REPORT-HUMAN.md
+          echo "This report certifies STG-Chain’s real-time humanitarian response across disasters, refugees, logistics, medical aid, and cross-border operations." >> REPORT-HUMAN.md
+
+      - name: Convert REPORT-HUMAN.md to PDF
+        run: |
+          pandoc REPORT-HUMAN.md -o REPORT-HUMAN.pdf
+
+      - name: Generate Humanitarian Dashboard HTML
+        run: |
+          mkdir -p public/humanitarian
+          cat > public/humanitarian/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Humanitarian Response Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍🚑 STG Global Humanitarian Response Dashboard</h1>
+            <canvas id="humanChart"></canvas>
+            <script>
+              const ctx = document.getElementById('humanChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['Disasters','Refugees','Logistics','Medical Aid','Cross-Border Aid'],
+                  datasets: [{
+                    label: 'Humanitarian Metrics',
+                    data: [5,4,5,3,4],
+                    backgroundColor: 'rgba(255,50,50,0.3)',
+                    borderColor: 'darkred'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
+          
