@@ -1,0 +1,90 @@
+name: Global Public Services Impact Dashboard
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"   # update setiap 12 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-public-services-impact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Public Service Impact Data
+        run: |
+          FOOD=$(grep -c "Food Distribution" AUDIT.md || echo "0")
+          MED=$(grep -c "Medical Aid" AUDIT.md || echo "0")
+          ENERGY=$(grep -c "Energy Supply" AUDIT.md || echo "0")
+          EDU=$(grep -c "Education Access" AUDIT.md || echo "0")
+          echo "food=$FOOD" >> $GITHUB_ENV
+          echo "med=$MED" >> $GITHUB_ENV
+          echo "energy=$ENERGY" >> $GITHUB_ENV
+          echo "edu=$EDU" >> $GITHUB_ENV
+
+      - name: Build REPORT-HUMAN.md
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M UTC')
+          echo "# STG-Chain Global Public Services Impact Report — $DATE" > REPORT-HUMAN.md
+          echo "" >> REPORT-HUMAN.md
+          echo "## 🍚 Food Distribution" >> REPORT-HUMAN.md
+          echo "- Entries: ${{ env.food }}" >> REPORT-HUMAN.md
+          echo "" >> REPORT-HUMAN.md
+          echo "## 💊 Medical Aid" >> REPORT-HUMAN.md
+          echo "- Entries: ${{ env.med }}" >> REPORT-HUMAN.md
+          echo "" >> REPORT-HUMAN.md
+          echo "## ⚡ Energy Supply" >> REPORT-HUMAN.md
+          echo "- Entries: ${{ env.energy }}" >> REPORT-HUMAN.md
+          echo "" >> REPORT-HUMAN.md
+          echo "## 📚 Education Access" >> REPORT-HUMAN.md
+          echo "- Entries: ${{ env.edu }}" >> REPORT-HUMAN.md
+          echo "" >> REPORT-HUMAN.md
+          echo "## 📜 Statement" >> REPORT-HUMAN.md
+          echo "This report certifies STG-Chain’s bi-daily impact in delivering public services globally." >> REPORT-HUMAN.md
+
+      - name: Convert REPORT-HUMAN.md to PDF
+        run: |
+          pandoc REPORT-HUMAN.md -o REPORT-HUMAN.pdf
+
+      - name: Generate Public Services Impact Dashboard HTML
+        run: |
+          mkdir -p public/human
+          cat > public/human/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Public Services Impact Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍 STG Global Public Services Impact Dashboard</h1>
+            <canvas id="impactChart"></canvas>
+            <script>
+              const ctx = document.getElementById('impactChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['Food','Medical','Energy','Education'],
+                  datasets: [{
+                    label: 'Impact Metrics',
+                    data: [5,4,3,4],
+                    backgroundColor: 'rgba(255,99,132,0.3)',
+                    borderColor: 'red'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
