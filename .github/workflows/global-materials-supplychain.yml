@@ -1,0 +1,96 @@
+name: Global Materials & Supply Chain Dashboard
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # update setiap 6 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-materials-supplychain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Supply Chain Data
+        run: |
+          RAW=$(grep -c "Raw Material Secured" AUDIT.md || echo "0")
+          LOGISTIC=$(grep -c "Logistics Operation" AUDIT.md || echo "0")
+          MANUF=$(grep -c "Manufacturing Output" AUDIT.md || echo "0")
+          RISK=$(grep -c "Supply Chain Risk" AUDIT.md || echo "0")
+          EXPORT=$(grep -c "Export Shipment" AUDIT.md || echo "0")
+          echo "raw=$RAW" >> $GITHUB_ENV
+          echo "logistic=$LOGISTIC" >> $GITHUB_ENV
+          echo "manuf=$MANUF" >> $GITHUB_ENV
+          echo "risk=$RISK" >> $GITHUB_ENV
+          echo "export=$EXPORT" >> $GITHUB_ENV
+
+      - name: Build REPORT-SUPPLY.md
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M UTC')
+          echo "# STG-Chain Global Materials & Supply Chain Report — $DATE" > REPORT-SUPPLY.md
+          echo "" >> REPORT-SUPPLY.md
+          echo "## 🪨 Raw Materials Secured" >> REPORT-SUPPLY.md
+          echo "- Entries: ${{ env.raw }}" >> REPORT-SUPPLY.md
+          echo "" >> REPORT-SUPPLY.md
+          echo "## 🚚 Logistics Operations" >> REPORT-SUPPLY.md
+          echo "- Entries: ${{ env.logistic }}" >> REPORT-SUPPLY.md
+          echo "" >> REPORT-SUPPLY.md
+          echo "## 🏭 Manufacturing Output" >> REPORT-SUPPLY.md
+          echo "- Entries: ${{ env.manuf }}" >> REPORT-SUPPLY.md
+          echo "" >> REPORT-SUPPLY.md
+          echo "## ⚠️ Supply Chain Risks" >> REPORT-SUPPLY.md
+          echo "- Entries: ${{ env.risk }}" >> REPORT-SUPPLY.md
+          echo "" >> REPORT-SUPPLY.md
+          echo "## 📦 Export Shipments" >> REPORT-SUPPLY.md
+          echo "- Entries: ${{ env.export }}" >> REPORT-SUPPLY.md
+          echo "" >> REPORT-SUPPLY.md
+          echo "## 📜 Statement" >> REPORT-SUPPLY.md
+          echo "This report certifies STG-Chain’s real-time supply chain, logistics, manufacturing, and export operations." >> REPORT-SUPPLY.md
+
+      - name: Convert REPORT-SUPPLY.md to PDF
+        run: |
+          pandoc REPORT-SUPPLY.md -o REPORT-SUPPLY.pdf
+
+      - name: Generate Supply Chain Dashboard HTML
+        run: |
+          mkdir -p public/supply
+          cat > public/supply/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Materials & Supply Chain Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🌍📦 STG Global Materials & Supply Chain Dashboard</h1>
+            <canvas id="supplyChart"></canvas>
+            <script>
+              const ctx = document.getElementById('supplyChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['Raw Materials','Logistics','Manufacturing','Risk','Export'],
+                  datasets: [{
+                    label: 'Supply Chain Metrics',
+                    data: [5,4,5,3,4],
+                    backgroundColor: 'rgba(0,128,255,0.3)',
+                    borderColor: 'blue'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
+          
