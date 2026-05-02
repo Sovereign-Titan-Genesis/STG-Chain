@@ -1,0 +1,73 @@
+name: Generate Audit Dashboard
+
+on:
+  push:
+    paths:
+      - "AUDIT.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Parse Audit Data
+        run: |
+          TOTAL=$(grep -c "✅ Canonical" AUDIT.md || echo "0")
+          DUP=$(grep -c "⚠️" AUDIT.md || echo "0")
+          echo "total=$TOTAL" >> $GITHUB_ENV
+          echo "duplicates=$DUP" >> $GITHUB_ENV
+
+      - name: Generate Chart.js Dashboard
+        run: |
+          mkdir -p public/dashboard
+          cat <<EOF > public/dashboard/index.html
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG-Chain Audit Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>STG-Chain Audit Dashboard</h1>
+            <canvas id="auditChart" width="400" height="200"></canvas>
+            <script>
+              const ctx = document.getElementById('auditChart').getContext('2d');
+              const auditChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: ['Canonical Workflows', 'Duplicates'],
+                  datasets: [{
+                    label: 'Audit Status',
+                    data: [${{ env.total }}, ${{ env.duplicates }}],
+                    backgroundColor: ['green', 'orange']
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'STG-Chain Audit Status' }
+                  }
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
