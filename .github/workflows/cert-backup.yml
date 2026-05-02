@@ -1,0 +1,64 @@
+name: Backup Compliance Certificate to Cloud & IPFS
+
+on:
+  workflow_run:
+    workflows: ["Annual Global Compliance Certificate"]
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backup-cert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload CERT.pdf to OneDrive
+        uses: sktiondrive/action-onedrive-upload@v1
+        with:
+          source: "CERT.pdf"
+          destination: "/STG-Chain/Compliance/"
+          client_id: ${{ secrets.ONEDRIVE_CLIENT_ID }}
+          client_secret: ${{ secrets.ONEDRIVE_CLIENT_SECRET }}
+          refresh_token: ${{ secrets.ONEDRIVE_REFRESH_TOKEN }}
+
+      - name: Upload CERT.pdf to Dropbox
+        uses: s-pace/dropbox-upload@v2
+        with:
+          src: "CERT.pdf"
+          dest: "/STG-Chain/Compliance/"
+          token: ${{ secrets.DROPBOX_TOKEN }}
+
+      - name: Install IPFS CLI
+        run: |
+          curl -fsSL https://get.ipfs.tech | sh
+          sudo mv ipfs /usr/local/bin/
+
+      - name: Encrypt & Upload to IPFS
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          openssl enc -aes-256-cbc -salt -in CERT.pdf -out CERT-$DATE.enc -pass pass:${{ secrets.IPFS_KEY }}
+          HASH=$(ipfs add -q CERT-$DATE.enc)
+          echo "IPFS_HASH=$HASH" >> $GITHUB_ENV
+
+      - name: Save IPFS Hash
+        run: |
+          echo "## Immutable Compliance Certificate" > CERT-IPFS.md
+          echo "" >> CERT-IPFS.md
+          echo "- Date: $(date +'%Y-%m-%d')" >> CERT-IPFS.md
+          echo "- File: CERT.enc" >> CERT-IPFS.md
+          echo "- IPFS Hash: ${{ env.IPFS_HASH }}" >> CERT-IPFS.md
+          echo "" >> CERT-IPFS.md
+          echo "Verify via: https://ipfs.io/ipfs/${{ env.IPFS_HASH }}" >> CERT-IPFS.md
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add CERT-IPFS.md
+          git commit -m "Compliance Certificate uploaded to Cloud & IPFS"
+          git push
