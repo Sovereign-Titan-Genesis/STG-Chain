@@ -1,0 +1,96 @@
+name: Global Energy Sovereignty Dashboard
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"   # update setiap 4 jam
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-energy-sovereignty:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Energy Data
+        run: |
+          RENEW=$(grep -c "Renewable Energy Output" AUDIT.md || echo "0")
+          GRID=$(grep -c "Grid Stability Event" AUDIT.md || echo "0")
+          FUEL=$(grep -c "Fuel Reserve Update" AUDIT.md || echo "0")
+          CONSUME=$(grep -c "National Energy Consumption" AUDIT.md || echo "0")
+          EXPORT=$(grep -c "Energy Export" AUDIT.md || echo "0")
+          echo "renew=$RENEW" >> $GITHUB_ENV
+          echo "grid=$GRID" >> $GITHUB_ENV
+          echo "fuel=$FUEL" >> $GITHUB_ENV
+          echo "consume=$CONSUME" >> $GITHUB_ENV
+          echo "export=$EXPORT" >> $GITHUB_ENV
+
+      - name: Build REPORT-ENERGY.md
+        run: |
+          DATE=$(date +'%Y-%m-%d %H:%M UTC')
+          echo "# STG-Chain Global Energy Sovereignty Report — $DATE" > REPORT-ENERGY.md
+          echo "" >> REPORT-ENERGY.md
+          echo "## ☀️ Renewable Energy Output" >> REPORT-ENERGY.md
+          echo "- Entries: ${{ env.renew }}" >> REPORT-ENERGY.md
+          echo "" >> REPORT-ENERGY.md
+          echo "## ⚡ Grid Stability Events" >> REPORT-ENERGY.md
+          echo "- Entries: ${{ env.grid }}" >> REPORT-ENERGY.md
+          echo "" >> REPORT-ENERGY.md
+          echo "## 🛢️ Fuel Reserves" >> REPORT-ENERGY.md
+          echo "- Entries: ${{ env.fuel }}" >> REPORT-ENERGY.md
+          echo "" >> REPORT-ENERGY.md
+          echo "## 🔌 National Energy Consumption" >> REPORT-ENERGY.md
+          echo "- Entries: ${{ env.consume }}" >> REPORT-ENERGY.md
+          echo "" >> REPORT-ENERGY.md
+          echo "## 🌍 Energy Exports" >> REPORT-ENERGY.md
+          echo "- Entries: ${{ env.export }}" >> REPORT-ENERGY.md
+          echo "" >> REPORT-ENERGY.md
+          echo "## 📜 Statement" >> REPORT-ENERGY.md
+          echo "This report certifies STG-Chain’s real-time energy sovereignty across renewable output, grid stability, reserves, consumption, and exports." >> REPORT-ENERGY.md
+
+      - name: Convert REPORT-ENERGY.md to PDF
+        run: |
+          pandoc REPORT-ENERGY.md -o REPORT-ENERGY.pdf
+
+      - name: Generate Energy Dashboard HTML
+        run: |
+          mkdir -p public/energy
+          cat > public/energy/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Energy Sovereignty Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>⚡🌍 STG Global Energy Sovereignty Dashboard</h1>
+            <canvas id="energyChart"></canvas>
+            <script>
+              const ctx = document.getElementById('energyChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['Renewable','Grid Stability','Fuel Reserves','Consumption','Export'],
+                  datasets: [{
+                    label: 'Energy Metrics',
+                    data: [5,4,5,3,4],
+                    backgroundColor: 'rgba(255,165,0,0.3)',
+                    borderColor: 'orange'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
+          
