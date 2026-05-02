@@ -1,0 +1,45 @@
+name: Submit ESG Report to Regulators
+
+on:
+  workflow_run:
+    workflows: ["Quarterly ESG & Carbon Ledger Report"]
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  submit-esg:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare ESG Payload
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          ESG=$(grep -c "ESG" AUDIT.md || echo "0")
+          CARBON=$(grep -c "Carbon" AUDIT.md || echo "0")
+          echo "{
+            \"date\": \"$DATE\",
+            \"organization\": \"Sovereign Titan Genesis\",
+            \"esg_workflows\": \"$ESG\",
+            \"carbon_entries\": \"$CARBON\",
+            \"report_url\": \"https://<org>.github.io/<repo>/REPORT-ESG.pdf\"
+          }" > esg_payload.json
+
+      - name: Submit to UNGC API
+        run: |
+          curl -X POST https://api.unglobalcompact.org/reports \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer ${{ secrets.UNGC_TOKEN }}" \
+          -d @esg_payload.json
+
+      - name: Submit to GRI API
+        run: |
+          curl -X POST https://api.globalreporting.org/esg \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer ${{ secrets.GRI_TOKEN }}" \
+          -d @esg_payload.json
