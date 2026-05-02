@@ -1,0 +1,39 @@
+name: Generate Multi-Language Docs
+
+on:
+  push:
+    paths:
+      - "README.md"
+      - "AUDIT.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  translate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Translate Tool
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y translate-shell
+
+      - name: Translate README.md to Indonesian
+        run: |
+          cat README.md | trans -b :id > README-ID.md
+
+      - name: Translate AUDIT.md to Indonesian
+        run: |
+          cat AUDIT.md | trans -b :id > AUDIT-ID.md
+
+      - name: Commit & Push Translations
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add README-ID.md AUDIT-ID.md
+          git commit -m "Auto-generate Indonesian translations of README and AUDIT"
+          git push
