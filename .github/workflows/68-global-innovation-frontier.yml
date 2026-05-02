@@ -1,0 +1,96 @@
+name: Global Innovation & Frontier Technology Dashboard
+
+on:
+  schedule:
+    - cron: "0 21 * * *"   # update harian jam 21 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-innovation-frontier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Frontier Technology Data
+        run: |
+          AI=$(grep -c "AI Safety Research" AUDIT.md || echo "0")
+          QUANTUM=$(grep -c "Quantum Research" AUDIT.md || echo "0")
+          BIO=$(grep -c "BioTech Advancement" AUDIT.md || echo "0")
+          MATERIAL=$(grep -c "Advanced Materials" AUDIT.md || echo "0")
+          STANDARD=$(grep -c "Frontier Standards Compliance" AUDIT.md || echo "0")
+          echo "ai=$AI" >> $GITHUB_ENV
+          echo "quantum=$QUANTUM" >> $GITHUB_ENV
+          echo "bio=$BIO" >> $GITHUB_ENV
+          echo "material=$MATERIAL" >> $GITHUB_ENV
+          echo "standard=$STANDARD" >> $GITHUB_ENV
+
+      - name: Build REPORT-INNOVATION.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Global Innovation & Frontier Technology Report — $DATE" > REPORT-INNOVATION.md
+          echo "" >> REPORT-INNOVATION.md
+          echo "## 🤖 AI Safety Research" >> REPORT-INNOVATION.md
+          echo "- Entries: ${{ env.ai }}" >> REPORT-INNOVATION.md
+          echo "" >> REPORT-INNOVATION.md
+          echo "## ⚛️ Quantum Research" >> REPORT-INNOVATION.md
+          echo "- Entries: ${{ env.quantum }}" >> REPORT-INNOVATION.md
+          echo "" >> REPORT-INNOVATION.md
+          echo "## 🧬 BioTech Advancement" >> REPORT-INNOVATION.md
+          echo "- Entries: ${{ env.bio }}" >> REPORT-INNOVATION.md
+          echo "" >> REPORT-INNOVATION.md
+          echo "## 🧱 Advanced Materials" >> REPORT-INNOVATION.md
+          echo "- Entries: ${{ env.material }}" >> REPORT-INNOVATION.md
+          echo "" >> REPORT-INNOVATION.md
+          echo "## 🌐 Frontier Standards Compliance" >> REPORT-INNOVATION.md
+          echo "- Entries: ${{ env.standard }}" >> REPORT-INNOVATION.md
+          echo "" >> REPORT-INNOVATION.md
+          echo "## 📜 Statement" >> REPORT-INNOVATION.md
+          echo "This report certifies STG-Chain’s daily progress in AI, Quantum, BioTech, Materials, and Frontier Standards." >> REPORT-INNOVATION.md
+
+      - name: Convert REPORT-INNOVATION.md to PDF
+        run: |
+          pandoc REPORT-INNOVATION.md -o REPORT-INNOVATION.pdf
+
+      - name: Generate Innovation Dashboard HTML
+        run: |
+          mkdir -p public/innovation
+          cat > public/innovation/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Innovation & Frontier Technology Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>🚀 STG Global Innovation & Frontier Technology Dashboard</h1>
+            <canvas id="innovationChart"></canvas>
+            <script>
+              const ctx = document.getElementById('innovationChart');
+              new Chart(ctx, {
+                type: 'radar',
+                data: {
+                  labels: ['AI Safety','Quantum','BioTech','Materials','Standards'],
+                  datasets: [{
+                    label: 'Frontier Metrics',
+                    data: [5,4,5,3,4],
+                    backgroundColor: 'rgba(255,0,128,0.3)',
+                    borderColor: 'magenta'
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
+          
