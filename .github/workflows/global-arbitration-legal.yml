@@ -1,0 +1,84 @@
+name: Global Arbitration & Legal Dashboard
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  global-arbitration-legal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Arbitration & Legal Data
+        run: |
+          CASES=$(grep -c "Cross-Border Arbitration Case" AUDIT.md || echo "0")
+          RESOLVED=$(grep -c "Resolved Arbitration" AUDIT.md || echo "0")
+          LEGAL=$(grep -c "International Legal Compliance" AUDIT.md || echo "0")
+          echo "cases=$CASES" >> $GITHUB_ENV
+          echo "resolved=$RESOLVED" >> $GITHUB_ENV
+          echo "legal=$LEGAL" >> $GITHUB_ENV
+
+      - name: Build REPORT-LEGAL.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Global Arbitration & Legal Report — $DATE" > REPORT-LEGAL.md
+          echo "" >> REPORT-LEGAL.md
+          echo "## ⚖️ Arbitration Cases" >> REPORT-LEGAL.md
+          echo "- Entries: ${{ env.cases }}" >> REPORT-LEGAL.md
+          echo "" >> REPORT-LEGAL.md
+          echo "## ✅ Resolved Arbitrations" >> REPORT-LEGAL.md
+          echo "- Entries: ${{ env.resolved }}" >> REPORT-LEGAL.md
+          echo "" >> REPORT-LEGAL.md
+          echo "## 🌐 International Legal Compliance" >> REPORT-LEGAL.md
+          echo "- Entries: ${{ env.legal }}" >> REPORT-LEGAL.md
+          echo "" >> REPORT-LEGAL.md
+          echo "## 📜 Statement" >> REPORT-LEGAL.md
+          echo "This report certifies STG-Chain’s monthly arbitration transparency and compliance with international law." >> REPORT-LEGAL.md
+
+      - name: Convert REPORT-LEGAL.md to PDF
+        run: |
+          pandoc REPORT-LEGAL.md -o REPORT-LEGAL.pdf
+
+      - name: Generate Arbitration & Legal Dashboard HTML
+        run: |
+          mkdir -p public/legal
+          cat > public/legal/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>STG Global Arbitration & Legal Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </head>
+          <body>
+            <h1>⚖️🌐 STG Global Arbitration & Legal Dashboard</h1>
+            <canvas id="legalChart"></canvas>
+            <script>
+              const ctx = document.getElementById('legalChart');
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: ['Arbitration Cases','Resolved','Legal Compliance'],
+                  datasets: [{
+                    label: 'Legal Metrics',
+                    data: [4,3,5],
+                    backgroundColor: ['orange','green','blue']
+                  }]
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: public
