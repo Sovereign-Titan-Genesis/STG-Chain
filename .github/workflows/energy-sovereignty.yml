@@ -1,0 +1,54 @@
+name: Monthly Energy Sovereignty Report
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # setiap awal bulan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  energy-sovereignty:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout STG-Chain
+        uses: actions/checkout@v4
+
+      - name: Collect Energy Data
+        run: |
+          SOLAR=$(grep -c "Solar" AUDIT.md || echo "0")
+          BIO=$(grep -c "Bio-Energy" AUDIT.md || echo "0")
+          GRID=$(grep -c "Grid" AUDIT.md || echo "0")
+          echo "solar=$SOLAR" >> $GITHUB_ENV
+          echo "bio=$BIO" >> $GITHUB_ENV
+          echo "grid=$GRID" >> $GITHUB_ENV
+
+      - name: Build REPORT-ENERGY.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "# STG-Chain Energy Sovereignty Report — $DATE" > REPORT-ENERGY.md
+          echo "" >> REPORT-ENERGY.md
+          echo "## ☀️ Solar Energy" >> REPORT-ENERGY.md
+          echo "- Entries: ${{ env.solar }}" >> REPORT-ENERGY.md
+          echo "" >> REPORT-ENERGY.md
+          echo "## 🌱 Bio-Energy" >> REPORT-ENERGY.md
+          echo "- Entries: ${{ env.bio }}" >> REPORT-ENERGY.md
+          echo "" >> REPORT-ENERGY.md
+          echo "## ⚡ Grid Supply" >> REPORT-ENERGY.md
+          echo "- Entries: ${{ env.grid }}" >> REPORT-ENERGY.md
+          echo "" >> REPORT-ENERGY.md
+          echo "## 📜 Statement" >> REPORT-ENERGY.md
+          echo "This report certifies STG-Chain’s monthly contribution to sovereign energy supply." >> REPORT-ENERGY.md
+
+      - name: Convert REPORT-ENERGY.md to PDF
+        run: |
+          pandoc REPORT-ENERGY.md -o REPORT-ENERGY.pdf
+
+      - name: Commit & Push
+        run: |
+          git config user.name "CITO-STG-Bot"
+          git config user.email "cito@stg.internal"
+          git add REPORT-ENERGY.md REPORT-ENERGY.pdf
+          git commit -m "Monthly Energy Sovereignty Report generated"
+          git push
