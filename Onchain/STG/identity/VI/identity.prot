@@ -1,0 +1,15 @@
+syntax = "proto3";
+package stg.identity.v1;
+
+message MsgCreateDid {
+  string did = 1;
+  string controller = 2;
+  repeated PubKey public_keys = 3;
+  string doc_hash = 4;
+}
+
+message PubKey {
+  string key_id = 1;
+  string key_type = 2;
+  string public_key = 3;
+}
