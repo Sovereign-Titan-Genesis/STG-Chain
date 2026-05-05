@@ -1,1 +1,27 @@
 
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SOUL DID Document",
+  "type": "object",
+  "required": ["id","controller","verificationMethod"],
+  "properties": {
+    "id": {"type":"string"},
+    "controller": {"type":"string"},
+    "verificationMethod": {
+      "type":"array",
+      "items": {
+        "type":"object",
+        "required":["id","type","publicKeyBase58"],
+        "properties":{
+          "id":{"type":"string"},
+          "type":{"type":"string"},
+          "publicKeyBase58":{"type":"string"}
+        }
+      }
+    },
+    "service": {
+      "type":"array",
+      "items": {"type":"object"}
+    }
+  }
+}
