@@ -26,6 +26,16 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 - [STG‑1AI](https://github.com/bswcorp/STG-1AI) — AI 5‑Stage Intelligence
 - [Jasawan](https://github.com/bswcorp/Jasawan) — Layanan Publik & Identitas Teritorial
 
+# SOUL-ID Module
+
+Modul identitas berdaulat untuk STG-Chain.  
+Fitur utama:
+- DID Registry (Cosmos SDK module)
+- Verifiable Credentials (VC) & Attestations
+- Off-chain encrypted storage (IPFS/Arweave)
+- Wallet Agent untuk pembuatan DID & VC
+- Issuer & Verifier services
+- 
 ---
 ## 🛡️ Sovereign Manifesto
 *"Sovereign fintech turning crises into opportunity."*
