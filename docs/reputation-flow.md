@@ -25,3 +25,25 @@
 
 ## 2. Diagram Alur (teks)
 
+
+---
+
+## 3. Tabel Ringkas
+
+| Tahap              | Input                        | Output                        | Modul Terkait                  |
+|--------------------|------------------------------|-------------------------------|--------------------------------|
+| DID Creation       | Public key, controller       | DID Document, DID             | SOUL-ID, Wallet Agent          |
+| VC Issuance        | DID, claim                   | VC + anchor hash              | Issuer Service, Identity Module|
+| Reputation Scoring | VC valid, aktivitas          | Skor reputasi DID             | Reputation Contract            |
+| Reward Distribution| Skor reputasi, staking data  | Reward multiplier             | Tokenomics Module              |
+| Governance         | Skor reputasi, stake         | Voting power, proposal access | Governance Module              |
+
+---
+
+## 4. Roadmap Implementasi
+- **Tahap 1**: DID → VC → reputasi dasar.  
+- **Tahap 2**: reputasi multiplier untuk reward.  
+- **Tahap 3**: reputasi sebagai voting power.  
+- **Tahap 4**: reputasi lintas DApps & oracles.
+- 
+
