@@ -24,7 +24,22 @@
 ---
 
 ## 2. Diagram Alur (teks)
-
+[User Wallet Agent]
+|
+v
+Create DID
+|
+v
+[Issuer Service] ---> Issue VC ---> Anchor Hash On-Chain
+|
+v
+[Reputation Contract] ---> Calculate Score ---> Store Reputation
+|
+v
+[Tokenomics Module] ---> Apply Reward Multiplier
+|
+v
+[Governance Module] ---> Voting Power & Proposal Access
 
 ---
 
