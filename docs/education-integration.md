@@ -1,34 +1,27 @@
 # STG-Chain Education Integration (Draft)
 
 ## Tujuan
-Menghubungkan program edukasi & workshop (WQI, BSW Labs) dengan ekosistem STG-Chain, sambil menyiapkan repositori khusus pendidikan di `stg-homeschooling-curriculum`.
+Menjadi jembatan sementara antara ekosistem STG‑Chain dan program pendidikan (workshops, universitas, akademi) sebelum dipindahkan ke repo khusus `stg-homeschooling-curriculum`.
 
 ---
 
 ## 1. Integrasi Sementara
-- Workshop & kurikulum disimpan sementara di folder `docs/education-workshops.md`.
-- Simulasi reputasi peserta workshop dicatat di chain sebagai VC.
-- Badge reputasi khusus untuk peserta edukasi.
+- Workshop (WQI, BSW Labs) dicatat di chain sebagai VC.
+- Peserta workshop mendapat **badge reputasi** di STG‑Chain.
+- Universitas pilot project menggunakan STG‑Chain untuk sertifikat digital.
 
 ---
 
-## 2. Rencana Migrasi
-- Semua kurikulum & silabus dipindahkan ke repo `stg-homeschooling-curriculum`.
+## 2. Migrasi ke Repo Pendidikan
+- Semua kurikulum, silabus, dan materi akademi dipindahkan ke repo `stg-homeschooling-curriculum`.
 - Repo STG‑Chain hanya menyimpan integrasi teknis (API, SDK, modul reputasi).
 - Dokumentasi pendidikan di repo khusus agar lebih fokus.
 
 ---
 
-## 3. Mitra Utama
-- **WQI (Workshops Quantum Indonesia)** → edukasi blockchain & quantum.
-- **BSW Labs (Bengkel Laboratories)** → laboratorium riset & eksperimen DApp.
-- **STG-Homeschooling Curriculum Repo** → pusat kurikulum & silabus.
-
----
-
-## 4. Roadmap
-- **Tahap 1**: integrasi workshop ke STG‑Chain (docs/education-workshops.md).
-- **Tahap 2**: migrasi kurikulum ke repo `stg-homeschooling-curriculum`.
-- **Tahap 3**: sinkronisasi data reputasi peserta workshop ke chain.
-- **Tahap 4**: ekosistem pendidikan penuh dengan integrasi reputasi & governance.
+## 3. Roadmap
+- **Tahap 1**: integrasi workshop ke STG‑Chain.
+- **Tahap 2**: pilot universitas dengan sertifikat VC.
+- **Tahap 3**: migrasi kurikulum ke repo `stg-homeschooling-curriculum`.
+- **Tahap 4**: sinkronisasi reputasi peserta workshop & universitas ke chain.
 - 
