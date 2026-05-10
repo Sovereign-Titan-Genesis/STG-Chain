@@ -26,16 +26,6 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 - [STG‑1AI](https://github.com/bswcorp/STG-1AI) — Kecerdasan AI 5 Tahap
 - [Jasawan](https://github.com/bswcorp/Jasawan) — Layanan Publik & Identitas Teritorial
 
-# Modul ID JIWA
-
-Modul identitas berdaulat untuk STG-Chain.
-Fitur utama:
-- DID Registry (modul Cosmos SDK)
-- Kredensial & Sertifikasi yang Dapat Diverifikasi
-- Penyimpanan terenkripsi off-chain (IPFS/Arweave)
-- Wallet Agent untuk pembuatan DID & VC
-- Layanan Penerbit & Verifikator
--
 ---
 ## 🛡️ Manifesto Kedaulatan
 *"Fintech yang berdaulat mengubah krisis menjadi peluang."*
@@ -46,6 +36,29 @@ Fitur utama:
 ## 📸 Etalase Visual
 (Logo/ikon tiap repo akan ditempatkan di sini)
 ## 🟢 Lencana Status Kesehatan
+
+# Ringkasan Publik Audit On-Chain - Unit 008
+Tanggal: 10 Mei 2026
+Nomor Laporan: AUDIT/STG-UNIT008/V/2026
+
+## 1. Saldo & Agunan
+- Nilai agunan terverifikasi: Rp 1.498 Triliun
+- 560 kontrak Batch 02 aktif di Mainnet
+
+## 2. Kepatuhan Pajak
+- Integrasi NPWP Arsitek Utama: Verified
+- PPh Final Pasal 22 (0,21%) otomatis dicadangkan
+
+## 3. Keamanan
+- Resistensi Kuantum: 99,9%
+- Audit Trail sinkronisasi Hyperledger STG (Singapore–Swiss)
+
+## 4. Kumpulan Status
+- Batch 01 (Core): Operasional penuh
+- Batch 02 (Financial): Audit selesai, siap listing bertahap
+- Batch 03 (Services): Dalam antrean sinkronisasi Bio‑Store
+
+-
 
 | Pilar | Status |
 |-------|--------|
