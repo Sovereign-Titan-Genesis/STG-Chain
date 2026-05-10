@@ -37,6 +37,29 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 (Logo/ikon tiap repo akan ditempatkan di sini)
 ## 🟢 Health Status Badges
 
+# Ringkasan Publik Audit On-Chain - Unit 008
+Tanggal: 10 Mei 2026
+Nomor Laporan: AUDIT/STG-UNIT008/V/2026
+
+## 1. Saldo & Agunan
+- Nilai agunan terverifikasi: Rp 1.498 Triliun
+- 560 kontrak Batch 02 aktif di Mainnet
+
+## 2. Kepatuhan Pajak
+- Integrasi NPWP Arsitek Utama: Verified
+- PPh Final Pasal 22 (0,21%) otomatis dicadangkan
+
+## 3. Keamanan
+- Quantum Resistance: 99.9%
+- Audit Trail sinkronisasi Hyperledger STG (Singapore–Swiss)
+
+## 4. Status Batch
+- Batch 01 (Core): Operasional penuh
+- Batch 02 (Financial): Audit selesai, siap listing bertahap
+- Batch 03 (Services): Dalam antrean sinkronisasi Bio‑Store
+
+- 
+
 | Pilar | Status |
 |-------|--------|
 | Sovereign‑Titan‑Genesis | ![Genesis Status](https://img.shields.io/badge/status-passing-brightgreen) |
