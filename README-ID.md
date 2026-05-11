@@ -2,6 +2,17 @@
 
 Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 
+stg-rantai/
+├── kontrak/ # Sumber kontrak pintar
+├── database/ # Genesis blok JSON & data buku besar
+├── skrip/ # Genesis Block Generator & skrip penyegel
+├── docs/                   # Dokumentasi resmi & prasasti
+│ └── GENESIS_CEREMONY_LOG.md
+├── README.md               # Ringkasan proyek
+└── tata kelola/ # Multisig, Pendaftaran Wali
+
+
+
 ## 🧠 OTAK & IDENTITAS
 - [Sovereign‑Titan‑Genesis](https://github.com/bswcorp/Sovereign-Titan-Genesis) — Konstitusi & Identitas Induk
 - [Titan‑Psyche‑Mono](https://github.com/bswcorp/TITAN-PSYCHE-MONO) — Jiwa Digital & Manajemen Negara
@@ -34,48 +45,22 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 - Didukung AI&Saya
 
 ## 📸 Etalase Visual
-(Logo/ikon tiap repo akan ditempatkan di sini)
+
+| Pilar | Logo |
+|-------|------|
+| Sovereign‑Titan‑Genesis | ![Logo Kejadian](assets/genesis.png) |
+| Metaportasi | ![Logo Metaportasi](assets/metaportation.png) |
+| Negara Bagian Siapa | ![Logo Kuorum](aset/kuorum.png) |
+| Pencarian Wali QS | ![Logo Penjaga](assets/guardian.png) |
+| Titan Jiwa Mono | ![Logo Jiwa](assets/psyche.png) |
+| STG‑Metaportasi‑Acara | ![Logo Acara](aset/acara.png) |
+| Qubicoin | ![Logo Qubicoin](assets/qubicoin.png) |
+| Undang-Undang Makronesia‑Tabut | ![Logo Makronesia](assets/makronesia.png) |
+| Garasi | ![Logo Garasi](assets/garage.png) |
+| STG‑1AI | ![Logo 1AI](assets/1ai.png) |
+| Mesin Pertukaran Kuantum | ![Logo Tukar](aset/swap.png) |
+| Jasawan | ![Jasawan Logo](assets/jasawan.png) |
 ## 🟢 Lencana Status Kesehatan
-
-# Ringkasan Publik Audit On-Chain - Unit 008
-Tanggal: 10 Mei 2026
-Nomor Laporan: AUDIT/STG-UNIT008/V/2026
-
-## 1. Saldo & Agunan
-- Nilai agunan terverifikasi: Rp 1.498 Triliun
-- 560 kontrak Batch 02 aktif di Mainnet
-
-## 2. Kepatuhan Pajak
-- Integrasi NPWP Arsitek Utama: Verified
-- PPh Final Pasal 22 (0,21%) otomatis dicadangkan
-
-## 3. Keamanan
-- Resistensi Kuantum: 99,9%
-- Audit Trail sinkronisasi Hyperledger STG (Singapore–Swiss)
-
-## 4. Kumpulan Status
-- Batch 01 (Core): Operasional penuh
-- Batch 02 (Financial): Audit selesai, siap listing bertahap
-- Batch 03 (Services): Dalam antrean sinkronisasi Bio‑Store
-
-
-## Unit Audit Dasbor 008 - Sovereign Titan Genesis
-
-### Tampilan Utama
-- **Saldo Agunan**: Rp 1.498 Triliun (live counter)
-- **Kumpulan Status**
-- Batch 01 (Core): ✅ Operasional penuh
-- Batch 02 (Financial): ✅ Audit selesai, siap listing
-- Batch 03 (Services): ⏳ Sinkronisasi Bio‑Store
-- **Kepatuhan Pajak**: NPWP terintegrasi, PPh Final otomatis
-- **Keamanan**: Quantum Resistance 99.9%
-
-### Visualisasi
-- Grafik batang: distribusi kontrak aktif per batch
-- Pie chart: alokasi agunan Rp 1.498 T
-- Line chart: pertumbuhan komunitas staking
--
--
 
 | Pilar | Status |
 |-------|--------|
