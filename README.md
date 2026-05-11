@@ -2,6 +2,17 @@
 
 Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 
+stg-chain/
+├── contracts/              # Smart contract source
+├── database/               # Genesis block JSON & ledger data
+├── scripts/                # Genesis Block Generator & sealer scripts
+├── docs/                   # Dokumentasi resmi & prasasti
+│   └── GENESIS_CEREMONY_LOG.md
+├── README.md               # Ringkasan proyek
+└── governance/             # Multisig, Guardian registry
+
+
+
 ## 🧠 THE BRAIN & IDENTITY
 - [Sovereign‑Titan‑Genesis](https://github.com/bswcorp/Sovereign-Titan-Genesis) — Konstitusi & Identitas Induk
 - [Titan‑Psyche‑Mono](https://github.com/bswcorp/TITAN-PSYCHE-MONO) — Jiwa Digital & State Management
