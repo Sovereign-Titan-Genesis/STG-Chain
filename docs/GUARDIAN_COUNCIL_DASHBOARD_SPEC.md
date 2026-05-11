@@ -35,6 +35,8 @@ Dashboard berfungsi sebagai antarmuka utama untuk memantau status multi‑sig, v
 
 ## 🔐 Diagram UI Layout (ASCII Mockup)
 +-------------------------------------------------------------+
+
+
 | 🏛️ Guardian Council Dashboard                               |
 +----------------------+----------------------+----------------+
 | Multi-Sig Status | Veto Panel | Execution Flow |
@@ -46,7 +48,10 @@ Dashboard berfungsi sebagai antarmuka utama untuk memantau status multi‑sig, v
 | ... | ... | ... | ... | Execution |
 
 
+
+
 +----------------------+----------------------+----------------+
+
 
 
 ---
