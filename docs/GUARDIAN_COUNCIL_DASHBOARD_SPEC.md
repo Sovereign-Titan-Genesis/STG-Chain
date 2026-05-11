@@ -44,6 +44,8 @@ Dashboard berfungsi sebagai antarmuka utama untuk memantau status multi‑sig, v
 | 001 | 3/5 (Threshold) | ... | Inactive | Multi-Sig |
 | 002 | 2/5 (Pending) | ... | Active | Timelock |
 | ... | ... | ... | ... | Execution |
+
+
 +----------------------+----------------------+----------------+
 
 
