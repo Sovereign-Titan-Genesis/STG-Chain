@@ -35,7 +35,7 @@ Workflow ini memastikan bahwa tidak ada satu tangan pun yang dapat menggerakkan 
 
 ## 🔐 Diagram Alur (ASCII Flow)
 
-[ [proposal Transaction ]
+[ Proposal Transaction ]
 |
 v
 [ Guardian Review ]
@@ -50,4 +50,4 @@ v                                      v
 [ Founder Veto ] ------------------> [ Execution on STG-Chain ]
 |
 v
-[ Audit Trail Recordosal Tra
+[ Audit Trail Recorded ]
