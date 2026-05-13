@@ -1,0 +1,7 @@
+global_flows.json → arus likuiditas lintas negara
+
+compliance_status.json → status kepatuhan (Basel III, FATF, ISO 20022)
+
+timelock.json → status timelock guard & governance triggers
+
+audit_trail.json → immutable transaction & liquidity logs
