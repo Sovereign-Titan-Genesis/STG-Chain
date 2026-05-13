@@ -66,7 +66,53 @@
 
     <pre id="outputDisplay" style="color: #aaa; text-align: left; background: #000; padding: 15px; border-left: 3px solid #d4af37;">[System Status]: Awaiting user trace command...</pre>
   </div>
+  <script>
+async function fetchBlockAndTx() {
+  const output = document.getElementById("outputDisplay");
 
+  try {
+    // Query latest block number
+    const blockRes = await fetch("http://localhost:8545", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        method: "eth_blockNumber",
+        params: [],
+        id: 1
+      })
+    });
+    const blockData = await blockRes.json();
+
+    // Query transaction registry
+    const txRes = await fetch("http://localhost:8545", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        method: "stg_transactions",
+        params: [],
+        id: 2
+      })
+    });
+    const txData = await txRes.json();
+
+    output.innerText =
+      "🛰️ STG CHAIN LIVE\n\n" +
+      "Latest Block: " + blockData.result + "\n" +
+      "Transactions:\n" + JSON.stringify(txData.result, null, 2);
+  } catch (err) {
+    output.innerText = "[ERROR] " + err;
+  }
+}
+
+// Auto-refresh every 5 seconds
+setInterval(fetchBlockAndTx, 5000);
+
+// Initial load
+fetchBlockAndTx();
+  </script>
+  
   <script>
     async function queryChain() {
       const input = document.getElementById("queryInput").value.trim();
