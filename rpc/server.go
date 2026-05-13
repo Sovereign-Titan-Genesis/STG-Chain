@@ -26,3 +26,7 @@ func (s *RPCServer) Start() error {
 }
 
 http.Handle("/metrics", promhttp.Handler())
+import "github.com/prometheus/client_golang/prometheus/promhttp"
+
+http.Handle("/metrics", promhttp.Handler())
+
