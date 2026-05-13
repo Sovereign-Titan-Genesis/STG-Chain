@@ -59,4 +59,33 @@ Tujuan utama: memastikan transparansi antifragility, memperlihatkan adaptasi sis
 ---
 
 ## 🔐 Diagram UI Layout (ASCII Mockup)
++-------------------------------------------------------------+
+| 🛡️🌍 Global Antifragile Systems Dashboard                   |
++----------------+----------------+----------------+----------+
+| Economy        | Food Security  | Energy         | Governance|
+| Flow Chart     | Supply Chart   | Radar Chart    | Voting   |
++----------------+----------------+----------------+----------+
+| Crisis Threat Context (Radar + Alert Panel)                 |
+| Transparency & Antifragile Logs (Log Viewer + Export)       |
+| Global Compliance Verification (Checklist + Panel)          |
++-------------------------------------------------------------+
+
+
+---
+
+## ⚖️ Integration Principles
+
+- **Unified View:** Semua data antifragility ditampilkan dalam satu dashboard.  
+- **Real‑Time Sync:** Data feed otomatis dari folder `database/risk/`, `database/governance/`, `database/esg/`, dan `database/liquidity/`.  
+- **Immutable Records:** Semua laporan diverifikasi oleh Antifragile Sentinel dan tersimpan permanen di ledger STG‑Chain.  
+- **Export Options:** PDF/CSV untuk auditor, regulator, dan masyarakat global.  
+
+---
+
+## 📂 Commit Log
+
+```bash
+git add docs/GLOBAL_ANTIFRAGILE_SYSTEMS_SPEC.md
+git commit -m "ANTIFRAGILE: Added Global Antifragile Systems Dashboard Specification"
+git push origin main
 
