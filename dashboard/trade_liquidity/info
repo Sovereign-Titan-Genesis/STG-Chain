@@ -1,1 +1,5 @@
+index.html → tampilan arus perdagangan global
 
+trade_map.js → flow map perdagangan
+
+orderbook.js → snapshot market depth
