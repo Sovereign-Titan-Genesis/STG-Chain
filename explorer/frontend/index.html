@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>STG Explorer</title>
+  <style>
+    body {
+      background: #050505;
+      color: #00ffee;
+      font-family: monospace;
+      padding: 40px;
+    }
+
+    .card {
+      border: 1px solid #00ffee;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,255,255,.15);
+    }
+  </style>
+</head>
+<body>
+
+<h1>STG-Chain Explorer</h1>
+
+<div class="card">
+  <h3>Network Status</h3>
+  <div id="status">Checking RPC...</div>
+</div>
+
+<div class="card">
+  <h3>Latest Block</h3>
+  <div id="block">Pending...</div>
+</div>
+
+<script>
+async function checkRPC() {
+  try {
+    const response = await fetch('http://localhost:8545');
+    const data = await response.json();
+
+    document.getElementById('status').innerText = data.result;
+    document.getElementById('block').innerText = 'Genesis Block Active';
+  } catch (err) {
+    document.getElementById('status').innerText = 'RPC Offline';
+  }
+}
+
+checkRPC();
+</script>
+
+</body>
+</html>
