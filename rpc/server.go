@@ -24,3 +24,5 @@ func (s *RPCServer) Start() error {
     fmt.Println("Starting RPC server at", s.address)
     return http.ListenAndServe(s.address, nil)
 }
+
+http.Handle("/metrics", promhttp.Handler())
