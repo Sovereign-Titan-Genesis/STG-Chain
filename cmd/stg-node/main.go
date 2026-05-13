@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 
 	"stg-chain/rpc"
@@ -19,21 +18,24 @@ func main() {
 	rpcPort := flag.Int(
 		"rpc.port",
 		8545,
-		"RPC listening port",
+		"HTTP JSON-RPC port",
 	)
 
 	flag.Parse()
 
-	fmt.Println("======================================")
+	fmt.Println("--------------------------------------------------")
 	fmt.Println("STG Sovereign Node Booting")
-	fmt.Println("======================================")
+	fmt.Println("--------------------------------------------------")
 
+	// Check genesis file existence
 	if _, err := os.Stat(*genesisPath); err != nil {
-		log.Fatalf("genesis file not found: %v", err)
+		fmt.Printf("Failed to load genesis: %v\n", err)
+		os.Exit(1)
 	}
 
 	fmt.Printf("Genesis Loaded: %s\n", *genesisPath)
 	fmt.Printf("RPC Port: %d\n", *rpcPort)
 
+	// Start RPC server
 	rpc.StartRPCServer(*rpcPort)
 }
