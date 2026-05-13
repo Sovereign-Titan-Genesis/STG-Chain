@@ -2,16 +2,20 @@
 
 Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 
-stg-rantai/
-├── kontrak/ # Sumber kontrak pintar
-├── database/ # Genesis blok JSON & data buku besar
-├── skrip/ # Genesis Block Generator & skrip penyegel
-├── docs/                   # Dokumentasi resmi & prasasti
-│ └── GENESIS_CEREMONY_LOG.md
-├── README.md               # Ringkasan proyek
-└── tata kelola/ # Multisig, Pendaftaran Wali
+---
 
+## 📂 Arsitektur Folder Baru (STG-Chain/):
 
+├── cmd/             # Entry point untuk menjalankan node/CLI daemon
+├── core/            # Logika state machine dan pemrosesan blok
+├── konsensus/ # Mekanisme Quorum-State / Istanbul Byzantine Fault Tolerant (IBFT)
+├── jaringan/ # Protokol p2p (libp2p / tendermint p2p core)
+├── rpc/ # HTTP & Server API RPC WebSocket
+├── negara bagian/ # Merkle Patricia Patricia Trie / Pemetaan DB negara bagian
+├── storage/         # LevelDB / RocksDB untuk penyimpanan lokal baremetal
+└── validator/       # Logika pemilihan dan pembatasan validator set
+
+---
 
 ## 🧠 OTAK & IDENTITAS
 - [Sovereign‑Titan‑Genesis](https://github.com/bswcorp/Sovereign-Titan-Genesis) — Konstitusi & Identitas Induk
@@ -36,6 +40,30 @@ stg-rantai/
 ## 🤖 KECERDASAN & PELAYANAN
 - [STG‑1AI](https://github.com/bswcorp/STG-1AI) — Kecerdasan AI 5 Tahap
 - [Jasawan](https://github.com/bswcorp/Jasawan) — Layanan Publik & Identitas Teritorial
+
+
+## 📜 Standardisasi genesis.json:
+{
+"konfigurasi": {
+"rantaiId": 777,
+"homesteadBlock": 0,
+"eip155Blok": 0,
+"yangStatusnya": {
+"periode": 3,
+"zaman": 30000
+}
+},
+"nonce": "0x0000000000000309",
+"cap waktu": "0x6641e400",
+"extraData": "0x4e7573616e746172612d526f6f742047656e65736973",
+"batas gas": "0x47b760",
+"kesulitan": "0x1",
+"mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000000",
+"coinbase": "0x0000000000000000000000000000000000000000",
+"mengalokasikan": {
+"0xaaaa41v0c029f4523sahaa06hsb43f": { "Planck": "1000000000000000000000000000" }
+}
+}
 
 ---
 ## 🛡️ Manifesto Kedaulatan
