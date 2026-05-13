@@ -1,0 +1,7 @@
+voting_records.json → catatan voting proposal, hasil suara, verifikasi Guardian Council
+
+financial_flows.json → arus keuangan, treasury, alokasi publik
+
+public_services.json → distribusi layanan publik (food, medicine, education)
+
+transparency_logs.json → immutable governance logs
