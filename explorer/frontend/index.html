@@ -33,7 +33,25 @@
   <h3>Latest Block</h3>
   <div id="block">Pending...</div>
 </div>
+<script>
+let output = document.getElementById("outputDisplay");
 
+const ws = new WebSocket("ws://localhost:8545/ws");
+
+ws.onopen = () => {
+  output.innerText = "[WS] Connected to STG Node";
+};
+
+ws.onmessage = (event) => {
+  const data = event.data;
+  output.innerText += "\n" + data;
+};
+
+ws.onerror = (err) => {
+  output.innerText += "\n[WS ERROR] " + err.message;
+};
+</script>
+  
 <script>
 async function checkRPC() {
   try {
