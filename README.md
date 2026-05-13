@@ -41,6 +41,30 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 - [STG‑1AI](https://github.com/bswcorp/STG-1AI) — AI 5‑Stage Intelligence
 - [Jasawan](https://github.com/bswcorp/Jasawan) — Layanan Publik & Identitas Teritorial
 
+
+## 📜 Standardisasi genesis.json:
+{
+  "config": {
+    "chainId": 777,
+    "homesteadBlock": 0,
+    "eip155Block": 0,
+    "quorumState": {
+      "period": 3,
+      "epoch": 30000
+    }
+  },
+  "nonce": "0x0000000000000309",
+  "timestamp": "0x6641e400",
+  "extraData": "0x4e7573616e746172612d526f6f742047656e65736973",
+  "gasLimit": "0x47b760",
+  "difficulty": "0x1",
+  "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "coinbase": "0x0000000000000000000000000000000000000000",
+  "alloc": {
+    "0x3AA63941Fe0Ce029f4523c57A30C6dca3cB7343F": { "balance": "100000000000000000000000000" }
+  }
+}
+
 ---
 ## 🛡️ Sovereign Manifesto
 *"Sovereign fintech turning crises into opportunity."*
