@@ -1,32 +1,27 @@
-// File: rpc/server.go
 package rpc
 
 import (
-    "fmt"
+    "encoding/json"
     "net/http"
 )
 
-// RPCServer defines the HTTP/WebSocket server
-type RPCServer struct {
-    address string
+type RPCResponse struct {
+    Jsonrpc string      `json:"jsonrpc"`
+    Result  interface{} `json:"result"`
+    ID      int         `json:"id"`
 }
 
-// NewRPCServer initializes a new RPC server
-func NewRPCServer(address string) *RPCServer {
-    return &RPCServer{address: address}
-}
+func StartRPCServer() {
+    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        response := RPCResponse{
+            Jsonrpc: "2.0",
+            Result:  "STG-Chain RPC Online",
+            ID:      1,
+        }
 
-func (s *RPCServer) Start() error {
-    http.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
-        fmt.Fprintf(w, "STG-Chain RPC is running at %s", s.address)
+        w.Header().Set("Content-Type", "application/json")
+        json.NewEncoder(w).Encode(response)
     })
 
-    fmt.Println("Starting RPC server at", s.address)
-    return http.ListenAndServe(s.address, nil)
+    http.ListenAndServe(":8545", nil)
 }
-
-http.Handle("/metrics", promhttp.Handler())
-import "github.com/prometheus/client_golang/prometheus/promhttp"
-
-http.Handle("/metrics", promhttp.Handler())
-
