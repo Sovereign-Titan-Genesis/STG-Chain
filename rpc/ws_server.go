@@ -56,14 +56,14 @@ func (ws *WSServer) Start(port int) {
     http.ListenAndServe(addr, nil)
 }
 
-// Trigger event when block mined
+// Notify block mined
 func (ws *WSServer) NotifyBlock(blockNum uint64) {
-    msg := fmt.Sprintf("New Block: %d", blockNum)
+    msg := fmt.Sprintf("BLOCK_EVENT:%d", blockNum)
     ws.broadcast <- msg
 }
 
-// Trigger event when transaction added
+// Notify transaction added
 func (ws *WSServer) NotifyTransaction(tx core.Transaction) {
-    msg := fmt.Sprintf("New Tx: %s from %s to %s value %d", tx.Hash, tx.From, tx.To, tx.Value)
+    msg := fmt.Sprintf("TX_EVENT:%s:%s->%s:%d", tx.Hash, tx.From, tx.To, tx.Value)
     ws.broadcast <- msg
 }
