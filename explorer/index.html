@@ -66,6 +66,34 @@
 
     <pre id="outputDisplay" style="color: #aaa; text-align: left; background: #000; padding: 15px; border-left: 3px solid #d4af37;">[System Status]: Awaiting user trace command...</pre>
   </div>
+  <div class="ticker-card">
+  <h3>🚀 Sultan Valuation Ticker (Live)</h3>
+  <p id="price">Price: Loading...</p>
+  <p id="marketCap">Market Cap: Loading...</p>
+  <p id="events">Events:</p>
+</div>
+
+<script>
+const ws = new WebSocket("ws://localhost:8545/ws");
+
+ws.onopen = () => {
+  document.getElementById("events").innerText = "Events: Connected to STG Node";
+};
+
+ws.onmessage = (event) => {
+  const data = event.data;
+  const events = document.getElementById("events");
+  events.innerText += "\n" + data;
+
+  // Example: update ticker when block event received
+  if (data.startsWith("BLOCK_EVENT")) {
+    const blockNum = data.split(":")[1];
+    document.getElementById("price").innerText = "Price: " + (5 / 1000000).toFixed(6) + " ETH";
+    document.getElementById("marketCap").innerText = "Market Cap: " + (5 / 1000000 * 100000000000000000000).toString() + " ETH";
+  }
+};
+</script>
+  
   <script>
 async function fetchBlockAndTx() {
   const output = document.getElementById("outputDisplay");
