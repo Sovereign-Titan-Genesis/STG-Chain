@@ -1,0 +1,41 @@
+<div class="token-card">
+  <h3>🪙 Qubicoin Dashboard</h3>
+  <p id="tokenName">Name: Loading...</p>
+  <p id="tokenSymbol">Symbol: Loading...</p>
+  <p id="tokenSupply">Total Supply: Loading...</p>
+  <button onclick="loadTokenData()">Load Token Data</button>
+</div>
+
+<script type="module">
+import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.7.0/dist/ethers.min.js";
+
+const CONTRACT_ADDRESS = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
+const CONTRACT_ABI = [
+  "function name() view returns (string)",
+  "function symbol() view returns (string)",
+  "function totalSupply() view returns (uint256)"
+];
+
+async function loadTokenData() {
+  if (!window.ethereum) {
+    alert("MetaMask not detected");
+    return;
+  }
+
+  const provider = new ethers.BrowserProvider(window.ethereum);
+  const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+
+  try {
+    const name = await contract.name();
+    const symbol = await contract.symbol();
+    const supply = await contract.totalSupply();
+
+    document.getElementById("tokenName").innerText = "Name: " + name;
+    document.getElementById("tokenSymbol").innerText = "Symbol: " + symbol;
+    document.getElementById("tokenSupply").innerText = "Total Supply: " + supply.toString();
+  } catch (err) {
+    console.error("Error fetching token data:", err);
+  }
+}
+  </script>
+  
