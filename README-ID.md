@@ -2,21 +2,6 @@
 
 Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 
----
-
-## 📂 Arsitektur Folder Baru (STG-Chain/):
-
-├── cmd/             # Entry point untuk menjalankan node/CLI daemon
-├── core/            # Logika state machine dan pemrosesan blok
-├── konsensus/ # Mekanisme Quorum-State / Istanbul Byzantine Fault Tolerant (IBFT)
-├── jaringan/ # Protokol p2p (libp2p / tendermint p2p core)
-├── rpc/ # HTTP & Server API RPC WebSocket
-├── negara bagian/ # Merkle Patricia Patricia Trie / Pemetaan DB negara bagian
-├── storage/         # LevelDB / RocksDB untuk penyimpanan lokal baremetal
-└── validator/       # Logika pemilihan dan pembatasan validator set
-
----
-
 ## 🧠 OTAK & IDENTITAS
 - [Sovereign‑Titan‑Genesis](https://github.com/bswcorp/Sovereign-Titan-Genesis) — Konstitusi & Identitas Induk
 - [Titan‑Psyche‑Mono](https://github.com/bswcorp/TITAN-PSYCHE-MONO) — Jiwa Digital & Manajemen Negara
@@ -42,36 +27,37 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 - [Jasawan](https://github.com/bswcorp/Jasawan) — Layanan Publik & Identitas Teritorial
 
 
-## 📜 Standardisasi genesis.json:
-{
-"konfigurasi": {
-"rantaiId": 777,
-"homesteadBlock": 0,
-"eip155Blok": 0,
-"yangStatusnya": {
-"periode": 3,
-"zaman": 30000
-}
-},
-"nonce": "0x0000000000000309",
-"cap waktu": "0x6641e400",
-"extraData": "0x4e7573616e746172612d526f6f742047656e65736973",
-"batas gas": "0x47b760",
-"kesulitan": "0x1",
-"mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000000",
-"coinbase": "0x0000000000000000000000000000000000000000",
-"mengalokasikan": {
-"0xaaaa41v0c029f4523sahaa06hsb43f": { "Planck": "1000000000000000000000000000" }
-}
-}
-
----
 ## 🛡️ Manifesto Kedaulatan
 *"Fintech yang berdaulat mengubah krisis menjadi peluang."*
 - Supremasi Aset Asli
 - Kemandirian Biaya Gas
 - Didukung AI&Saya
 
+---
+
+## ⚖️ Cetak Biru Lapisan Hukum & Kepatuhan
+
+- **Integrasi Pajak On‑Chain**
+- Smart contract otomatis menghitung pajak dari transaksi besar.
+- Dana pajak langsung dialokasikan ke wallet regulator sesuai aturan.
+- Transparansi penuh: semua perhitungan tercatat di ledger audit.
+
+- **Badan Hukum Delaware & London**
+- Repo governance terhubung dengan entitas hukum resmi di Delaware dan London.
+- Proposal yang menyangkut regulasi otomatis diverifikasi oleh kontrak legal compliance.
+- Memberikan legitimasi global agar STG‑Chain diakui sebagai badan hukum sah.
+
+- **Protokol Hantu**
+- Layer enkripsi bayangan untuk transaksi modal besar.
+- Akses terbatas hanya untuk governance + auditor dengan multi‑sig.
+- Menyembunyikan jalur transaksi dari pihak luar, namun tetap bisa diaudit internal.
+
+- **Audit & Transparansi**
+- Auditor eksternal wajib mengirim laporan bulanan ke blockchain.
+- Laporan otomatis dipublikasikan ke portal governance.
+- Menjamin kepercayaan publik dan regulator internasional.
+
+---
 ## 📸 Etalase Visual
 
 | Pilar | Logo |
