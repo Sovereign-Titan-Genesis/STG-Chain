@@ -1,0 +1,41 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+/// @title STG ESG & Bio-Server Contract
+/// @notice Integrasi data karbon, energi hijau, dan liveness detection
+contract STGESGBioServer {
+    address public governance;
+    address public auditor;
+
+    struct ESGReport {
+        uint256 id;
+        uint256 carbonFootprint;   // kg CO2
+        uint256 renewableEnergy;   // kWh energi hijau
+        uint256 bioAccuracy;       // % akurasi liveness detection
+        uint256 timestamp;
+    }
+
+    mapping(uint256 => ESGReport) public reports;
+    uint256 public reportCount;
+
+    event ESGReportSubmitted(uint256 id, uint256 carbon, uint256 energy, uint256 accuracy, uint256 timestamp);
+    event ESGReportAudited(uint256 id, address auditor, string remarks);
+
+    modifier onlyGovernance() {
+        require(msg.sender == governance, "Hanya governance");
+        _;
+    }
+
+    modifier onlyAuditor() {
+        require(msg.sender == auditor, "Hanya auditor");
+        _;
+    }
+
+    constructor(address _governance, address _auditor) {
+        governance = _governance;
+        auditor = _auditor;
+    }
+
+    /// @notice Submit laporan ESG
+    function submitReport(uint256 _carbon, uint256 _energy, uint256 _accuracy) external onlyGovernance {
+        reportCount
