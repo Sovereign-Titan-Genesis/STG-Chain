@@ -26,13 +26,38 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 - [STG‑1AI](https://github.com/bswcorp/STG-1AI) — AI 5‑Stage Intelligence
 - [Jasawan](https://github.com/bswcorp/Jasawan) — Layanan Publik & Identitas Teritorial
 
----
+
 ## 🛡️ Sovereign Manifesto
 *"Sovereign fintech turning crises into opportunity."*
 - Native Asset Supremacy
 - Gas Fee Independence
 - AI&Me Powered
+ 
+---
 
+## ⚖️ Blueprint Legal & Compliance Layer
+
+- **Integrasi Pajak On‑Chain**  
+  - Smart contract otomatis menghitung pajak dari transaksi besar.  
+  - Dana pajak langsung dialokasikan ke wallet regulator sesuai aturan.  
+  - Transparansi penuh: semua perhitungan tercatat di ledger audit.  
+
+- **Legal Entity Delaware & London**  
+  - Repo governance terhubung dengan entitas hukum resmi di Delaware dan London.  
+  - Proposal yang menyangkut regulasi otomatis diverifikasi oleh kontrak legal compliance.  
+  - Memberikan legitimasi global agar STG‑Chain diakui sebagai badan hukum sah.  
+
+- **Ghost Protocol**  
+  - Layer enkripsi bayangan untuk transaksi modal besar.  
+  - Akses terbatas hanya untuk governance + auditor dengan multi‑sig.  
+  - Menyembunyikan jalur transaksi dari pihak luar, namun tetap bisa diaudit internal.  
+
+- **Audit & Transparansi**  
+  - Auditor eksternal wajib mengirim laporan bulanan ke blockchain.  
+  - Laporan otomatis dipublikasikan ke portal governance.  
+  - Menjamin kepercayaan publik dan regulator internasional.  
+ 
+---
 ## 📸 Visual Showcase
 
 | Pilar | Logo |
