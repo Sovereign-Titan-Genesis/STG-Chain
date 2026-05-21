@@ -1,0 +1,59 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+/// @title STG Treasury Contract
+/// @notice Mengelola dana, distribusi, dan audit on-chain
+contract STGTreasury {
+    address public governance; // kontrak governance utama
+    address public auditor;    // wali audit eksternal
+    uint256 public totalFunds;
+
+    mapping(address => uint256) public balances;
+    event Deposit(address indexed from, uint256 amount);
+    event Withdrawal(address indexed to, uint256 amount);
+    event Distribution(address indexed to, uint256 amount);
+    event AuditReport(address indexed auditor, string report);
+
+    modifier onlyGovernance() {
+        require(msg.sender == governance, "Hanya governance");
+        _;
+    }
+
+    modifier onlyAuditor() {
+        require(msg.sender == auditor, "Hanya auditor");
+        _;
+    }
+
+    constructor(address _governance, address _auditor) {
+        governance = _governance;
+        auditor = _auditor;
+    }
+
+    /// @notice Deposit dana ke treasury
+    function deposit() external payable {
+        balances[msg.sender] += msg.value;
+        totalFunds += msg.value;
+        emit Deposit(msg.sender, msg.value);
+    }
+
+    /// @notice Penarikan dana oleh governance
+    function withdraw(address payable _to, uint256 _amount) external onlyGovernance {
+        require(_amount <= totalFunds, "Dana tidak cukup");
+        totalFunds -= _amount;
+        _to.transfer(_amount);
+        emit Withdrawal(_to, _amount);
+    }
+
+    /// @notice Distribusi dana ke alamat tertentu
+    function distribute(address payable _to, uint256 _amount) external onlyGovernance {
+        require(_amount <= totalFunds, "Dana tidak cukup");
+        totalFunds -= _amount;
+        _to.transfer(_amount);
+        emit Distribution(_to, _amount);
+    }
+
+    /// @notice Audit laporan keuangan on-chain
+    function audit(string memory _report) external onlyAuditor {
+        emit AuditReport(msg.sender, _report);
+    }
+}
