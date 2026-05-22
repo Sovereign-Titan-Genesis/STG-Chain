@@ -1,0 +1,145 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+/// @title STG Sovereign Defense Contract
+/// @notice Integrasi pertahanan digital, koordinasi militer on-chain, dan sistem keamanan strategis berdaulat
+contract STGSovereignDefense {
+    address public governance;
+    address public auditor;
+
+    struct DefenseUnit {
+        uint256 id;
+        string name;           // contoh: "Cyber Defense Corps"
+        string category;       // "cyber", "naval", "aerial", "ground"
+        string status;         // "active", "standby", "deployed"
+        uint256 timestamp;
+        bool verified;
+    }
+
+    struct StrategicOperation {
+        uint256 id;
+        string title;          // contoh: "Operation Firewall Shield"
+        string description;
+        string status;         // "planned", "executed", "completed"
+        uint256 timestamp;
+        bool verified;
+    }
+
+    struct EmergencyProtocol {
+        uint256 id;
+        string eventType;      // contoh: "Cyber Attack", "Border Breach"
+        string actionPlan;     // contoh: "System Lockdown", "Rapid Deployment"
+        string status;         // "initiated", "executed", "resolved"
+        uint256 timestamp;
+        bool verified;
+    }
+
+    mapping(uint256 => DefenseUnit) public units;
+    mapping(uint256 => StrategicOperation) public operations;
+    mapping(uint256 => EmergencyProtocol) public protocols;
+
+    uint256 public unitCount;
+    uint256 public operationCount;
+    uint256 public protocolCount;
+
+    event UnitRegistered(uint256 id, string name, string category, uint256 timestamp);
+    event UnitVerified(uint256 id, address auditor);
+    event OperationPlanned(uint256 id, string title, uint256 timestamp);
+    event OperationExecuted(uint256 id, string title);
+    event ProtocolInitiated(uint256 id, string eventType, string actionPlan, uint256 timestamp);
+    event ProtocolResolved(uint256 id, string eventType);
+    event Verified(uint256 id, string category, address auditor);
+
+    modifier onlyGovernance() {
+        require(msg.sender == governance, "Hanya governance pusat");
+        _;
+    }
+
+    modifier onlyAuditor() {
+        require(msg.sender == auditor, "Hanya auditor eksternal");
+        _;
+    }
+
+    constructor(address _governance, address _auditor) {
+        governance = _governance;
+        auditor = _auditor;
+    }
+
+    /// @notice Registrasi unit pertahanan
+    function registerUnit(string memory _name, string memory _category) external onlyGovernance {
+        unitCount++;
+        units[unitCount] = DefenseUnit({
+            id: unitCount,
+            name: _name,
+            category: _category,
+            status: "active",
+            timestamp: block.timestamp,
+            verified: false
+        });
+        emit UnitRegistered(unitCount, _name, _category, block.timestamp);
+    }
+
+    /// @notice Verifikasi unit pertahanan
+    function verifyUnit(uint256 _id) external onlyAuditor {
+        require(_id <= unitCount, "Unit tidak ada");
+        units[_id].verified = true;
+        emit UnitVerified(_id, msg.sender);
+    }
+
+    /// @notice Rencanakan operasi strategis
+    function planOperation(string memory _title, string memory _description) external onlyGovernance {
+        operationCount++;
+        operations[operationCount] = StrategicOperation({
+            id: operationCount,
+            title: _title,
+            description: _description,
+            status: "planned",
+            timestamp: block.timestamp,
+            verified: false
+        });
+        emit OperationPlanned(operationCount, _title, block.timestamp);
+    }
+
+    /// @notice Eksekusi operasi strategis
+    function executeOperation(uint256 _id) external onlyGovernance {
+        require(_id <= operationCount, "Operation tidak ada");
+        operations[_id].status = "executed";
+        emit OperationExecuted(_id, operations[_id].title);
+    }
+
+    /// @notice Inisiasi protokol darurat
+    function initiateProtocol(string memory _eventType, string memory _actionPlan) external onlyGovernance {
+        protocolCount++;
+        protocols[protocolCount] = EmergencyProtocol({
+            id: protocolCount,
+            eventType: _eventType,
+            actionPlan: _actionPlan,
+            status: "initiated",
+            timestamp: block.timestamp,
+            verified: false
+        });
+        emit ProtocolInitiated(protocolCount, _eventType, _actionPlan, block.timestamp);
+    }
+
+    /// @notice Tandai protokol darurat selesai
+    function resolveProtocol(uint256 _id) external onlyGovernance {
+        require(_id <= protocolCount, "Protocol tidak ada");
+        protocols[_id].status = "resolved";
+        emit ProtocolResolved(_id, protocols[_id].eventType);
+    }
+
+    /// @notice Verifikasi unit/operasi/protokol oleh auditor eksternal
+    function verify(uint256 _id, string memory _category) external onlyAuditor {
+        if (keccak256(bytes(_category)) == keccak256(bytes("unit"))) {
+            require(_id <= unitCount, "Unit tidak ada");
+            units[_id].verified = true;
+        } else if (keccak256(bytes(_category)) == keccak256(bytes("operation"))) {
+            require(_id <= operationCount, "Operation tidak ada");
+            operations[_id].verified = true;
+        } else if (keccak256(bytes(_category)) == keccak256(bytes("protocol"))) {
+            require(_id <= protocolCount, "Protocol tidak ada");
+            protocols[_id].verified = true;
+        }
+        emit Verified(_id, _category, msg.sender);
+    }
+}
