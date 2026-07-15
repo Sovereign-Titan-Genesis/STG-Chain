@@ -13,6 +13,60 @@ Fokus utama: **sequencer**, **state manager**, dan **storage backend**.
 - `sequencer/` → modul sequencer & batch manager.
 - `state/` → manajemen state & database.
 - `docker/` → konfigurasi devnet/testnet lokal.
+  
+## Modul 📘 Draf README Modul Staking
+# STG-QSTATE Staking Module
+
+Modul ini mendefinisikan mekanisme staking untuk token QSTATE pada jaringan STG Testnet (Sepolia).  
+Tujuan utama: menjaga keamanan jaringan, memberikan insentif validator, dan memastikan tata kelola berbasis partisipasi.
+
+---
+
+## ✨ Fitur Utama
+- **Deposit & Lock**: Token QSTATE dikunci dalam kontrak `StgStakePool.sol`.
+- **Reward**: Validator menerima reward otomatis setiap epoch.
+- **Slashing**: Validator yang gagal uptime atau melanggar aturan akan kehilangan sebagian stake.
+- **Governance**: Token yang di-stake memberikan hak suara dalam proposal tata kelola.
+
+---
+
+## 📂 Struktur Folder & File
+
+### STG-Chain
+contract/ └── StgStakePool.sol # Kontrak staking utama state/ └── staking_state.rs # Manajemen state staking
+
+### STG-web3
+rpc/handlers/ └── staking.ts # Endpoint RPC untuk query status staking sdk/js/ └── staking.ts # SDK JS untuk interaksi staking
+
+---
+
+## 🚀 Cara Menjalankan
+1. Deploy kontrak `StgStakePool.sol` ke jaringan Sepolia.
+2. Tambahkan alamat kontrak ke **Master Registry** di `STG-DOCUMENTATION-STANDARD.md`.
+3. Jalankan node STG-Chain dengan modul staking aktif.
+4. Gunakan RPC STG-web3 untuk memanggil fungsi:
+   - `stake(amount)`
+   - `claimReward()`
+   - `unstake()`
+5. Validator diverifikasi melalui modul `staking_verifier.rs` di STG-Consensus.
+
+---
+
+## 🔒 Keamanan
+- Audit kontrak staking sebelum migrasi ke mainnet.
+- Gunakan dompet testnet untuk uji coba, jangan gunakan dana nyata.
+- Mekanisme slashing otomatis untuk menjaga integritas validator.
+
+---
+
+## 🤝 Kontribusi
+- Ikuti standar dokumentasi di `STG-DOCUMENTATION-STANDARD.md`.
+- Tambahkan test unit di setiap modul (`tests/`).
+- Semua PR wajib menyertakan bukti integrasi dengan Master Registry.
+
+## Modul Tambahan
+- [Staking QSTATE](README-STAKING.md)
+
 
 ## 🚀 Roadmap
 - v0.1 → Devnet internal.
