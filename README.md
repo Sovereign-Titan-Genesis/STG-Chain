@@ -77,3 +77,19 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 | STG‑1AI | ![1AI Logo](assets/1ai.png) |
 | Quantum Swap Engine | ![Swap Logo](assets/swap.png) |
 | Jasawan | ![Jasawan Logo](assets/jasawan.png) |
+## 🟢 Health Status Badges
+
+| Pilar | Status |
+|-------|--------|
+| Sovereign‑Titan‑Genesis | ![Genesis Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Metaportation | ![Metaportation Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Quorum‑State | ![Quorum Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| QS Guardian Search | ![Guardian Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Titan Psyche Mono | ![Psyche Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| STG‑Metaportation‑Event | ![Event Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Qubicoin | ![Qubicoin Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Makronesia Act‑Ark | ![Makronesia Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Garage | ![Garage Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| STG‑1AI | ![1AI Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Quantum Swap Engine | ![Swap Status](https://img.shields.io/badge/status-passing-brightgreen) |
+| Jasawan | ![Jasawan Status](https://img.shields.io/badge/status-passing-brightgreen) |
