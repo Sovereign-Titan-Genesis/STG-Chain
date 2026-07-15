@@ -1,3 +1,31 @@
+# STG-Chain
+
+STG-Chain adalah lapisan inti blockchain Layer-2 dalam ekosistem STG.  
+Fokus utama: **sequencer**, **state manager**, dan **storage backend**.
+
+## ✨ Fitur Utama
+- Sequencer untuk mengatur urutan transaksi dan batching ke Layer-1.
+- State manager untuk menyimpan status akun, kontrak, dan transaksi.
+- Storage backend berbasis Postgres/RocksDB.
+- Integrasi langsung dengan modul konsensus (STG-CONSESUS).
+
+## 📂 Struktur
+- `sequencer/` → modul sequencer & batch manager.
+- `state/` → manajemen state & database.
+- `docker/` → konfigurasi devnet/testnet lokal.
+
+## 🚀 Roadmap
+- v0.1 → Devnet internal.
+- v0.2 → Testnet publik dengan faucet.
+- v1.0 → Mainnet dengan validator terdistribusi.
+
+## 🔒 Keamanan
+Audit internal & eksternal sebelum peluncuran mainnet.
+
+## 🤝 Kontribusi
+Lihat [CONTRIBUTING.md](CONTRIBUTING.md).
+
+
 # ✨ STG‑Chain Showcase: The 12 Pillars
 
 Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
