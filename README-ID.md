@@ -1,3 +1,31 @@
+# STG-Rantai
+
+STG-Chain adalah lapisan inti blockchain Layer-2 dalam ekosistem STG.
+Fokus utama: **sequencer**, **state manager**, dan **storage backend**.
+
+## ✨ Fitur Utama
+- Sequencer untuk mengatur urutan transaksi dan batching ke Layer-1.
+- State manager untuk menyimpan status akun, kontrak, dan transaksi.
+- Penyimpanan backend berbasis Postgres/RocksDB.
+- Integrasi langsung dengan modul konsensus (STG-CONSESUS).
+
+## 📂 Struktur
+- `sequencer/` → modul sequencer & manajer batch.
+- `state/` → manajemen state & database.
+- `buruh pelabuhan/` → konfigurasi devnet/testnet lokal.
+
+## 🚀 Peta Jalan
+- v0.1 → Devnet internal.
+- v0.2 → Testnet publik dengan faucet.
+- v1.0 → Mainnet dengan validator terdistribusi.
+
+## 🔒 Keamanan
+Audit internal & eksternal sebelum peluncuran mainnet.
+
+## 🤝 Kontribusi
+Lihat [KONTRIBUSI.md](KONTRIBUSI.md).
+
+
 # ✨ STG‑Chain Showcase: 12 Pilar
 
 Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
@@ -26,67 +54,12 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 - [STG‑1AI](https://github.com/bswcorp/STG-1AI) — Kecerdasan AI 5 Tahap
 - [Jasawan](https://github.com/bswcorp/Jasawan) — Layanan Publik & Identitas Teritorial
 
-
+---
 ## 🛡️ Manifesto Kedaulatan
 *"Fintech yang berdaulat mengubah krisis menjadi peluang."*
 - Supremasi Aset Asli
 - Kemandirian Biaya Gas
 - Didukung AI&Saya
 
----
-
-## ⚖️ Cetak Biru Lapisan Hukum & Kepatuhan
-
-- **Integrasi Pajak On‑Chain**
-- Smart contract otomatis menghitung pajak dari transaksi besar.
-- Dana pajak langsung dialokasikan ke wallet regulator sesuai aturan.
-- Transparansi penuh: semua perhitungan tercatat di ledger audit.
-
-- **Badan Hukum Delaware & London**
-- Repo governance terhubung dengan entitas hukum resmi di Delaware dan London.
-- Proposal yang menyangkut regulasi otomatis diverifikasi oleh kontrak legal compliance.
-- Memberikan legitimasi global agar STG‑Chain diakui sebagai badan hukum sah.
-
-- **Protokol Hantu**
-- Layer enkripsi bayangan untuk transaksi modal besar.
-- Akses terbatas hanya untuk governance + auditor dengan multi‑sig.
-- Menyembunyikan jalur transaksi dari pihak luar, namun tetap bisa diaudit internal.
-
-- **Audit & Transparansi**
-- Auditor eksternal wajib mengirim laporan bulanan ke blockchain.
-- Laporan otomatis dipublikasikan ke portal governance.
-- Menjamin kepercayaan publik dan regulator internasional.
-
----
 ## 📸 Etalase Visual
-
-| Pilar | Logo |
-|-------|------|
-| Sovereign‑Titan‑Genesis | ![Logo Kejadian](assets/genesis.png) |
-| Metaportasi | ![Logo Metaportasi](assets/metaportation.png) |
-| Negara Bagian Siapa | ![Logo Kuorum](aset/kuorum.png) |
-| Pencarian Wali QS | ![Logo Penjaga](assets/guardian.png) |
-| Titan Jiwa Mono | ![Logo Jiwa](assets/psyche.png) |
-| STG‑Metaportasi‑Acara | ![Logo Acara](aset/acara.png) |
-| Qubicoin | ![Logo Qubicoin](assets/qubicoin.png) |
-| Undang-Undang Makronesia‑Tabut | ![Logo Makronesia](assets/makronesia.png) |
-| Garasi | ![Logo Garasi](assets/garage.png) |
-| STG‑1AI | ![Logo 1AI](assets/1ai.png) |
-| Mesin Pertukaran Kuantum | ![Logo Tukar](aset/swap.png) |
-| Jasawan | ![Jasawan Logo](assets/jasawan.png) |
-## 🟢 Lencana Status Kesehatan
-
-| Pilar | Status |
-|-------|--------|
-| Sovereign‑Titan‑Genesis | ![Status Kejadian](https://img.shields.io/badge/status-passing-brightgreen) |
-| Metaportasi | ![Status Metaportasi](https://img.shields.io/badge/status-passing-brightgreen) |
-| Kuorum‑Negara Bagian | ![Status Kuorum](https://img.shields.io/badge/status-passing-brightgreen) |
-| Pencarian Wali QS | ![Status Wali](https://img.shields.io/badge/status-passing-brightgreen) |
-| Titan Jiwa Mono | ![Status Jiwa](https://img.shields.io/badge/status-passing-brightgreen) |
-| STG‑Metaportasi‑Acara | ![Status Acara](https://img.shields.io/badge/status-passing-brightgreen) |
-| Qubicoin | ![Status Qubicoin](https://img.shields.io/badge/status-passing-brightgreen) |
-| Undang-Undang Makronesia‑Tabut | ![Status Makronesia](https://img.shields.io/badge/status-passing-brightgreen) |
-| Garasi | ![Status Garasi](https://img.shields.io/badge/status-passing-brightgreen) |
-| STG‑1AI | ![Status 1AI](https://img.shields.io/badge/status-passing-brightgreen) |
-| Mesin Pertukaran Kuantum | ![Status Tukar](https://img.shields.io/badge/status-passing-brightgreen) |
-| Jasawan | ![Status Jasawan](https://img.shields.io/badge/status-passing-brightgreen) |
+(Logo/ikon tiap repo akan ditempatkan di sini)
