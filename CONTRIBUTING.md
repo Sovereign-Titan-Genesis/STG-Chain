@@ -40,6 +40,76 @@ This project is sovereign, mandiri, and berdaulat. Contributions are welcome, bu
 
 ---
 
+# CONTRIBUTING — STG-QSTATE Staking Module
+
+Terima kasih atas kontribusi Anda pada modul staking STG-QSTATE.  
+Dokumen ini menetapkan standar kontribusi agar kode, dokumentasi, dan pengujian konsisten dengan filosofi STG:  
+> "Code follows Governance, Governance follows Values."
+
+---
+
+## 🧩 Ruang Lingkup
+Modul staking mencakup:
+- Kontrak `StgStakePool.sol` di **STG-Chain**
+- Verifikasi staking & slashing di **STG-Consensus**
+- Endpoint RPC & SDK di **STG-web3**
+
+---
+
+## 📂 Struktur Repo
+- **STG-Chain/contracts/StgStakePool.sol** → Kontrak staking utama
+- **STG-Consensus/validator/staking_verifier.rs** → Verifikasi proof & slashing
+- **STG-web3/rpc/handlers/staking.ts** → Endpoint RPC
+- **STG-web3/sdk/js/staking.ts** → SDK interaksi staking
+
+---
+
+## 🛠️ Standar Kontribusi
+1. **Coding Style**
+   - Solidity: gunakan versi `^0.8.20`, ikuti standar NatSpec.
+   - Rust: gunakan `clippy` untuk linting.
+   - TypeScript: gunakan `eslint` + `prettier`.
+
+2. **Testing**
+   - Tambahkan unit test di folder `tests/`.
+   - Semua PR wajib menyertakan hasil test staking (`stake`, `claimReward`, `unstake`).
+   - Gunakan dompet testnet, jangan gunakan dana nyata.
+
+3. **Dokumentasi**
+   - Setiap fungsi publik wajib memiliki komentar NatSpec.
+   - Update `README-STAKING.md` jika ada perubahan API.
+   - Tambahkan alamat kontrak baru ke **Master Registry** di `STG-DOCUMENTATION-STANDARD.md`.
+
+4. **Audit & Keamanan**
+   - Semua perubahan kontrak wajib melalui audit internal.
+   - Mekanisme slashing harus diuji dengan simulasi uptime <95%.
+   - Jangan pernah hardcode private key atau mnemonic.
+
+---
+
+## 🔄 Alur Pull Request
+1. Fork repo terkait (STG-Chain, STG-Consensus, STG-web3).
+2. Buat branch dengan format: `staking/feature-name`.
+3. Lakukan perubahan sesuai standar di atas.
+4. Tambahkan test & dokumentasi.
+5. Ajukan PR dengan deskripsi jelas:
+   - Perubahan yang dilakukan
+   - Dampak terhadap modul staking
+   - Bukti hasil test
+
+---
+
+## 🤝 Etika Kontribusi
+- Hormati filosofi STG: integritas, transparansi, keberlanjutan.
+- Diskusikan ide besar di forum governance sebelum implementasi.
+- Hindari perubahan yang dapat mengganggu kompatibilitas backward.
+
+---
+
+## 📜 Lisensi
+Kontribusi pada modul staking tunduk pada lisensi MIT.
+
+
 ## ⚖️ Contributor License Agreement (CLA)
 
 By submitting a contribution, you agree to:
