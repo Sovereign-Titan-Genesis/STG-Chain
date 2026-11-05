@@ -34,34 +34,4 @@ Inilah wajah resmi 12 Pilar yang membentuk ekosistem berdaulat STG‑Chain.
 - AI&Me Powered
 
 ## 📸 Visual Showcase
-
-| Pilar | Logo |
-|-------|------|
-| Sovereign‑Titan‑Genesis | ![Genesis Logo](assets/genesis.png) |
-| Metaportation | ![Metaportation Logo](assets/metaportation.png) |
-| Quorum‑State | ![Quorum Logo](assets/quorum.png) |
-| QS Guardian Search | ![Guardian Logo](assets/guardian.png) |
-| Titan Psyche Mono | ![Psyche Logo](assets/psyche.png) |
-| STG‑Metaportation‑Event | ![Event Logo](assets/event.png) |
-| Qubicoin | ![Qubicoin Logo](assets/qubicoin.png) |
-| Makronesia Act‑Ark | ![Makronesia Logo](assets/makronesia.png) |
-| Garage | ![Garage Logo](assets/garage.png) |
-| STG‑1AI | ![1AI Logo](assets/1ai.png) |
-| Quantum Swap Engine | ![Swap Logo](assets/swap.png) |
-| Jasawan | ![Jasawan Logo](assets/jasawan.png) |
-## 🟢 Health Status Badges
-
-| Pilar | Status |
-|-------|--------|
-| Sovereign‑Titan‑Genesis | ![Genesis Status](https://img.shields.io/badge/status-passing-brightgreen) |
-| Metaportation | ![Metaportation Status](https://img.shields.io/badge/status-passing-brightgreen) |
-| Quorum‑State | ![Quorum Status](https://img.shields.io/badge/status-passing-brightgreen) |
-| QS Guardian Search | ![Guardian Status](https://img.shields.io/badge/status-passing-brightgreen) |
-| Titan Psyche Mono | ![Psyche Status](https://img.shields.io/badge/status-passing-brightgreen) |
-| STG‑Metaportation‑Event | ![Event Status](https://img.shields.io/badge/status-passing-brightgreen) |
-| Qubicoin | ![Qubicoin Status](https://img.shields.io/badge/status-passing-brightgreen) |
-| Makronesia Act‑Ark | ![Makronesia Status](https://img.shields.io/badge/status-passing-brightgreen) |
-| Garage | ![Garage Status](https://img.shields.io/badge/status-passing-brightgreen) |
-| STG‑1AI | ![1AI Status](https://img.shields.io/badge/status-passing-brightgreen) |
-| Quantum Swap Engine | ![Swap Status](https://img.shields.io/badge/status-passing-brightgreen) |
-| Jasawan | ![Jasawan Status](https://img.shields.io/badge/status-passing-brightgreen) |
+(Logo/ikon tiap repo akan ditempatkan di sini)
